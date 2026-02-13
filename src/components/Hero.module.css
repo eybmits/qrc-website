@@ -35,9 +35,8 @@
 
 .bgStars {
   animation:
-    starPan 140s linear infinite,
-    starTwinkle 11s ease-in-out infinite,
-    starDepth 26s ease-in-out infinite alternate;
+    starPan 78s linear infinite,
+    starTwinkle 8.5s ease-in-out infinite;
   background-image:
     radial-gradient(circle at 9% 14%, rgba(233, 245, 255, 0.9) 1px, transparent 1.5px),
     radial-gradient(circle at 26% 22%, rgba(213, 234, 255, 0.66) 1px, transparent 1.6px),
@@ -65,8 +64,8 @@
 
 .bgStars::before {
   animation:
-    starPanReverse 180s linear infinite,
-    starShimmer 13s ease-in-out infinite;
+    starPanReverse 92s linear infinite,
+    starShimmer 10s ease-in-out infinite;
   background-image:
     radial-gradient(circle at 11% 30%, rgba(219, 239, 255, 0.5) 1px, transparent 1.7px),
     radial-gradient(circle at 32% 12%, rgba(188, 223, 255, 0.42) 1px, transparent 1.7px),
@@ -81,8 +80,8 @@
 
 .bgStars::after {
   animation:
-    starLayerDrift 95s ease-in-out infinite alternate,
-    starShimmer 9s ease-in-out infinite;
+    starLayerDrift 54s ease-in-out infinite alternate,
+    starShimmer 7.6s ease-in-out infinite;
   background-image:
     radial-gradient(circle at 6% 22%, rgba(235, 247, 255, 0.4) 1px, transparent 1.5px),
     radial-gradient(circle at 19% 16%, rgba(216, 238, 255, 0.34) 1px, transparent 1.5px),
@@ -143,6 +142,7 @@
     );
   mask-image: radial-gradient(ellipse at center, #000 28%, transparent 86%);
   opacity: 0.32;
+  will-change: transform, opacity, background-position;
   z-index: 4;
 }
 
@@ -464,7 +464,7 @@
   }
 
   100% {
-    transform: translate3d(-1.4%, 1.8%, 0);
+    transform: translate3d(-3.2%, 3.4%, 0);
   }
 }
 
@@ -474,17 +474,17 @@
   }
 
   100% {
-    transform: translate3d(1.2%, -1.5%, 0);
+    transform: translate3d(2.8%, -2.6%, 0);
   }
 }
 
 @keyframes starLayerDrift {
   0% {
-    transform: translate3d(-0.8%, 0.5%, 0) scale(0.99);
+    transform: translate3d(-1.8%, 1.2%, 0) scale(0.985);
   }
 
   100% {
-    transform: translate3d(0.8%, -0.7%, 0) scale(1.02);
+    transform: translate3d(1.9%, -1.6%, 0) scale(1.03);
   }
 }
 
@@ -507,16 +507,6 @@
 
   50% {
     opacity: 0.42;
-  }
-}
-
-@keyframes starDepth {
-  0% {
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-
-  100% {
-    transform: translate3d(-0.7%, 0.6%, 0) scale(1.015);
   }
 }
 
@@ -567,15 +557,21 @@
 
 @keyframes ringDrift {
   0% {
-    transform: translate3d(-0.8%, 0.4%, 0);
+    background-position:
+      0 0,
+      0 0;
   }
 
   50% {
-    transform: translate3d(0.9%, -0.6%, 0);
+    background-position:
+      24px -12px,
+      -18px 10px;
   }
 
   100% {
-    transform: translate3d(-0.5%, 0.2%, 0);
+    background-position:
+      40px -18px,
+      -30px 16px;
   }
 }
 
