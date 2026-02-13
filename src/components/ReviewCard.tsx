@@ -29,6 +29,19 @@ export function ReviewCard({
   const [flipped, setFlipped] = useState(false);
   const [rated, setRated] = useState(false);
   const [doneMessage, setDoneMessage] = useState('Response recorded');
+  const [showFullAnswer, setShowFullAnswer] = useState(false);
+
+  const shortAnswer = useMemo(() => {
+    const normalized = answer.replace(/\s+/g, ' ').trim();
+    if (normalized.length <= 180) return normalized;
+
+    const firstSentence = normalized.match(/^(.+?[.!?])(\s|$)/)?.[1];
+    if (firstSentence && firstSentence.length <= 220) {
+      return firstSentence.trim();
+    }
+
+    return `${normalized.slice(0, 180).trim()}...`;
+  }, [answer]);
 
   const ratingPrompt = useMemo(() => {
     return 'How did that feel?';
@@ -56,7 +69,10 @@ export function ReviewCard({
           <div className={styles.questionText}>{question}</div>
           <button
             className={styles.revealBtn}
-            onClick={() => setFlipped(true)}
+            onClick={() => {
+              setFlipped(true);
+              setShowFullAnswer(false);
+            }}
             disabled={disabled}
           >
             Show Answer
@@ -68,8 +84,21 @@ export function ReviewCard({
             <div className={styles.label}>Question</div>
             <div className={styles.questionTextSmall}>{question}</div>
             <div className={styles.divider} />
-            <div className={styles.label}>Answer</div>
-            <div className={styles.answerText}>{answer}</div>
+            <div className={styles.label}>Core Answer</div>
+            <div className={styles.answerText}>{shortAnswer}</div>
+            <button
+              className={styles.moreBtn}
+              onClick={() => setShowFullAnswer((value) => !value)}
+              disabled={disabled}
+            >
+              {showFullAnswer ? 'Hide Full Explanation' : 'Show Full Explanation'}
+            </button>
+            {showFullAnswer && (
+              <div className={styles.fullAnswer}>
+                <div className={styles.label}>Full Explanation</div>
+                <div className={styles.answerText}>{answer}</div>
+              </div>
+            )}
             {!rated && (
               <div className={styles.ratingButtons}>
                 <div className={styles.ratingLabel}>{ratingPrompt}</div>

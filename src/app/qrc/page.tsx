@@ -4,530 +4,498 @@ import { Essay, Section, SubSection } from '@/components/Essay';
 import { MathBlock } from '@/components/MathBlock';
 import { ReviewCardSet } from '@/components/ReviewCardSet';
 import { qrcCards } from '@/data/qrc-cards';
+import styles from './page.module.css';
+
+interface FigureFrameProps {
+  title: string;
+  caption: string;
+  children: React.ReactNode;
+}
+
+function FigureFrame({ title, caption, children }: FigureFrameProps) {
+  return (
+    <figure className={styles.figureFrame}>
+      <figcaption className={styles.figureHeader}>
+        <span className={styles.figureTitle}>{title}</span>
+        <span className={styles.figureCaption}>{caption}</span>
+      </figcaption>
+      <div className={styles.figureCanvas}>{children}</div>
+    </figure>
+  );
+}
+
+function StateUpdateVisual() {
+  return (
+    <FigureFrame
+      title="Temporal State Update"
+      caption="Reservoir state mixes new input and previous memory at every step."
+    >
+      <svg viewBox="0 0 860 200" className={styles.figureSvg} role="img" aria-label="State update flow">
+        <defs>
+          <linearGradient id="qrcFlowNode" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#1f3f72" />
+            <stop offset="100%" stopColor="#10233d" />
+          </linearGradient>
+          <marker id="qrcArrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+            <path d="M0,0 L8,4 L0,8 Z" fill="#86dbff" />
+          </marker>
+        </defs>
+
+        <rect x="20" y="56" width="154" height="84" rx="12" fill="url(#qrcFlowNode)" stroke="#7ec6ff" strokeWidth="1.2" />
+        <text x="97" y="88" textAnchor="middle" className={styles.svgLabel}>x(t)</text>
+        <text x="97" y="110" textAnchor="middle" className={styles.svgSub}>input</text>
+
+        <rect x="248" y="56" width="180" height="84" rx="12" fill="url(#qrcFlowNode)" stroke="#7ec6ff" strokeWidth="1.2" />
+        <text x="338" y="88" textAnchor="middle" className={styles.svgLabel}>h(t-1)</text>
+        <text x="338" y="110" textAnchor="middle" className={styles.svgSub}>memory</text>
+
+        <rect x="494" y="42" width="176" height="112" rx="12" fill="#163054" stroke="#8de1ff" strokeWidth="1.3" />
+        <text x="582" y="84" textAnchor="middle" className={styles.svgLabel}>f(·)</text>
+        <text x="582" y="108" textAnchor="middle" className={styles.svgSub}>fixed dynamics</text>
+
+        <rect x="726" y="56" width="116" height="84" rx="12" fill="url(#qrcFlowNode)" stroke="#7ec6ff" strokeWidth="1.2" />
+        <text x="784" y="88" textAnchor="middle" className={styles.svgLabel}>h(t)</text>
+        <text x="784" y="110" textAnchor="middle" className={styles.svgSub}>new state</text>
+
+        <line x1="174" y1="98" x2="248" y2="98" stroke="#86dbff" strokeWidth="2" markerEnd="url(#qrcArrow)" />
+        <line x1="428" y1="98" x2="494" y2="98" stroke="#86dbff" strokeWidth="2" markerEnd="url(#qrcArrow)" />
+        <line x1="670" y1="98" x2="726" y2="98" stroke="#86dbff" strokeWidth="2" markerEnd="url(#qrcArrow)" />
+      </svg>
+    </FigureFrame>
+  );
+}
+
+function GradientVisual() {
+  return (
+    <FigureFrame
+      title="BPTT Gradient Behavior"
+      caption="Long chains can contract gradients to zero or expand them uncontrollably."
+    >
+      <svg viewBox="0 0 860 210" className={styles.figureSvg} role="img" aria-label="Gradient regimes">
+        <line x1="62" y1="176" x2="810" y2="176" stroke="#6da0d8" strokeWidth="1.2" />
+        <line x1="62" y1="26" x2="62" y2="176" stroke="#6da0d8" strokeWidth="1.2" />
+
+        <path d="M70 98 C 220 86, 380 62, 540 34 C 650 16, 740 16, 800 24" fill="none" stroke="#ff8b9b" strokeWidth="3" />
+        <path d="M70 98 C 220 112, 380 136, 540 156 C 650 166, 740 170, 800 172" fill="none" stroke="#6fd7ff" strokeWidth="3" />
+
+        <text x="736" y="26" fill="#ff8b9b" fontSize="14" fontWeight="700">exploding</text>
+        <text x="720" y="170" fill="#6fd7ff" fontSize="14" fontWeight="700">vanishing</text>
+      </svg>
+    </FigureFrame>
+  );
+}
+
+function ReservoirReadoutVisual() {
+  return (
+    <FigureFrame
+      title="Reservoir + Linear Readout"
+      caption="A fixed dynamic core plus a trainable linear layer."
+    >
+      <svg viewBox="0 0 860 220" className={styles.figureSvg} role="img" aria-label="Reservoir readout architecture">
+        <rect x="24" y="64" width="118" height="88" rx="12" fill="#1b3660" stroke="#81ccff" />
+        <text x="83" y="102" textAnchor="middle" className={styles.svgLabel}>Input</text>
+        <text x="83" y="124" textAnchor="middle" className={styles.svgSub}>x(t)</text>
+
+        <ellipse cx="372" cy="108" rx="188" ry="84" fill="#112742" stroke="#7fd1ff" strokeWidth="1.2" />
+        <text x="372" y="36" textAnchor="middle" className={styles.svgLabel}>Fixed Reservoir Dynamics</text>
+
+        <circle cx="290" cy="95" r="8" fill="#8ce4ff" />
+        <circle cx="328" cy="128" r="7" fill="#9ab7ff" />
+        <circle cx="368" cy="88" r="9" fill="#7fe2ff" />
+        <circle cx="408" cy="120" r="8" fill="#8cc7ff" />
+        <circle cx="442" cy="84" r="7" fill="#7fe2ff" />
+        <circle cx="474" cy="126" r="8" fill="#8cc7ff" />
+
+        <line x1="290" y1="95" x2="328" y2="128" stroke="#72b5ec" />
+        <line x1="328" y1="128" x2="368" y2="88" stroke="#72b5ec" />
+        <line x1="368" y1="88" x2="408" y2="120" stroke="#72b5ec" />
+        <line x1="408" y1="120" x2="442" y2="84" stroke="#72b5ec" />
+        <line x1="442" y1="84" x2="474" y2="126" stroke="#72b5ec" />
+        <line x1="474" y1="126" x2="328" y2="128" stroke="#72b5ec" />
+
+        <rect x="616" y="58" width="122" height="100" rx="12" fill="#1b3660" stroke="#81ccff" />
+        <text x="677" y="98" textAnchor="middle" className={styles.svgLabel}>Readout</text>
+        <text x="677" y="122" textAnchor="middle" className={styles.svgSub}>ridge fit</text>
+
+        <rect x="774" y="72" width="66" height="72" rx="10" fill="#163054" stroke="#81ccff" />
+        <text x="807" y="110" textAnchor="middle" className={styles.svgLabel}>y(t)</text>
+
+        <line x1="142" y1="108" x2="186" y2="108" stroke="#83deff" strokeWidth="2" />
+        <line x1="560" y1="108" x2="616" y2="108" stroke="#83deff" strokeWidth="2" />
+        <line x1="738" y1="108" x2="774" y2="108" stroke="#83deff" strokeWidth="2" />
+      </svg>
+    </FigureFrame>
+  );
+}
+
+function QuantumPotentialVisual() {
+  return (
+    <FigureFrame
+      title="Quantum Barrier Intuition"
+      caption="A driven quantum system can retain a tunneled component after a barrier interaction."
+    >
+      <svg viewBox="0 0 860 220" className={styles.figureSvg} role="img" aria-label="Quantum barrier and tunneling intuition">
+        <line x1="52" y1="176" x2="810" y2="176" stroke="#6b9acd" strokeWidth="1.2" />
+        <path d="M60 176 L250 176 L340 90 L520 90 L610 176 L810 176" fill="none" stroke="#8dc1ff" strokeWidth="3" />
+        <path d="M86 138 C 140 90, 198 90, 252 138" fill="none" stroke="#79e2ff" strokeWidth="3" />
+        <path d="M252 138 C 304 156, 334 152, 356 142" fill="none" stroke="#79e2ff" strokeWidth="2.4" opacity="0.58" />
+        <path d="M520 140 C 566 112, 618 112, 664 140" fill="none" stroke="#79e2ff" strokeWidth="2.2" opacity="0.58" />
+        <circle cx="150" cy="128" r="8" fill="#a9f0ff" />
+        <circle cx="602" cy="134" r="6" fill="#a9f0ff" opacity="0.75" />
+        <text x="378" y="78" textAnchor="middle" className={styles.svgSub}>potential barrier</text>
+        <text x="112" y="196" className={styles.svgSub}>incoming packet</text>
+        <text x="552" y="196" className={styles.svgSub}>transmitted component</text>
+      </svg>
+    </FigureFrame>
+  );
+}
+
+function MeasurementVisual() {
+  return (
+    <FigureFrame
+      title="Measurement to Feature Vector"
+      caption="Observable expectations are converted into classical readout features."
+    >
+      <svg viewBox="0 0 860 220" className={styles.figureSvg} role="img" aria-label="Measurement and feature extraction">
+        <rect x="34" y="58" width="172" height="104" rx="12" fill="#143058" stroke="#86cdff" />
+        <text x="120" y="100" textAnchor="middle" className={styles.svgLabel}>rho(t)</text>
+        <text x="120" y="122" textAnchor="middle" className={styles.svgSub}>quantum state</text>
+
+        <rect x="282" y="46" width="212" height="128" rx="14" fill="#122946" stroke="#7ec8ff" />
+        <text x="388" y="82" textAnchor="middle" className={styles.svgLabel}>Measure O_k</text>
+        <text x="388" y="108" textAnchor="middle" className={styles.svgSub}>⟨sigma_x⟩, ⟨sigma_y⟩, ...</text>
+        <text x="388" y="136" textAnchor="middle" className={styles.svgSub}>z(t) in R^k</text>
+
+        <rect x="566" y="58" width="126" height="104" rx="12" fill="#15325a" stroke="#84d7ff" />
+        <text x="629" y="100" textAnchor="middle" className={styles.svgLabel}>Features</text>
+        <text x="629" y="122" textAnchor="middle" className={styles.svgSub}>z(t)</text>
+
+        <rect x="730" y="72" width="104" height="78" rx="10" fill="#173764" stroke="#84d7ff" />
+        <text x="782" y="108" textAnchor="middle" className={styles.svgLabel}>y(t)</text>
+        <text x="782" y="128" textAnchor="middle" className={styles.svgSub}>readout</text>
+
+        <line x1="206" y1="110" x2="282" y2="110" stroke="#83deff" strokeWidth="2" />
+        <line x1="494" y1="110" x2="566" y2="110" stroke="#83deff" strokeWidth="2" />
+        <line x1="692" y1="110" x2="730" y2="110" stroke="#83deff" strokeWidth="2" />
+      </svg>
+    </FigureFrame>
+  );
+}
+
+function cardIndex(id: string): number {
+  const parsed = parseInt(id.split('-')[1] ?? '0', 10);
+  return Number.isFinite(parsed) ? parsed : 0;
+}
 
 export default function QRCPage() {
-  // Split cards into sets for embedding throughout the essay
   const cardSets = {
-    rnn: qrcCards.filter((c) => parseInt(c.id.split('-')[1]) <= 5),
-    training: qrcCards.filter((c) => {
-      const n = parseInt(c.id.split('-')[1]);
-      return n >= 6 && n <= 10;
-    }),
-    esn: qrcCards.filter((c) => {
-      const n = parseInt(c.id.split('-')[1]);
-      return n >= 11 && n <= 18;
-    }),
-    quantum: qrcCards.filter((c) => {
-      const n = parseInt(c.id.split('-')[1]);
-      return n >= 19 && n <= 27;
-    }),
-    encoding: qrcCards.filter((c) => {
-      const n = parseInt(c.id.split('-')[1]);
-      return n >= 28 && n <= 36;
-    }),
-    applications: qrcCards.filter((c) => {
-      const n = parseInt(c.id.split('-')[1]);
-      return n >= 37;
-    }),
+    foundations: qrcCards.filter((c) => cardIndex(c.id) <= 7),
+    quantumCore: qrcCards.filter((c) => cardIndex(c.id) >= 8 && cardIndex(c.id) <= 14),
+    applications: qrcCards.filter((c) => cardIndex(c.id) >= 15),
   };
 
   return (
     <Essay
       title="Quantum Reservoir Computing for the Very Curious"
-      subtitle="A deep introduction to quantum reservoir computing, building from classical foundations to quantum implementations. Embedded review cards help you truly remember what you learn."
+      subtitle="A deep path from classical temporal learning to quantum reservoirs: intuitive first steps, then full mathematical structure and realistic implementation constraints."
     >
       <Section id="introduction" title="Introduction">
         <p>
-          In the landscape of quantum machine learning, <strong>quantum reservoir computing (QRC)</strong> stands
-          out as one of the most promising near-term approaches to achieving practical quantum advantage in
-          computational tasks. Unlike variational quantum algorithms that require careful circuit optimization,
-          QRC leverages the natural dynamics of quantum systems to process information — and only requires
-          training a simple classical readout layer.
+          This course is built as a staircase. We begin with intuition and simple equations, then move to full formal
+          models used in current QRC research.
         </p>
         <p>
-          This essay will build your understanding from the ground up. We&apos;ll start with the classical
-          foundations — recurrent neural networks and their training difficulties — then show how reservoir
-          computing elegantly sidesteps those problems. From there, we&apos;ll make the leap to quantum
-          systems and explore why quantum reservoirs might offer computational advantages that classical
-          systems cannot match.
+          The learning loop is deliberate: read carefully, work through the examples, then use a smaller set of in-text
+          flashcards to anchor core ideas. The objective is not just understanding once, but durable recall.
         </p>
         <p>
-          Throughout, you&apos;ll encounter <strong>review cards</strong> — interactive flashcards designed to
-          test and reinforce your understanding using spaced repetition. Research shows that actively testing
-          yourself dramatically improves long-term retention compared to passive reading.
+          If a section feels dense, pause at the intuition sentence first, then read the equation line-by-line. This
+          text is written so each equation directly corresponds to one physical or algorithmic mechanism.
         </p>
-      </Section>
 
-      {/* ============ PART I: Classical Foundations ============ */}
+        <div className={styles.quickMap}>
+          <div className={styles.quickMapTitle}>Learning Path</div>
+          <div className={styles.quickMapFlow}>
+            <span className={styles.quickStep}>Temporal Intuition</span>
+            <span className={styles.quickArrow}>→</span>
+            <span className={styles.quickStep}>Reservoir Principle</span>
+            <span className={styles.quickArrow}>→</span>
+            <span className={styles.quickStep}>Quantum Dynamics</span>
+            <span className={styles.quickArrow}>→</span>
+            <span className={styles.quickStep}>Hardware Reality</span>
+          </div>
+          <p className={styles.quickMapNote}>
+            Embedded review cards are part of the method, not an extra. They lock in definitions, equations, and
+            design tradeoffs over time.
+          </p>
+        </div>
+
+        <div className={styles.pipelineVisual} aria-label="QRC pipeline" role="img">
+          <div className={styles.pipelineNode}>
+            <span className={styles.nodeLabel}>Input Sequence</span>
+            <span className={styles.nodeSub}>u(t)</span>
+          </div>
+          <span className={styles.pipelineConnector} />
+          <div className={styles.pipelineNode}>
+            <span className={styles.nodeLabel}>Reservoir Dynamics</span>
+            <span className={styles.nodeSub}>h(t) or rho(t)</span>
+          </div>
+          <span className={styles.pipelineConnector} />
+          <div className={styles.pipelineNode}>
+            <span className={styles.nodeLabel}>Features</span>
+            <span className={styles.nodeSub}>z(t)</span>
+          </div>
+          <span className={styles.pipelineConnector} />
+          <div className={styles.pipelineNode}>
+            <span className={styles.nodeLabel}>Readout</span>
+            <span className={styles.nodeSub}>y(t)</span>
+          </div>
+        </div>
+      </Section>
 
       <Section id="recurrent-neural-networks" title="Recurrent Neural Networks">
         <p>
-          To understand reservoir computing, we first need to understand what it improves upon. <strong>Recurrent
-          neural networks (RNNs)</strong> are neural networks with feedback connections, allowing them to maintain
-          an internal state that evolves over time. This makes them naturally suited for sequential and
-          temporal data.
-        </p>
-        <p>
-          In a standard RNN, the hidden state <MathBlock math="\mathbf{h}(t)" /> at time step{' '}
-          <MathBlock math="t" /> is computed as:
+          A recurrent model keeps memory through state recursion. At time t, the new state depends on the previous
+          state and current input:
         </p>
         <MathBlock
           display
-          math="\mathbf{h}(t) = f\left(\mathbf{W}_{\text{in}} \mathbf{x}(t) + \mathbf{W}_{\text{res}} \mathbf{h}(t-1) + \mathbf{b}\right)"
+          math="\mathbf{h}(t)=f\left(\mathbf{W}_{\text{in}}\mathbf{x}(t)+\mathbf{W}_{\text{res}}\mathbf{h}(t-1)+\mathbf{b}\right)"
         />
         <p>
-          where <MathBlock math="\mathbf{x}(t)" /> is the input, <MathBlock math="\mathbf{W}_{\text{in}}" /> is
-          the input weight matrix, <MathBlock math="\mathbf{W}_{\text{res}}" /> is the recurrent weight matrix,{' '}
-          <MathBlock math="\mathbf{b}" /> is a bias vector, and <MathBlock math="f" /> is a nonlinear activation
-          function (typically <MathBlock math="\tanh" />).
+          This is the core temporal template from which ESNs and QRC are derived. The challenge is not writing this
+          equation; it is training such models stably for long contexts.
         </p>
         <p>
-          The output is then produced by a readout function applied to the hidden state:
+          Keep this interpretation in mind: <MathBlock math="\mathbf{W}_{\text{in}}\mathbf{x}(t)" /> injects new
+          information, while <MathBlock math="\mathbf{W}_{\text{res}}\mathbf{h}(t-1)" /> carries temporal context.
+          Reservoir methods keep that temporal machinery fixed and move learning pressure to the readout.
         </p>
-        <MathBlock
-          display
-          math="\mathbf{y}(t) = g\left(\mathbf{W}_{\text{out}} \mathbf{h}(t)\right)"
-        />
-        <p>
-          RNNs are powerful in principle — they are Turing-complete and can approximate any computable
-          function on sequences. However, <em>training</em> them is notoriously difficult.
-        </p>
+        <StateUpdateVisual />
       </Section>
 
       <Section id="the-training-problem" title="The Training Problem">
         <p>
-          The standard approach to training RNNs is <strong>backpropagation through time (BPTT)</strong>. The
-          network is &quot;unrolled&quot; across time steps, and gradients are computed by propagating errors backward
-          through the entire sequence. This involves computing products of the recurrent weight matrix
-          across many time steps:
+          Backpropagation through time multiplies many Jacobians across sequence depth. The product can collapse or
+          explode, creating vanishing/exploding gradients:
         </p>
         <MathBlock
           display
-          math="\frac{\partial \mathbf{h}(t)}{\partial \mathbf{h}(k)} = \prod_{i=k+1}^{t} \mathbf{W}_{\text{res}}^\top \, \text{diag}\left(f'(\mathbf{h}(i))\right)"
+          math="\frac{\partial \mathbf{h}(t)}{\partial \mathbf{h}(k)}=\prod_{i=k+1}^{t}\mathbf{W}_{\text{res}}^{\top}\,\mathrm{diag}(f'(\mathbf{h}(i)))"
         />
         <p>
-          This product of matrices is the source of the infamous <strong>vanishing and exploding gradient
-          problem</strong>. If the spectral radius (largest eigenvalue magnitude) of{' '}
-          <MathBlock math="\mathbf{W}_{\text{res}}" /> is less than 1, the gradient products shrink exponentially
-          — gradients <em>vanish</em>, and the network cannot learn long-range dependencies. If the spectral
-          radius exceeds 1, gradients <em>explode</em>, making training unstable.
+          Reservoir computing avoids this by not training recurrent weights at all. It keeps temporal dynamics fixed
+          and learns only a final mapping.
         </p>
         <p>
-          Architectures like LSTMs and GRUs partially address this with gating mechanisms, but they add
-          significant complexity and computational cost. Reservoir computing takes a radically different approach:
-          <strong> don&apos;t train the recurrent connections at all</strong>.
+          This is a major engineering simplification: instead of solving a fragile non-convex temporal optimization,
+          you solve a stable linear regression after collecting states.
         </p>
+        <GradientVisual />
       </Section>
-
-      <ReviewCardSet cards={cardSets.rnn} />
 
       <Section id="echo-state-networks" title="Echo State Networks">
         <p>
-          In 2001, Herbert Jaeger introduced <strong>Echo State Networks (ESNs)</strong>, one of the founding
-          architectures of reservoir computing. The key insight is deceptively simple: instead of training all
-          weights in the network, fix the recurrent weights randomly and only train the output layer.
-        </p>
-        <p>
-          An ESN consists of three components:
-        </p>
-        <ol>
-          <li>
-            <strong>Input layer:</strong> Maps inputs to the reservoir via a random (fixed) weight matrix{' '}
-            <MathBlock math="\mathbf{W}_{\text{in}}" />.
-          </li>
-          <li>
-            <strong>Reservoir:</strong> A large, sparsely connected recurrent network with fixed random weights{' '}
-            <MathBlock math="\mathbf{W}_{\text{res}}" />. Typically hundreds to thousands of nodes.
-          </li>
-          <li>
-            <strong>Readout layer:</strong> A simple linear mapping{' '}
-            <MathBlock math="\mathbf{W}_{\text{out}}" /> that is the <em>only</em> trained component.
-          </li>
-        </ol>
-        <p>
-          The reservoir state update follows the same recurrence as a standard RNN:
+          ESNs are the classical prototype of reservoir computing. You initialize a random recurrent reservoir,
+          optionally tune spectral radius and leak, and train only the readout.
         </p>
         <MathBlock
           display
-          math="\mathbf{h}(t) = (1-\alpha)\mathbf{h}(t-1) + \alpha \tanh\left(\mathbf{W}_{\text{in}} \mathbf{x}(t) + \mathbf{W}_{\text{res}} \mathbf{h}(t-1)\right)"
+          math="\mathbf{h}(t)=(1-\alpha)\mathbf{h}(t-1)+\alpha\tanh\!\left(\mathbf{W}_{\text{in}}\mathbf{x}(t)+\mathbf{W}_{\text{res}}\mathbf{h}(t-1)\right)"
         />
         <p>
-          where <MathBlock math="\alpha \in (0, 1]" /> is a <strong>leaking rate</strong> that controls the
-          speed of reservoir dynamics. The crucial difference is that{' '}
-          <MathBlock math="\mathbf{W}_{\text{in}}" /> and <MathBlock math="\mathbf{W}_{\text{res}}" /> are
-          never updated during training.
+          The readout is then a ridge-regressed linear map from state features to outputs.
+        </p>
+        <p>
+          Conceptually, ESNs separate representation from training: representation is produced by dynamics, training is
+          delegated to a lightweight statistical layer.
         </p>
       </Section>
 
-      <Section id="reservoir-computing-paradigm" title="The Reservoir Computing Paradigm">
+      <Section id="reservoir-computing-paradigm" title="Reservoir Computing Paradigm">
         <p>
-          The reservoir computing paradigm rests on a powerful conceptual separation: the <strong>reservoir</strong>{' '}
-          acts as a fixed, high-dimensional nonlinear dynamical system that projects inputs into a rich feature
-          space, while the <strong>readout</strong> extracts task-relevant information through simple linear
-          combination.
+          A good reservoir must separate different input histories and keep fading memory of recent context. In
+          practice this means operating near, but not beyond, instability.
         </p>
         <p>
-          For this to work, the reservoir must satisfy two key properties:
+          A common guideline for classical reservoirs is controlling spectral radius:
         </p>
-        <ul>
-          <li>
-            <strong>Separation property:</strong> Different input sequences should drive the reservoir to
-            distinguishably different states. The reservoir must be sensitive enough to separate distinct inputs.
-          </li>
-          <li>
-            <strong>Fading memory (echo state property):</strong> The reservoir&apos;s state should gradually forget
-            initial conditions. The influence of inputs from the distant past should decay, ensuring the
-            current state primarily reflects recent inputs.
-          </li>
-        </ul>
+        <MathBlock display math="\rho(\mathbf{W}_{\text{res}}) \lesssim 1" />
         <p>
-          These properties create a balance: the reservoir must remember enough recent history to be useful,
-          but not so much that it becomes chaotic or retains irrelevant ancient history. The{' '}
-          <strong>spectral radius</strong> <MathBlock math="\rho(\mathbf{W}_{\text{res}})" /> — the largest
-          absolute eigenvalue of the reservoir weight matrix — is the key control parameter. A necessary
-          (though not sufficient) condition for the echo state property is:
+          Values near one can improve memory depth, but they narrow the stability margin. Practical tuning is always a
+          balance between expressive state trajectories and robust inference.
+        </p>
+        <ReservoirReadoutVisual />
+      </Section>
+
+      <Section id="readout-layer" title="Readout Layer and Ridge Regression">
+        <p>
+          Collect states into <MathBlock math="\mathbf{H}" />, targets into <MathBlock math="\mathbf{Y}" />, then solve:
         </p>
         <MathBlock
           display
-          math="\rho(\mathbf{W}_{\text{res}}) < 1"
+          math="\mathbf{W}_{\text{out}}=\mathbf{Y}\mathbf{H}^{\top}(\mathbf{H}\mathbf{H}^{\top}+\beta\mathbf{I})^{-1}"
         />
         <p>
-          In practice, the spectral radius is typically set close to (but below) 1, often around 0.9–0.99,
-          to operate near the &quot;edge of chaos&quot; where computational power is maximized.
+          This gives a stable, convex training objective and is one reason reservoirs transfer well to physical
+          hardware settings.
+        </p>
+        <p>
+          In implementation terms, you mainly tune regularization, state normalization, and washout length. Most
+          gains come from improving feature quality before the solver, not from making the solver itself more complex.
         </p>
       </Section>
 
-      <ReviewCardSet cards={cardSets.training} />
-
-      <Section id="readout-layer" title="The Readout Layer">
-        <p>
-          The elegance of reservoir computing lies in how simple the training becomes. Given a sequence of
-          inputs and corresponding target outputs, we collect the reservoir states into a matrix{' '}
-          <MathBlock math="\mathbf{H}" /> where each row is a reservoir state at one time step. The readout
-          weights are then found by solving a linear regression problem:
-        </p>
-        <MathBlock
-          display
-          math="\mathbf{W}_{\text{out}} = \mathbf{Y}_{\text{target}} \mathbf{H}^\top (\mathbf{H} \mathbf{H}^\top + \beta \mathbf{I})^{-1}"
-        />
-        <p>
-          where <MathBlock math="\beta" /> is a regularization parameter (Tikhonov / ridge regression) that
-          prevents overfitting. This is a <strong>closed-form solution</strong> — no iterative optimization, no
-          gradient descent, no hyperparameter-sensitive training loops. A single matrix computation gives you
-          the optimal readout weights.
-        </p>
-        <p>
-          This simplicity is what makes reservoir computing so attractive: all the complex, nonlinear
-          processing happens in the fixed reservoir, and we only need to solve a simple linear problem to
-          extract the information we need. As we&apos;ll see, this property becomes even more powerful when the
-          reservoir is a quantum system.
-        </p>
-      </Section>
-
-      <ReviewCardSet cards={cardSets.esn} />
-
-      {/* ============ PART II: Going Quantum ============ */}
+      <ReviewCardSet cards={cardSets.foundations} />
 
       <Section id="going-quantum" title="Going Quantum">
         <p>
-          Now we arrive at the central question: <em>what happens if we replace the classical reservoir with a
-          quantum system?</em> The idea is natural and compelling. Quantum systems are inherently:
+          QRC keeps the same training philosophy but replaces classical recurrence with quantum dynamics. An
+          n-qubit reservoir evolves in a 2^n-dimensional Hilbert space, which can provide rich temporal feature maps.
         </p>
-        <ul>
-          <li>
-            <strong>High-dimensional:</strong> An <MathBlock math="n" />-qubit system lives in a{' '}
-            <MathBlock math="2^n" />-dimensional Hilbert space, providing exponentially many degrees of freedom.
-          </li>
-          <li>
-            <strong>Nonlinear (upon measurement):</strong> While quantum evolution is linear (unitary), the
-            measurement process introduces effective nonlinearity in the observed features.
-          </li>
-          <li>
-            <strong>Dynamical:</strong> Quantum systems naturally evolve over time under Hamiltonian dynamics,
-            providing the temporal processing needed for reservoir computing.
-          </li>
-        </ul>
         <p>
-          These properties map directly onto the requirements for a good reservoir. The exponential state space
-          means even a small quantum system can generate an extraordinarily rich feature space — potentially
-          far richer than a classical reservoir of comparable physical size.
+          Closed-system evolution follows Schrödinger dynamics:
+        </p>
+        <MathBlock display math="i\hbar\frac{d}{dt}|\psi(t)\rangle=\hat{H}(t)|\psi(t)\rangle" />
+        <p>
+          The reservoir viewpoint is practical here: we do not need universal fault-tolerant computation to get value.
+          We need useful temporal feature dynamics that can be measured reliably.
         </p>
       </Section>
 
       <Section id="quantum-systems-as-reservoirs" title="Quantum Systems as Reservoirs">
         <p>
-          In quantum reservoir computing, the reservoir is a quantum system — typically a collection of
-          interacting qubits. The system evolves according to the Schrödinger equation:
+          Real hardware is open and noisy, so density-matrix form is often more useful:
         </p>
         <MathBlock
           display
-          math="i\hbar \frac{d}{dt}|\psi(t)\rangle = \hat{H}(t)|\psi(t)\rangle"
+          math="\frac{d\rho}{dt}=-\frac{i}{\hbar}[\hat{H}(t),\rho]+\mathcal{L}[\rho]"
         />
         <p>
-          or equivalently, for the density matrix <MathBlock math="\rho" /> (which can describe mixed states
-          and open quantum systems):
+          Here <MathBlock math="\mathcal{L}" /> captures dissipative channels. Moderate dissipation can help fading
+          memory, while strong dissipation erases informative structure.
         </p>
-        <MathBlock
-          display
-          math="\frac{d\rho}{dt} = -\frac{i}{\hbar}[\hat{H}(t), \rho(t)] + \mathcal{L}[\rho(t)]"
-        />
         <p>
-          where <MathBlock math="\hat{H}(t)" /> is the system Hamiltonian and{' '}
-          <MathBlock math="\mathcal{L}" /> is a Lindbladian superoperator describing decoherence and
-          dissipation. The Hamiltonian typically includes:
+          So in QRC, noise is neither purely enemy nor friend. It is a design parameter that can regularize temporal
+          memory when controlled, or destroy it when excessive.
         </p>
-        <ul>
-          <li>
-            <strong>Internal interactions:</strong> Qubit-qubit couplings like{' '}
-            <MathBlock math="\sum_{i,j} J_{ij} \hat{\sigma}_i^z \hat{\sigma}_j^z" /> (Ising-type) or
-            Heisenberg interactions.
-          </li>
-          <li>
-            <strong>Input-dependent terms:</strong> External fields modulated by the input signal, such as{' '}
-            <MathBlock math="\sum_i x(t) B_i \hat{\sigma}_i^x" />.
-          </li>
-          <li>
-            <strong>Disorder:</strong> Random local fields{' '}
-            <MathBlock math="\sum_i h_i \hat{\sigma}_i^z" /> that help diversify reservoir dynamics.
-          </li>
-        </ul>
-        <p>
-          The interplay between these terms — particularly the balance between interaction strength,
-          input driving, and dissipation — determines the computational capabilities of the quantum reservoir.
-        </p>
+        <QuantumPotentialVisual />
       </Section>
 
-      <ReviewCardSet cards={cardSets.quantum} />
-
-      <Section id="input-encoding" title="Input Encoding Strategies">
+      <Section id="input-encoding" title="Input Encoding">
         <p>
-          How we feed classical data into a quantum reservoir is a critical design choice. Several encoding
-          strategies have been developed:
+          QRC quality depends heavily on how classical signals are injected into quantum evolution.
         </p>
+
         <SubSection id="input-encoding-parameter" title="Parameter Encoding">
           <p>
-            The simplest approach modulates parameters of the Hamiltonian with the input signal. For example,
-            the input <MathBlock math="x(t)" /> can control the strength of an external magnetic field:
+            Input modulates Hamiltonian or gate parameters directly, for example:
           </p>
-          <MathBlock
-            display
-            math="\hat{H}(t) = \hat{H}_0 + x(t) \sum_i B_i \hat{\sigma}_i^x"
-          />
+          <MathBlock display math="\hat{H}(t)=\hat{H}_0+u(t)\sum_i b_i\hat{\sigma}_i^x" />
           <p>
-            The system then evolves for a fixed time <MathBlock math="\tau" /> before the next input is
-            applied. This is analogous to how inputs drive a classical ESN, with the quantum dynamics playing
-            the role of the nonlinear activation function.
+            This is usually the easiest strategy to deploy on real hardware because it aligns with native control
+            channels.
           </p>
         </SubSection>
 
         <SubSection id="input-encoding-amplitude" title="Amplitude Encoding">
           <p>
-            In amplitude encoding, the input data is encoded directly into the amplitudes of a quantum state.
-            For an input vector <MathBlock math="\mathbf{x} = (x_1, \ldots, x_N)" />, we prepare:
+            A normalized vector can be embedded in amplitudes:
           </p>
           <MathBlock
             display
-            math="|\psi_{\text{in}}\rangle = \frac{1}{\|\mathbf{x}\|} \sum_{i=1}^{N} x_i |i\rangle"
+            math="|\psi_{\text{in}}\rangle=\frac{1}{\|\mathbf{x}\|}\sum_{i=1}^{N}x_i|i\rangle"
           />
           <p>
-            This is exponentially efficient in terms of the number of qubits needed (only{' '}
-            <MathBlock math="\lceil \log_2 N \rceil" /> qubits for <MathBlock math="N" /> data points), but
-            preparing such states can be costly in terms of circuit depth.
+            It is information-dense but can be costly to prepare on noisy hardware.
+          </p>
+          <p>
+            In practice, teams often prototype with parameter encoding first and move to richer encodings only when
+            the task justifies the added preparation cost.
           </p>
         </SubSection>
 
         <SubSection id="input-encoding-temporal" title="Time-Multiplexing">
           <p>
-            Inspired by classical delay-line reservoirs, time-multiplexing feeds inputs sequentially to a
-            single quantum node (or small subsystem), using the temporal dynamics as the effective reservoir
-            dimension. Inputs are applied at intervals shorter than the system&apos;s relaxation time, creating
-            a virtual network of nodes within the transient dynamics.
+            Repeated sampling over short windows creates virtual nodes from one physical system, trading extra time for
+            effective dimensionality.
+          </p>
+          <p>
+            This is a frequent strategy when hardware qubit count is small but timing control is strong.
           </p>
         </SubSection>
       </Section>
 
-      <Section id="measurement-and-features" title="Measurement & Feature Extraction">
+      <Section id="measurement-and-features" title="Measurement and Features">
         <p>
-          The final step in the QRC pipeline is extracting classical features from the quantum reservoir state.
-          This is done through quantum measurements. The most common approach computes{' '}
-          <strong>expectation values</strong> of observables:
+          Readout uses measured observables:
         </p>
-        <MathBlock
-          display
-          math="\langle \hat{O}_k \rangle = \text{Tr}(\hat{O}_k \, \rho(t))"
-        />
+        <MathBlock display math="z_k(t)=\langle \hat{O}_k\rangle_t=\mathrm{Tr}(\hat{O}_k\rho(t))" />
         <p>
-          Typical observables include single-qubit Pauli operators{' '}
-          <MathBlock math="\hat{\sigma}_i^x, \hat{\sigma}_i^y, \hat{\sigma}_i^z" /> and multi-qubit
-          correlations like <MathBlock math="\hat{\sigma}_i^z \hat{\sigma}_j^z" />. For{' '}
-          <MathBlock math="n" /> qubits, the set of all Pauli strings provides up to{' '}
-          <MathBlock math="4^n - 1" /> independent observables — an exponentially large feature set.
+          The prediction is a linear map on these features:
+        </p>
+        <MathBlock display math="y(t)=\sum_{k}w_k z_k(t)+b" />
+        <p>
+          Measurement introduces shot noise and state disturbance, so feature richness must be balanced against
+          coherence preservation.
         </p>
         <p>
-          These expectation values form the feature vector that is passed to the classical linear readout:
+          A useful workflow is to begin with a compact observable set, verify stability, then expand features
+          incrementally while tracking calibration and shot budgets.
         </p>
-        <MathBlock
-          display
-          math="y(t) = \sum_k w_k \langle \hat{O}_k \rangle_t + b"
-        />
+        <MeasurementVisual />
+      </Section>
+
+      <ReviewCardSet cards={cardSets.quantumCore} />
+
+      <Section id="time-series-prediction" title="Time-Series Workflow">
         <p>
-          The readout weights <MathBlock math="w_k" /> and bias <MathBlock math="b" /> are trained using
-          ridge regression, exactly as in the classical case. Importantly, we only need a polynomial number
-          of measurements to extract useful features — we don&apos;t need to measure all{' '}
-          <MathBlock math="4^n - 1" /> observables.
+          A complete QRC experiment includes temporal splitting, washout, feature extraction, ridge training, and both
+          one-step and rollout evaluation. Rollout is essential for checking long-horizon stability.
         </p>
         <p>
-          An important subtlety: quantum measurement is inherently probabilistic, so each expectation
-          value must be estimated by repeating the experiment (running &quot;shots&quot;). The number of shots
-          required for accurate estimation affects both the computational cost and the effective noise level
-          of the QRC system.
+          Typical benchmark families include nonlinear autoregressive tasks, chaotic forecasting, and streaming
+          classification.
+        </p>
+        <p>
+          Always report both one-step and rollout behavior. A model that wins one-step error can still drift badly
+          under autoregressive rollout.
         </p>
       </Section>
 
-      <ReviewCardSet cards={cardSets.encoding} />
-
-      {/* ============ PART III: Applications & Frontiers ============ */}
-
-      <Section id="time-series-prediction" title="Time Series Prediction">
+      <Section id="quantum-advantage" title="Quantum Advantage Claims">
         <p>
-          Time series prediction is the most widely studied application of QRC. The standard benchmarks include:
+          Advantage claims are meaningful only with matched resource budgets and strong classical baselines. Error-only
+          comparisons are insufficient without latency, shot, and calibration costs.
         </p>
-        <ul>
-          <li>
-            <strong>NARMA tasks:</strong> The Nonlinear Auto-Regressive Moving Average task of order{' '}
-            <MathBlock math="n" /> (NARMA-<MathBlock math="n" />) tests the ability to learn nonlinear
-            temporal dependencies. The target output depends on the current input and the previous{' '}
-            <MathBlock math="n" /> outputs, requiring the reservoir to maintain a fading memory of sufficient
-            depth. NARMA-10 is a common benchmark:
-          </li>
-        </ul>
-        <MathBlock
-          display
-          math="y(t+1) = 0.3 y(t) + 0.05 y(t) \sum_{i=0}^{9} y(t-i) + 1.5 x(t) x(t-9) + 0.1"
-        />
-        <ul>
-          <li>
-            <strong>Mackey-Glass system:</strong> A chaotic time series defined by a delay differential equation.
-            Predicting its future values tests the reservoir&apos;s ability to model complex chaotic dynamics.
-          </li>
-          <li>
-            <strong>Santa Fe laser data:</strong> Real-world experimental data from a chaotic laser system.
-          </li>
-        </ul>
         <p>
-          Numerical studies have shown that QRC with as few as 5–7 qubits can match or exceed the
-          performance of classical ESNs with hundreds of nodes on these benchmarks, suggesting a significant
-          resource advantage.
+          The relevant metric is task performance at fixed total budget, not isolated best-case numbers.
+        </p>
+        <p>
+          Budget should include data protocol, shot count, latency, calibration cadence, and classical post-processing
+          overhead.
         </p>
       </Section>
 
-      <Section id="quantum-advantage" title="Quantum Advantage Arguments">
+      <Section id="physical-implementations" title="Hardware Implementations">
         <p>
-          The question of quantum advantage in QRC can be framed through the <strong>kernel perspective</strong>.
-          Any reservoir computer (classical or quantum) implicitly defines a kernel function:
-        </p>
-        <MathBlock
-          display
-          math="K(\mathbf{x}, \mathbf{x}') = \langle \phi(\mathbf{x}), \phi(\mathbf{x}') \rangle"
-        />
-        <p>
-          where <MathBlock math="\phi(\mathbf{x})" /> is the feature map induced by the reservoir dynamics. The
-          quantum reservoir&apos;s feature map operates in the exponentially large Hilbert space, defining a
-          <strong> quantum kernel</strong> that may capture correlations inaccessible to polynomial-sized
-          classical feature maps.
+          Superconducting, photonic, and NMR-inspired setups each offer different tradeoffs in control, speed, and
+          reproducibility. QRC design must be platform-aware from the start.
         </p>
         <p>
-          There are several arguments for quantum advantage:
-        </p>
-        <ul>
-          <li>
-            <strong>Exponential feature space:</strong> An <MathBlock math="n" />-qubit reservoir provides
-            access to a <MathBlock math="2^n" />-dimensional feature space through the density matrix elements.
-          </li>
-          <li>
-            <strong>Entanglement-enhanced correlations:</strong> Quantum entanglement allows the reservoir
-            to represent correlations between features that would require exponentially many classical nodes.
-          </li>
-          <li>
-            <strong>Native quantum data processing:</strong> For tasks involving quantum data (e.g., classifying
-            quantum states or learning quantum channels), QRC avoids the exponential overhead of classical
-            simulation.
-          </li>
-        </ul>
-        <p>
-          However, proving rigorous quantum advantage remains an open challenge. The practical advantage
-          depends on the specific task, the noise level of the quantum hardware, and the number of
-          measurements available.
+          A platform choice is a systems decision, not only an algorithm decision: control stack maturity and
+          integration constraints often dominate lab-to-product transfer.
         </p>
       </Section>
 
-      <Section id="physical-implementations" title="Physical Implementations">
+      <Section id="research-directions" title="Research Directions">
         <p>
-          One of QRC&apos;s greatest strengths is its flexibility in physical implementation. Because the reservoir
-          dynamics are not trained, we can use <em>any</em> controllable quantum system. Several platforms have
-          been explored:
+          Open questions include principled Hamiltonian design, robust low-shot feature sets, and reproducible
+          benchmarking standards. The field is moving from proof-of-concept toward engineering discipline.
         </p>
-        <ul>
-          <li>
-            <strong>Superconducting qubits:</strong> Transmon-based processors (like those from IBM and Google)
-            offer high connectivity and fast gate operations. QRC has been demonstrated on IBM quantum
-            hardware with up to 7 qubits.
-          </li>
-          <li>
-            <strong>Nuclear Magnetic Resonance (NMR):</strong> Liquid-state NMR systems use nuclear spins in
-            molecules as qubits. While limited in scalability, NMR provides excellent coherence and precise
-            control, making it ideal for proof-of-concept QRC experiments.
-          </li>
-          <li>
-            <strong>Photonic systems:</strong> Optical implementations can operate at room temperature and
-            offer high speeds. Photonic QRC uses the temporal and spectral modes of light as computational
-            resources.
-          </li>
-          <li>
-            <strong>Trapped ions:</strong> Long coherence times and high-fidelity operations make trapped ion
-            systems attractive for QRC, though they currently face speed limitations.
-          </li>
-          <li>
-            <strong>Nitrogen-vacancy centers:</strong> Solid-state spin defects in diamond offer room-temperature
-            quantum properties and have been proposed for QRC applications.
-          </li>
-        </ul>
-      </Section>
-
-      <Section id="research-directions" title="Current Research Directions">
         <p>
-          Quantum reservoir computing is an active and rapidly evolving field. Key research directions include:
-        </p>
-        <ul>
-          <li>
-            <strong>Reservoir design optimization:</strong> While the reservoir isn&apos;t trained by backpropagation,
-            its structure (connectivity, coupling strengths, input encoding) can be optimized. Techniques
-            from random matrix theory and quantum chaos are being applied to understand optimal reservoir
-            structures.
-          </li>
-          <li>
-            <strong>Noise as a resource:</strong> Counter-intuitively, the noise and decoherence present in
-            real quantum hardware may actually <em>help</em> QRC by providing the dissipation needed for
-            fading memory. Some studies suggest that moderate noise levels can improve QRC performance.
-          </li>
-          <li>
-            <strong>Hybrid quantum-classical architectures:</strong> Combining quantum reservoirs with classical
-            pre- and post-processing layers to leverage the strengths of both paradigms.
-          </li>
-          <li>
-            <strong>Temporal information processing capacity:</strong> Developing rigorous theoretical measures
-            of the computational power of quantum reservoirs, extending classical information processing
-            capacity measures to the quantum domain.
-          </li>
-          <li>
-            <strong>Beyond supervised learning:</strong> Exploring QRC for reinforcement learning, generative
-            modeling, and unsupervised feature extraction.
-          </li>
-        </ul>
-        <p>
-          The field sits at a fascinating intersection of quantum physics, machine learning, and dynamical
-          systems theory. As quantum hardware continues to improve, QRC may be among the first quantum
-          machine learning approaches to demonstrate clear, practical quantum advantage.
+          In practical terms, the next milestone is not maximal novelty but reliable, repeatable performance on
+          well-scoped temporal tasks.
         </p>
       </Section>
 

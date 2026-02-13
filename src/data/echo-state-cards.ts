@@ -1,188 +1,88 @@
 import { ReviewCard } from '@/lib/spaced-repetition';
 
 export const echoStateCards: ReviewCard[] = [
-  // ── ESN Architecture ────────────────────────────────────────────────
   {
-    id: 'esn-1',
-    question:
-      'What are the three layers of an Echo State Network, and which connections are trained?',
+    id: 'esn2-1',
+    question: 'What are the three ESN blocks and which one is trained?',
     answer:
-      'An ESN has an input layer, a reservoir (hidden) layer, and an output (readout) layer. Only the output weights are trained; input and reservoir weights are fixed after random initialization.',
+      'An ESN has input mapping, recurrent reservoir, and readout. Only the readout weights are trained; reservoir and input weights remain fixed after initialization.',
   },
   {
-    id: 'esn-2',
-    question:
-      'Why are the reservoir weights in an ESN kept fixed rather than learned through backpropagation?',
+    id: 'esn2-2',
+    question: 'Why does fixed random recurrence still work in ESNs?',
     answer:
-      'Fixing the reservoir weights avoids the vanishing/exploding gradient problem in recurrent networks and reduces training to a simple linear regression on the readout layer, making learning fast and stable.',
+      'Random recurrence can generate rich nonlinear state trajectories when driven by input. The readout then selects useful combinations from that state space.',
   },
   {
-    id: 'esn-3',
-    question:
-      'What role does sparse connectivity play in the reservoir of an ESN?',
+    id: 'esn2-3',
+    question: 'What does the leak rate alpha control?',
     answer:
-      'Sparse connectivity (typically 1–20% density) creates diverse, loosely coupled dynamical sub-networks within the reservoir, increasing the variety of temporal features the reservoir can represent.',
+      'It controls how quickly the state updates toward the new activation. Small alpha produces slower, longer-memory dynamics; large alpha yields faster responsiveness.',
   },
   {
-    id: 'esn-4',
-    question:
-      'How does the reservoir transform input signals before the readout layer sees them?',
+    id: 'esn2-4',
+    question: 'What is the practical meaning of reservoir state collection?',
     answer:
-      'The reservoir nonlinearly projects the input into a high-dimensional state space where temporal patterns are expanded into spatial patterns, making them linearly separable for the readout.',
+      'You record hidden states over time into a design matrix H. That matrix becomes the input for readout regression.',
   },
   {
-    id: 'esn-5',
-    question:
-      'What is the typical activation function used by reservoir neurons, and why?',
+    id: 'esn2-5',
+    question: 'Why is washout done before training ESN readout?',
     answer:
-      'The hyperbolic tangent (tanh) is most common because it is bounded between −1 and +1, which helps keep reservoir dynamics stable, while still providing the nonlinearity needed for rich representations.',
-  },
-
-  // ── The Echo State Property ─────────────────────────────────────────
-  {
-    id: 'esn-6',
-    question: 'State the Echo State Property (ESP) in plain language.',
-    answer:
-      'The ESP requires that the reservoir state be uniquely determined by the history of inputs, regardless of the initial state. In other words, the effect of any initial conditions must wash out over time.',
+      'Early states are biased by arbitrary initialization. Washout removes that transient so training sees input-driven dynamics only.',
   },
   {
-    id: 'esn-7',
-    question:
-      'Why is the Echo State Property essential for an ESN to function correctly?',
+    id: 'esn2-6',
+    question: 'State the echo state property (ESP) concisely.',
     answer:
-      'Without the ESP, the reservoir\'s response would depend on arbitrary initial conditions rather than solely on the input history, making the network\'s output unreproducible and unlearnable.',
+      'For the same input history, different initial states converge to the same reservoir trajectory. The state is determined by input history, not by initialization.',
   },
   {
-    id: 'esn-8',
-    question:
-      'What does "asymptotic state independence" mean in the context of the ESP?',
+    id: 'esn2-7',
+    question: 'Why is ESP critical for dependable prediction?',
     answer:
-      'It means that two reservoir trajectories started from different initial states but driven by the same input sequence will converge to the same trajectory as time progresses, so the initial state is eventually forgotten.',
+      'Without ESP, output depends on hidden initial conditions rather than data alone. That breaks reproducibility and makes supervised fitting unreliable.',
   },
   {
-    id: 'esn-9',
-    question:
-      'Is the Echo State Property a binary condition or a matter of degree? Explain.',
+    id: 'esn2-8',
+    question: 'What is spectral radius and why does ESN design care about it?',
     answer:
-      'Strictly, the ESP is a binary condition—it either holds or it does not. However, in practice the rate at which initial conditions are forgotten (the "fading memory") varies continuously and affects performance.',
+      'It is the largest absolute eigenvalue of the reservoir matrix. It strongly controls contraction rate, stability margin, and memory depth.',
   },
   {
-    id: 'esn-10',
-    question:
-      'How does the ESP relate to the concept of fading memory in dynamical systems?',
+    id: 'esn2-9',
+    question: 'What usually happens if spectral radius is too small?',
     answer:
-      'A system with fading memory gradually discounts older inputs, retaining a decaying trace of the past. The ESP guarantees fading memory: recent inputs dominate the reservoir state while distant inputs are progressively forgotten.',
-  },
-
-  // ── Spectral Radius ─────────────────────────────────────────────────
-  {
-    id: 'esn-11',
-    question:
-      'What is the spectral radius of a matrix, and how is it computed?',
-    answer:
-      'The spectral radius is the largest absolute value among all eigenvalues of the matrix. It is computed by finding the eigenvalues of the reservoir weight matrix and taking the maximum of their absolute values.',
+      'States contract too quickly, so memory of past inputs disappears early. Tasks with longer temporal dependence then perform poorly.',
   },
   {
-    id: 'esn-12',
-    question:
-      'What is the standard rule of thumb for the spectral radius to ensure the Echo State Property?',
+    id: 'esn2-10',
+    question: 'What is the risk if spectral radius is too large?',
     answer:
-      'A necessary condition for the ESP (for any input) is that the spectral radius of the reservoir weight matrix be less than 1. In practice, values slightly below 1 (e.g., 0.9–0.99) are common.',
+      'Dynamics can become unstable or too sensitive to small perturbations. Training then becomes noisy and generalization degrades.',
   },
   {
-    id: 'esn-13',
-    question:
-      'Why is spectral radius less than 1 only a necessary—not sufficient—condition for the ESP?',
+    id: 'esn2-11',
+    question: 'Why is ridge regression standard for ESN readout?',
     answer:
-      'The spectral radius condition guarantees the ESP for zero input, but with nonzero input the effective dynamics change. Conversely, for certain input distributions, a spectral radius above 1 may still satisfy the ESP due to the contractive effect of the tanh nonlinearity under input drive.',
+      'Reservoir features are often collinear and noisy. Ridge penalization stabilizes inversion and improves out-of-sample behavior.',
   },
   {
-    id: 'esn-14',
-    question:
-      'How does increasing the spectral radius toward 1 affect the reservoir\'s memory capacity?',
+    id: 'esn2-12',
+    question: 'What diagnostics indicate a badly tuned reservoir?',
     answer:
-      'A spectral radius closer to 1 slows the decay of reservoir states, giving the network a longer memory of past inputs. However, pushing it too close to 1 risks instability and loss of the ESP.',
+      'Rapid state collapse, unstable state norms, and highly erratic validation curves are common signs. Also, very high sensitivity to tiny hyperparameter changes is a warning.',
   },
   {
-    id: 'esn-15',
-    question:
-      'Describe a practical strategy for tuning the spectral radius of an ESN.',
+    id: 'esn2-13',
+    question: 'Why can ESNs struggle compared with deep sequence models?',
     answer:
-      'Generate a random reservoir matrix, compute its spectral radius, then rescale the matrix by dividing by the current spectral radius and multiplying by the desired value. The optimal value is then selected via cross-validation on the target task.',
-  },
-
-  // ── Reservoir Design Principles ─────────────────────────────────────
-  {
-    id: 'esn-16',
-    question:
-      'How does reservoir sparsity affect computational cost and performance?',
-    answer:
-      'Higher sparsity reduces the number of non-zero weights, lowering the computational cost of state updates. It also promotes diverse dynamical regimes within the reservoir, often improving representation quality up to a point.',
+      'A fixed reservoir cannot adapt internal representation to every task. For very complex hierarchical temporal structure, trained deep models can learn better internal features.',
   },
   {
-    id: 'esn-17',
-    question: 'What is input scaling in an ESN and why does it matter?',
+    id: 'esn2-14',
+    question: 'How does ESN intuition transfer to QRC?',
     answer:
-      'Input scaling multiplies the input weights by a scalar factor, controlling how strongly external inputs drive the reservoir. Large input scaling pushes neurons into the saturated region of tanh, creating more nonlinear but less memory-rich dynamics.',
-  },
-  {
-    id: 'esn-18',
-    question:
-      'What is a leaky integrator neuron, and why is it used in ESN reservoirs?',
-    answer:
-      'A leaky integrator neuron blends its previous state with the new activation via a leak rate parameter α: x(t) = (1−α)x(t−1) + α·tanh(Win·u(t) + W·x(t−1)). This smooths the dynamics and allows the reservoir to operate on multiple timescales.',
-  },
-  {
-    id: 'esn-19',
-    question:
-      'How does the leak rate α in a leaky-integrator ESN control the effective timescale of the reservoir?',
-    answer:
-      'A small α (close to 0) makes neurons change slowly, favoring long timescales and smooth dynamics. A large α (close to 1) makes the reservoir respond quickly to inputs, behaving like a standard ESN update with fast dynamics.',
-  },
-
-  // ── Training the Readout ────────────────────────────────────────────
-  {
-    id: 'esn-20',
-    question:
-      'Why is training the ESN readout typically formulated as a linear regression problem?',
-    answer:
-      'Because only the output weights are trained and the reservoir states are fixed, the mapping from reservoir states to outputs is linear. This means we can collect reservoir states into a matrix and solve for the output weights with standard linear regression.',
-  },
-  {
-    id: 'esn-21',
-    question:
-      'What is the role of Tikhonov regularization (ridge regression) when training an ESN readout?',
-    answer:
-      'Tikhonov regularization adds a penalty term λ‖W_out‖² to the least-squares objective, preventing overfitting to noise in the training data and improving generalization, especially when the reservoir dimension is large relative to the training set.',
-  },
-  {
-    id: 'esn-22',
-    question:
-      'How is the Moore–Penrose pseudoinverse used to compute ESN output weights?',
-    answer:
-      'The output weights are computed as W_out = Y · X⁺, where X⁺ is the pseudoinverse of the collected reservoir state matrix X and Y is the target matrix. This gives the least-squares optimal weights in one step without iterative optimization.',
-  },
-
-  // ── Applications and Limitations ────────────────────────────────────
-  {
-    id: 'esn-23',
-    question:
-      'Why are ESNs particularly well-suited for time-series prediction tasks?',
-    answer:
-      'The reservoir naturally maintains a fading memory of recent inputs, creating a rich temporal feature space without backpropagation through time. Combined with fast linear training, this makes ESNs efficient and effective for learning temporal patterns.',
-  },
-  {
-    id: 'esn-24',
-    question:
-      'What are the main computational limitations of standard ESNs compared to deep learning approaches?',
-    answer:
-      'ESNs struggle with tasks requiring deep hierarchical feature extraction or very long-range dependencies. The random, untrained reservoir may also need to be very large to match the representational power of a trained deep network, increasing memory and compute costs.',
-  },
-  {
-    id: 'esn-25',
-    question:
-      'What is a Deep Echo State Network, and what problem does it address?',
-    answer:
-      'A Deep ESN stacks multiple reservoir layers, where each layer receives the states of the layer below. This introduces hierarchical processing of temporal features at multiple timescales, addressing the shallow architecture limitation of standard ESNs.',
+      'Both rely on fixed dynamic feature generation and trained readout. QRC replaces classical reservoir dynamics with quantum dynamics and measurement-derived features.',
   },
 ];

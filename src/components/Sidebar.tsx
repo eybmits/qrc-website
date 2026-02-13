@@ -6,12 +6,23 @@ import Link from 'next/link';
 import { essays } from '@/data/toc';
 import styles from './Sidebar.module.css';
 
+function normalizePath(path: string): string {
+  const normalized = path.replace(/\/+$/, '');
+  return normalized === '' ? '/' : normalized;
+}
+
+function matchesRoute(pathname: string, route: string): boolean {
+  const path = normalizePath(pathname);
+  const target = normalizePath(route);
+  return path === target || path.endsWith(target);
+}
+
 export function Sidebar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('');
 
-  const currentEssay = essays.find((e) => e.slug === pathname);
+  const currentEssay = essays.find((essay) => matchesRoute(pathname, essay.slug));
 
   useEffect(() => {
     setMobileOpen(false);
@@ -74,7 +85,7 @@ export function Sidebar() {
 
           <Link
             href="/"
-            className={`${styles.essayLink} ${pathname === '/' ? styles.active : ''}`}
+            className={`${styles.essayLink} ${matchesRoute(pathname, '/') ? styles.active : ''}`}
             onClick={() => setMobileOpen(false)}
           >
             Overview
@@ -82,7 +93,7 @@ export function Sidebar() {
 
           <Link
             href="/review"
-            className={`${styles.reviewLink} ${pathname === '/review' ? styles.active : ''}`}
+            className={`${styles.reviewLink} ${matchesRoute(pathname, '/review') ? styles.active : ''}`}
             onClick={() => setMobileOpen(false)}
           >
             <span className={styles.reviewLinkText}>
@@ -96,7 +107,7 @@ export function Sidebar() {
 
           <div className={styles.navLabel}>Essays</div>
           {essays.map((essay) => {
-            const isActive = pathname === essay.slug;
+            const isActive = matchesRoute(pathname, essay.slug);
 
             return (
               <div key={essay.slug} className={styles.essayGroup}>

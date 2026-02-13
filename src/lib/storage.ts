@@ -10,6 +10,7 @@ import {
 } from './spaced-repetition';
 
 const STORAGE_KEY = 'qrc-review-state';
+const STORAGE_VERSION = 4;
 
 export interface DailyStats {
   dayKey: string;
@@ -23,29 +24,7 @@ export interface StoredState {
   cards: Record<string, CardState>;
   config: SchedulerConfig;
   dailyStats: DailyStats;
-  version: 3;
-}
-
-type LegacyCardState = {
-  easeFactor?: number;
-  interval?: number;
-  repetitions?: number;
-  nextReview?: number;
-  lastReview?: number;
-};
-
-type LegacyStoredState = {
-  cards?: Record<string, LegacyCardState>;
-  config?: unknown;
-  dailyStats?: unknown;
-  version?: number;
-};
-
-interface StoredStateV2 {
-  cards: Record<string, CardState>;
-  config: SchedulerConfig;
-  dailyStats: DailyStats;
-  version: 2;
+  version: 4;
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -57,8 +36,7 @@ function toFiniteNumber(value: unknown, fallback: number): number {
 }
 
 function toNonNegativeInt(value: unknown, fallback: number): number {
-  const numeric = toFiniteNumber(value, fallback);
-  return Math.max(0, Math.round(numeric));
+  return Math.max(0, Math.round(toFiniteNumber(value, fallback)));
 }
 
 function toStatus(value: unknown): CardStatus | null {
@@ -90,42 +68,28 @@ function getDefaultState(): StoredState {
     cards: {},
     config: { ...DEFAULT_SCHEDULER_CONFIG },
     dailyStats: createDailyStats(),
-    version: 3,
+    version: STORAGE_VERSION,
   };
 }
 
 function normalizeCardState(raw: unknown): CardState {
   const fallback = createInitialCardState();
-  if (!isRecord(raw)) {
-    return fallback;
-  }
+  if (!isRecord(raw)) return fallback;
 
-  const rawStatus = toStatus(raw.status);
-  const legacyRepetitions = toNonNegativeInt(raw.repetitions, 0);
-  const legacyInterval = toNonNegativeInt(raw.interval, 0);
-  const legacyNextReview = toNonNegativeInt(raw.nextReview, 0);
-
-  const derivedStatus: CardStatus =
-    rawStatus ||
-    (legacyRepetitions > 0
-      ? 'review'
-      : legacyNextReview > 0
-        ? 'learning'
-        : 'new');
-
-  const dueAtCandidate = toNonNegativeInt(raw.dueAt, legacyNextReview);
+  const status = toStatus(raw.status) ?? 'new';
+  const dueAtCandidate = toNonNegativeInt(raw.dueAt, 0);
 
   return {
-    status: derivedStatus,
-    dueAt: derivedStatus === 'new' ? dueAtCandidate : Math.max(1, dueAtCandidate),
-    lastReviewedAt: toNonNegativeInt(raw.lastReviewedAt, toNonNegativeInt(raw.lastReview, 0)),
+    status,
+    dueAt: status === 'new' ? dueAtCandidate : Math.max(1, dueAtCandidate),
+    lastReviewedAt: toNonNegativeInt(raw.lastReviewedAt, 0),
     unlockedAt: toNonNegativeInt(raw.unlockedAt, 0),
     easeFactor: Math.max(1.3, toFiniteNumber(raw.easeFactor, 2.5)),
     repetitions: toNonNegativeInt(raw.repetitions, 0),
     lapses: toNonNegativeInt(raw.lapses, 0),
     learningStepIndex: toNonNegativeInt(raw.learningStepIndex, 0),
-    scheduledDays: toNonNegativeInt(raw.scheduledDays, legacyInterval),
-    reviewCount: toNonNegativeInt(raw.reviewCount, legacyRepetitions),
+    scheduledDays: toNonNegativeInt(raw.scheduledDays, 0),
+    reviewCount: toNonNegativeInt(raw.reviewCount, 0),
     lastSeenDayKey: typeof raw.lastSeenDayKey === 'string' ? raw.lastSeenDayKey : '',
   };
 }
@@ -153,63 +117,7 @@ function ensureCurrentDay(state: { dailyStats: DailyStats }): void {
   }
 }
 
-function migrateV1ToV2(raw: unknown): StoredStateV2 {
-  const migrated: StoredStateV2 = {
-    cards: {},
-    config: { ...DEFAULT_SCHEDULER_CONFIG },
-    dailyStats: createDailyStats(),
-    version: 2,
-  };
-  if (!isRecord(raw)) return migrated;
-
-  if (isRecord(raw.cards)) {
-    for (const [cardId, value] of Object.entries(raw.cards)) {
-      migrated.cards[cardId] = normalizeCardState(value);
-    }
-  }
-
-  if (isRecord(raw.config)) {
-    migrated.config = normalizeSchedulerConfig(raw.config as Partial<SchedulerConfig>);
-  }
-
-  if (isRecord(raw.dailyStats)) {
-    migrated.dailyStats = normalizeDailyStats(raw.dailyStats);
-  }
-
-  ensureCurrentDay(migrated);
-  return migrated;
-}
-
-function normalizeV2(raw: unknown): StoredStateV2 {
-  if (!isRecord(raw)) {
-    return {
-      cards: {},
-      config: { ...DEFAULT_SCHEDULER_CONFIG },
-      dailyStats: createDailyStats(),
-      version: 2,
-    };
-  }
-
-  const normalized: StoredStateV2 = {
-    cards: {},
-    config: normalizeSchedulerConfig(
-      isRecord(raw.config) ? (raw.config as Partial<SchedulerConfig>) : undefined
-    ),
-    dailyStats: normalizeDailyStats(raw.dailyStats),
-    version: 2,
-  };
-
-  if (isRecord(raw.cards)) {
-    for (const [cardId, value] of Object.entries(raw.cards)) {
-      normalized.cards[cardId] = normalizeCardState(value);
-    }
-  }
-
-  ensureCurrentDay(normalized);
-  return normalized;
-}
-
-function normalizeV3(raw: unknown): StoredState {
+function normalizeV4(raw: unknown): StoredState {
   if (!isRecord(raw)) return getDefaultState();
 
   const normalized: StoredState = {
@@ -218,7 +126,7 @@ function normalizeV3(raw: unknown): StoredState {
       isRecord(raw.config) ? (raw.config as Partial<SchedulerConfig>) : undefined
     ),
     dailyStats: normalizeDailyStats(raw.dailyStats),
-    version: 3,
+    version: STORAGE_VERSION,
   };
 
   if (isRecord(raw.cards)) {
@@ -231,25 +139,16 @@ function normalizeV3(raw: unknown): StoredState {
   return normalized;
 }
 
-function migrateLegacyToV3(raw: unknown): StoredState {
-  const normalizedLegacy = isRecord(raw) && raw.version === 2 ? normalizeV2(raw) : migrateV1ToV2(raw);
-  const migrated: StoredState = {
-    cards: {},
-    config: normalizedLegacy.config,
-    dailyStats: normalizedLegacy.dailyStats,
-    version: 3,
-  };
-
-  // User-chosen migration mode: cards are locked again until first in-text answer.
-  for (const [cardId, cardState] of Object.entries(normalizedLegacy.cards)) {
-    migrated.cards[cardId] = {
-      ...normalizeCardState(cardState),
-      unlockedAt: 0,
-    };
+function resetStateAndPersist(): StoredState {
+  const reset = getDefaultState();
+  try {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(reset));
+    }
+  } catch {
+    // localStorage might be full or unavailable
   }
-
-  ensureCurrentDay(migrated);
-  return migrated;
+  return reset;
 }
 
 export function loadState(): StoredState {
@@ -259,15 +158,15 @@ export function loadState(): StoredState {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return getDefaultState();
 
-    const parsed = JSON.parse(raw) as LegacyStoredState & Record<string, unknown>;
-    const version = typeof parsed.version === 'number' ? parsed.version : 1;
-    const state = version === 3 ? normalizeV3(parsed) : migrateLegacyToV3(parsed);
+    const parsed = JSON.parse(raw) as Record<string, unknown>;
+    const version = typeof parsed.version === 'number' ? parsed.version : 0;
 
-    if (version !== 3) {
-      saveState(state);
+    // Curriculum reset policy: any pre-v4 state is discarded.
+    if (version !== STORAGE_VERSION) {
+      return resetStateAndPersist();
     }
 
-    return state;
+    return normalizeV4(parsed);
   } catch {
     return getDefaultState();
   }
@@ -281,7 +180,7 @@ export function saveState(state: StoredState): void {
       ...state,
       config: normalizeSchedulerConfig(state.config),
       dailyStats: normalizeDailyStats(state.dailyStats),
-      version: 3,
+      version: STORAGE_VERSION,
     };
     ensureCurrentDay(normalized);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized));
