@@ -740,15 +740,17 @@
   background-clip: text;
   border: 0;
   color: transparent;
+  display: inline-block;
   -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   font-family: var(--font-display), serif;
   font-size: clamp(3.2rem, 7.2vw, 5.8rem);
   font-weight: 600;
-  letter-spacing: -0.04em;
-  line-height: 1.08;
+  letter-spacing: -0.03em;
+  line-height: 1.16;
   margin: 0 0 1.2rem;
   overflow: visible;
-  padding: 0 0 0.14em;
+  padding: 0 0.05em 0.2em 0;
   text-shadow: 0 0 44px rgba(117, 195, 255, 0.34);
 }
 
