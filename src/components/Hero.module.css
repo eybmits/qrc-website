@@ -37,7 +37,8 @@
 .bgStars {
   animation:
     starPan 56s linear infinite,
-    starTwinkle 7.6s ease-in-out infinite;
+    starTwinkle 6.2s ease-in-out infinite,
+    starBreath 9.6s ease-in-out infinite;
   background-image:
     radial-gradient(circle at 9% 14%, rgba(233, 245, 255, 0.9) 1px, transparent 1.5px),
     radial-gradient(circle at 26% 22%, rgba(213, 234, 255, 0.66) 1px, transparent 1.6px),
@@ -51,6 +52,7 @@
     radial-gradient(circle at 73% 66%, rgba(226, 241, 255, 0.64) 1px, transparent 1.6px),
     radial-gradient(circle at 88% 60%, rgba(210, 232, 255, 0.56) 1px, transparent 1.6px);
   backface-visibility: hidden;
+  filter: brightness(0.92) saturate(98%);
   transform: translateZ(0);
   transform-origin: 50% 50%;
   will-change: transform, opacity;
@@ -68,7 +70,8 @@
 .bgStars::before {
   animation:
     starPanReverse 68s linear infinite,
-    starShimmer 8.8s ease-in-out infinite;
+    starShimmer 8.4s ease-in-out infinite,
+    starBreathSoft 10.2s ease-in-out infinite;
   background-image:
     radial-gradient(circle at 11% 30%, rgba(219, 239, 255, 0.5) 1px, transparent 1.7px),
     radial-gradient(circle at 32% 12%, rgba(188, 223, 255, 0.42) 1px, transparent 1.7px),
@@ -84,7 +87,8 @@
 .bgStars::after {
   animation:
     starLayerDrift 34s ease-in-out infinite alternate,
-    starShimmer 6.8s ease-in-out infinite;
+    starShimmer 6.4s ease-in-out infinite,
+    starBreathSoft 8.1s ease-in-out infinite;
   background-image:
     radial-gradient(circle at 6% 22%, rgba(235, 247, 255, 0.4) 1px, transparent 1.5px),
     radial-gradient(circle at 19% 16%, rgba(216, 238, 255, 0.34) 1px, transparent 1.5px),
@@ -102,7 +106,7 @@
 .bgStarsSoft {
   animation:
     starDriftSoft 46s ease-in-out infinite alternate,
-    nebulaPulse 20s ease-in-out infinite;
+    nebulaPulse 14s ease-in-out infinite;
   background:
     radial-gradient(circle at 18% 36%, rgba(120, 172, 255, 0.18) 0, rgba(120, 172, 255, 0) 34%),
     radial-gradient(circle at 78% 44%, rgba(92, 213, 255, 0.16) 0, rgba(92, 213, 255, 0) 38%),
@@ -543,22 +547,44 @@
 @keyframes starTwinkle {
   0%,
   100% {
-    opacity: 0.44;
+    opacity: 0.3;
   }
 
   50% {
-    opacity: 0.62;
+    opacity: 0.82;
   }
 }
 
 @keyframes starShimmer {
   0%,
   100% {
-    opacity: 0.28;
+    opacity: 0.16;
   }
 
   50% {
-    opacity: 0.42;
+    opacity: 0.58;
+  }
+}
+
+@keyframes starBreath {
+  0%,
+  100% {
+    filter: brightness(0.86) saturate(92%);
+  }
+
+  50% {
+    filter: brightness(1.24) saturate(138%);
+  }
+}
+
+@keyframes starBreathSoft {
+  0%,
+  100% {
+    filter: brightness(0.82) saturate(88%);
+  }
+
+  50% {
+    filter: brightness(1.18) saturate(126%);
   }
 }
 
@@ -575,13 +601,13 @@
 @keyframes nebulaPulse {
   0%,
   100% {
-    opacity: 0.52;
-    filter: blur(18px) saturate(110%);
+    opacity: 0.42;
+    filter: blur(17px) saturate(104%);
   }
 
   50% {
-    opacity: 0.68;
-    filter: blur(20px) saturate(122%);
+    opacity: 0.86;
+    filter: blur(23px) saturate(142%);
   }
 }
 
