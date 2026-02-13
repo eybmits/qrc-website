@@ -58,6 +58,7 @@ export function Hero() {
   return (
     <div className={styles.hero}>
       <div className={styles.bgSky} />
+      <div className={styles.bgBreathBlob} />
       <div className={styles.bgStars} />
       <div className={styles.bgStarsSoft} />
       <div className={styles.bgAurora} />

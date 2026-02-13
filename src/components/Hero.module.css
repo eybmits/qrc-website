@@ -10,6 +10,7 @@
 }
 
 .bgSky,
+.bgBreathBlob,
 .bgStars,
 .bgStarsSoft,
 .bgAurora,
@@ -32,6 +33,22 @@
     radial-gradient(ellipse 900px 680px at 50% 112%, rgba(28, 95, 212, 0.2), transparent 72%);
   opacity: 0.84;
   z-index: 0;
+}
+
+.bgBreathBlob {
+  animation: breathBlob 11s ease-in-out infinite;
+  background: radial-gradient(
+    ellipse 680px 460px at 84% 14%,
+    rgba(118, 180, 255, 0.42) 0%,
+    rgba(96, 162, 255, 0.28) 34%,
+    rgba(86, 146, 255, 0.08) 54%,
+    rgba(86, 146, 255, 0) 74%
+  );
+  filter: blur(1px) saturate(112%);
+  opacity: 0.58;
+  transform-origin: 84% 14%;
+  will-change: transform, opacity, filter;
+  z-index: 1;
 }
 
 .bgStars {
@@ -57,7 +74,7 @@
   transform-origin: 50% 50%;
   will-change: transform, opacity;
   opacity: 0.58;
-  z-index: 1;
+  z-index: 2;
 }
 
 .bgStars::before,
@@ -113,7 +130,7 @@
     radial-gradient(circle at 47% 74%, rgba(135, 174, 255, 0.12) 0, rgba(135, 174, 255, 0) 42%);
   filter: blur(18px) saturate(114%);
   opacity: 0.62;
-  z-index: 2;
+  z-index: 3;
 }
 
 .bgAurora {
@@ -125,7 +142,7 @@
   filter: blur(46px);
   mix-blend-mode: screen;
   opacity: 0.52;
-  z-index: 3;
+  z-index: 4;
 }
 
 .bgDriftParticles {
@@ -135,7 +152,7 @@
   overflow: hidden;
   transform: translateZ(0);
   will-change: transform;
-  z-index: 4;
+  z-index: 5;
 }
 
 .driftParticle {
@@ -199,7 +216,7 @@
   mask-image: radial-gradient(ellipse at center, #000 28%, transparent 86%);
   opacity: 0.32;
   will-change: transform, opacity, background-position;
-  z-index: 5;
+  z-index: 6;
 }
 
 .bgGlow {
@@ -209,7 +226,7 @@
     radial-gradient(ellipse 520px 240px at 88% 72%, rgba(54, 201, 255, 0.18), transparent 72%);
   filter: blur(30px);
   opacity: 0.44;
-  z-index: 6;
+  z-index: 7;
 }
 
 .bgGrain {
@@ -218,7 +235,7 @@
   background-size: 3px 3px;
   mix-blend-mode: soft-light;
   opacity: 0.11;
-  z-index: 7;
+  z-index: 8;
 }
 
 .orbitOne,
@@ -228,7 +245,7 @@
   left: auto;
   overflow: hidden;
   transform-origin: 50% 50%;
-  z-index: 8;
+  z-index: 9;
 }
 
 .orbitOne {
@@ -511,6 +528,21 @@
 
   100% {
     transform: translate3d(1.2%, -1%, 0) scale(1.04);
+  }
+}
+
+@keyframes breathBlob {
+  0%,
+  100% {
+    filter: blur(1px) saturate(106%);
+    opacity: 0.42;
+    transform: translate3d(0, 0, 0) scale(0.88);
+  }
+
+  50% {
+    filter: blur(1.8px) saturate(138%);
+    opacity: 0.86;
+    transform: translate3d(-1.2%, 0.9%, 0) scale(1.22);
   }
 }
 
@@ -812,6 +844,10 @@
 
   .bgDriftParticles {
     opacity: 0.62;
+  }
+
+  .bgBreathBlob {
+    opacity: 0.5;
   }
 }
 
