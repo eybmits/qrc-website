@@ -99,6 +99,8 @@ const formulaOverlay = [
 ];
 
 const PATH_STEPS = 84;
+const PATH_X_MIN = -16;
+const PATH_X_MAX = 116;
 
 function buildWavePath(
   baseY: number,
@@ -110,8 +112,9 @@ function buildWavePath(
   const points: string[] = [];
 
   for (let step = 0; step <= PATH_STEPS; step += 1) {
-    const x = (step / PATH_STEPS) * 100;
-    const theta = (x / 100) * Math.PI * 2 * frequency + phase;
+    const t = step / PATH_STEPS;
+    const x = PATH_X_MIN + t * (PATH_X_MAX - PATH_X_MIN);
+    const theta = t * Math.PI * 2 * frequency + phase;
     const y = baseY + verticalOffset + Math.sin(theta) * amplitude;
     points.push(`${x.toFixed(3)} ${y.toFixed(3)}`);
   }
@@ -123,7 +126,7 @@ export function Hero() {
   return (
     <div className={styles.hero}>
       <div className={styles.bgWaveScene} aria-hidden>
-        <svg className={styles.waveSvg} viewBox="0 0 100 100" preserveAspectRatio="none" role="presentation">
+        <svg className={styles.waveSvg} viewBox="-8 -8 116 116" preserveAspectRatio="none" role="presentation">
           {waveBands.map((band) => (
             <g key={band.id} className={`${styles.waveGroup} ${band.className}`}>
               {Array.from({ length: band.lineCount }, (_, lineIndex) => {
