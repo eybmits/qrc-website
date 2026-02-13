@@ -1,0 +1,127 @@
+.essay {
+  margin: 0 auto;
+  max-width: var(--content-max-width);
+  padding: 3.8rem 2rem 5.2rem;
+}
+
+.header {
+  background:
+    linear-gradient(145deg, rgba(16, 27, 47, 0.88), rgba(9, 16, 30, 0.86));
+  border: 1px solid rgba(111, 142, 197, 0.28);
+  border-radius: var(--radius-lg);
+  box-shadow:
+    var(--shadow-soft),
+    inset 0 1px 0 rgba(180, 214, 255, 0.1);
+  margin-bottom: 2.35rem;
+  overflow: hidden;
+  padding: 1.7rem 1.55rem;
+  position: relative;
+}
+
+.header::before {
+  background: linear-gradient(90deg, rgba(56, 217, 255, 0), rgba(56, 217, 255, 0.42), rgba(139, 92, 246, 0.4), rgba(56, 217, 255, 0));
+  content: '';
+  height: 1px;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.title {
+  background: linear-gradient(135deg, #ffffff 0%, #c9ebff 50%, #b6b8ff 100%);
+  background-clip: text;
+  border: 0;
+  color: transparent;
+  -webkit-background-clip: text;
+  font-family: var(--font-display), serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.06;
+  margin: 0 0 0.7rem;
+  padding: 0;
+}
+
+.subtitle {
+  color: #95a8c8;
+  font-size: 1rem;
+  line-height: 1.65;
+  margin: 0;
+  max-width: 64ch;
+}
+
+.content {
+  color: #c6d2e7;
+  font-size: 19px;
+  line-height: 1.82;
+}
+
+.section {
+  margin-top: 2.7rem;
+}
+
+.sectionTitle {
+  border-bottom-color: rgba(114, 144, 197, 0.3);
+  color: #f1f7ff;
+  font-family: var(--font-ui), sans-serif;
+  font-size: clamp(1.28rem, 2.4vw, 1.72rem);
+  letter-spacing: -0.018em;
+  padding-right: 1.45rem;
+  position: relative;
+}
+
+.subsection {
+  margin-top: 2.25rem;
+}
+
+.subsectionTitle {
+  color: #eff6ff;
+  font-family: var(--font-ui), sans-serif;
+  font-size: 1.22rem;
+  letter-spacing: -0.012em;
+  position: relative;
+}
+
+.anchor {
+  color: #7f96bc;
+  opacity: 0;
+  position: absolute;
+  right: 0;
+  text-decoration: none;
+  top: 0;
+  transition:
+    color var(--transition-fast),
+    opacity var(--transition-fast),
+    text-shadow var(--transition-fast);
+}
+
+.sectionTitle:hover .anchor,
+.subsectionTitle:hover .anchor {
+  opacity: 0.74;
+}
+
+.anchor:hover {
+  color: var(--accent-primary);
+  opacity: 1 !important;
+  text-shadow: 0 0 14px rgba(56, 217, 255, 0.5);
+}
+
+@media (max-width: 1024px) {
+  .essay {
+    padding: 2rem 1.2rem 4rem;
+  }
+
+  .header {
+    margin-bottom: 1.8rem;
+    padding: 1.2rem 1rem;
+  }
+
+  .content {
+    font-size: 17.5px;
+  }
+
+  .anchor {
+    display: none;
+  }
+}

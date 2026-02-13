@@ -1,0 +1,206 @@
+.card {
+  border-radius: var(--radius-md);
+  margin: 0.45rem 0;
+  perspective: 1000px;
+  transition:
+    transform var(--transition-normal),
+    opacity var(--transition-normal);
+}
+
+.card:hover {
+  transform: translateY(-2px);
+}
+
+.card.rated {
+  opacity: 0.62;
+  transform: scale(0.985);
+}
+
+.inner {
+  position: relative;
+  transform-style: preserve-3d;
+}
+
+.front,
+.back {
+  background: linear-gradient(150deg, rgba(16, 27, 47, 0.9), rgba(8, 15, 27, 0.86));
+  border: 1px solid rgba(111, 143, 197, 0.3);
+  border-radius: var(--radius-md);
+  box-shadow:
+    var(--shadow-soft),
+    inset 0 1px 0 rgba(188, 218, 255, 0.1);
+  padding: 1.15rem;
+}
+
+.front {
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.front:hover {
+  border-color: rgba(133, 193, 255, 0.5);
+  box-shadow:
+    var(--shadow-soft),
+    0 0 20px rgba(56, 217, 255, 0.16);
+  transform: translateY(-1px);
+}
+
+.back {
+  animation: fadeIn 0.28s ease;
+  border-color: rgba(122, 187, 255, 0.46);
+}
+
+.flipped .front {
+  display: none;
+}
+
+.label {
+  color: #7be8ff;
+  font-family: var(--font-ui), sans-serif;
+  font-size: 0.61rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  margin-bottom: 0.38rem;
+  text-transform: uppercase;
+}
+
+.questionText {
+  color: #f0f6ff;
+  font-size: 0.95rem;
+  line-height: 1.57;
+  margin-bottom: 0.9rem;
+}
+
+.questionTextSmall {
+  color: #97aac8;
+  font-size: 0.84rem;
+  line-height: 1.55;
+  margin-bottom: 0.4rem;
+}
+
+.answerText {
+  color: #f2f7ff;
+  font-size: 0.94rem;
+  line-height: 1.58;
+  margin-bottom: 0.95rem;
+}
+
+.divider {
+  background: linear-gradient(90deg, rgba(112, 147, 200, 0.5), transparent 66%);
+  height: 1px;
+  margin: 0.62rem 0;
+}
+
+.revealBtn {
+  background: rgba(56, 217, 255, 0.16);
+  border: 1px solid rgba(114, 202, 255, 0.46);
+  border-radius: 10px;
+  color: #ddf4ff;
+  cursor: pointer;
+  display: block;
+  font-family: var(--font-ui), sans-serif;
+  font-size: 0.79rem;
+  font-weight: 700;
+  letter-spacing: 0.038em;
+  padding: 0.67rem;
+  transition:
+    background-color var(--transition-fast),
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast),
+    border-color var(--transition-fast);
+  width: 100%;
+}
+
+.revealBtn:hover {
+  background: rgba(56, 217, 255, 0.24);
+  border-color: rgba(160, 226, 255, 0.72);
+  box-shadow: 0 9px 22px rgba(18, 135, 177, 0.24);
+  transform: translateY(-1px);
+}
+
+.ratingButtons {
+  margin-top: 0.9rem;
+}
+
+.ratingLabel {
+  color: #92a7c6;
+  font-family: var(--font-ui), sans-serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  margin-bottom: 0.44rem;
+}
+
+.buttons {
+  display: flex;
+  gap: 0.36rem;
+  align-items: flex-start;
+}
+
+.rateBtnWrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.rateBtn {
+  background: rgba(9, 17, 31, 0.72);
+  border: 1px solid var(--btn-color);
+  border-radius: 9px;
+  color: var(--btn-color);
+  cursor: pointer;
+  flex: 1;
+  font-family: var(--font-ui), sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 0.56rem 0.38rem;
+  transition:
+    background-color var(--transition-fast),
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.rateBtn:hover {
+  background: rgba(16, 27, 47, 0.98);
+  box-shadow:
+    0 7px 18px rgba(3, 7, 17, 0.55),
+    0 0 14px rgba(56, 217, 255, 0.12);
+  transform: translateY(-1px);
+}
+
+.rateBtn:disabled,
+.revealBtn:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+  transform: none;
+  box-shadow: none;
+}
+
+.dueHint {
+  color: #7f95b8;
+  font-family: var(--font-ui), sans-serif;
+  font-size: 0.6rem;
+  text-align: center;
+  letter-spacing: 0.03em;
+}
+
+.doneMessage {
+  color: #63ebb4;
+  font-family: var(--font-ui), sans-serif;
+  font-size: 0.77rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+@media (max-width: 640px) {
+  .buttons {
+    flex-wrap: wrap;
+  }
+
+  .rateBtnWrap {
+    flex: 1 1 calc(50% - 0.18rem);
+  }
+}

@@ -1,0 +1,79 @@
+.container {
+  background: linear-gradient(145deg, rgba(13, 25, 45, 0.92), rgba(7, 15, 28, 0.88));
+  border: 1px solid rgba(109, 142, 196, 0.32);
+  border-radius: var(--radius-xl);
+  box-shadow:
+    var(--shadow-soft),
+    inset 0 1px 0 rgba(188, 219, 255, 0.08);
+  margin: 2.7rem 0;
+  overflow: hidden;
+  padding: 1.2rem;
+  position: relative;
+}
+
+.container::before {
+  background: linear-gradient(90deg, rgba(56, 217, 255, 0), rgba(56, 217, 255, 0.4), rgba(139, 92, 246, 0.34), rgba(56, 217, 255, 0));
+  content: '';
+  height: 1px;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.84rem;
+}
+
+.headerLeft {
+  align-items: center;
+  display: flex;
+  gap: 0.45rem;
+}
+
+.icon {
+  animation: glowPulse 5.8s ease-in-out infinite;
+  color: #79e7ff;
+  font-size: 0.92rem;
+}
+
+.headerTitle {
+  color: #eef6ff;
+  font-family: var(--font-ui), sans-serif;
+  font-size: 0.84rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.count {
+  color: #89a0c4;
+  font-family: var(--font-ui), sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.progressBar {
+  background: rgba(80, 101, 137, 0.38);
+  border-radius: 999px;
+  height: 6px;
+  margin-bottom: 0.92rem;
+  overflow: hidden;
+}
+
+.progressFill {
+  background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+  border-radius: 999px;
+  height: 100%;
+  transition: width var(--transition-normal);
+}
+
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0.32rem;
+}
