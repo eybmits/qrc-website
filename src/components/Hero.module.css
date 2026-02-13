@@ -13,6 +13,7 @@
 .bgStars,
 .bgStarsSoft,
 .bgAurora,
+.bgDriftParticles,
 .bgRings,
 .bgGlow,
 .bgGrain,
@@ -35,8 +36,8 @@
 
 .bgStars {
   animation:
-    starPan 78s linear infinite,
-    starTwinkle 8.5s ease-in-out infinite;
+    starPan 56s linear infinite,
+    starTwinkle 7.6s ease-in-out infinite;
   background-image:
     radial-gradient(circle at 9% 14%, rgba(233, 245, 255, 0.9) 1px, transparent 1.5px),
     radial-gradient(circle at 26% 22%, rgba(213, 234, 255, 0.66) 1px, transparent 1.6px),
@@ -49,6 +50,8 @@
     radial-gradient(circle at 58% 57%, rgba(205, 230, 255, 0.56) 1px, transparent 1.6px),
     radial-gradient(circle at 73% 66%, rgba(226, 241, 255, 0.64) 1px, transparent 1.6px),
     radial-gradient(circle at 88% 60%, rgba(210, 232, 255, 0.56) 1px, transparent 1.6px);
+  backface-visibility: hidden;
+  transform: translateZ(0);
   transform-origin: 50% 50%;
   will-change: transform, opacity;
   opacity: 0.58;
@@ -64,8 +67,8 @@
 
 .bgStars::before {
   animation:
-    starPanReverse 92s linear infinite,
-    starShimmer 10s ease-in-out infinite;
+    starPanReverse 68s linear infinite,
+    starShimmer 8.8s ease-in-out infinite;
   background-image:
     radial-gradient(circle at 11% 30%, rgba(219, 239, 255, 0.5) 1px, transparent 1.7px),
     radial-gradient(circle at 32% 12%, rgba(188, 223, 255, 0.42) 1px, transparent 1.7px),
@@ -80,8 +83,8 @@
 
 .bgStars::after {
   animation:
-    starLayerDrift 54s ease-in-out infinite alternate,
-    starShimmer 7.6s ease-in-out infinite;
+    starLayerDrift 34s ease-in-out infinite alternate,
+    starShimmer 6.8s ease-in-out infinite;
   background-image:
     radial-gradient(circle at 6% 22%, rgba(235, 247, 255, 0.4) 1px, transparent 1.5px),
     radial-gradient(circle at 19% 16%, rgba(216, 238, 255, 0.34) 1px, transparent 1.5px),
@@ -121,6 +124,55 @@
   z-index: 3;
 }
 
+.bgDriftParticles {
+  animation: driftFieldShift 36s ease-in-out infinite alternate;
+  mix-blend-mode: screen;
+  opacity: 0.82;
+  overflow: hidden;
+  transform: translateZ(0);
+  will-change: transform;
+  z-index: 4;
+}
+
+.driftParticle {
+  animation:
+    particleDriftLong var(--p-duration, 24s) linear var(--p-delay, 0s) infinite,
+    particlePulse calc(var(--p-duration, 24s) * 0.52) ease-in-out var(--p-delay, 0s) infinite;
+  background: radial-gradient(
+    circle at 30% 36%,
+    rgba(241, 250, 255, 0.96) 0%,
+    rgba(126, 216, 255, 0.58) 38%,
+    rgba(85, 146, 255, 0.14) 62%,
+    rgba(85, 146, 255, 0) 84%
+  );
+  border: 1px solid rgba(160, 223, 255, 0.26);
+  border-radius: 999px;
+  box-shadow:
+    0 0 16px rgba(80, 200, 255, 0.34),
+    0 0 28px rgba(89, 143, 255, 0.2);
+  height: calc(var(--p-size, 8px) * 1.45);
+  left: var(--p-x, 50%);
+  opacity: 0.28;
+  position: absolute;
+  top: var(--p-y, 50%);
+  transform-origin: left center;
+  will-change: transform, opacity;
+  width: calc(var(--p-size, 8px) * 1.45);
+}
+
+.driftParticle::after {
+  background: linear-gradient(90deg, rgba(126, 220, 255, 0.38), rgba(126, 220, 255, 0));
+  border-radius: 999px;
+  content: '';
+  height: 2px;
+  left: 40%;
+  opacity: 0.26;
+  position: absolute;
+  top: 48%;
+  transform: translateY(-50%);
+  width: calc(var(--p-size, 8px) * 7.6);
+}
+
 .bgRings {
   animation:
     ringSweep 26s ease-in-out infinite alternate,
@@ -143,7 +195,7 @@
   mask-image: radial-gradient(ellipse at center, #000 28%, transparent 86%);
   opacity: 0.32;
   will-change: transform, opacity, background-position;
-  z-index: 4;
+  z-index: 5;
 }
 
 .bgGlow {
@@ -153,7 +205,7 @@
     radial-gradient(ellipse 520px 240px at 88% 72%, rgba(54, 201, 255, 0.18), transparent 72%);
   filter: blur(30px);
   opacity: 0.44;
-  z-index: 5;
+  z-index: 6;
 }
 
 .bgGrain {
@@ -162,7 +214,7 @@
   background-size: 3px 3px;
   mix-blend-mode: soft-light;
   opacity: 0.11;
-  z-index: 6;
+  z-index: 7;
 }
 
 .orbitOne,
@@ -172,7 +224,7 @@
   left: auto;
   overflow: hidden;
   transform-origin: 50% 50%;
-  z-index: 7;
+  z-index: 8;
 }
 
 .orbitOne {
@@ -464,7 +516,7 @@
   }
 
   100% {
-    transform: translate3d(-3.2%, 3.4%, 0);
+    transform: translate3d(-4.6%, 4.8%, 0);
   }
 }
 
@@ -474,17 +526,17 @@
   }
 
   100% {
-    transform: translate3d(2.8%, -2.6%, 0);
+    transform: translate3d(4.2%, -3.8%, 0);
   }
 }
 
 @keyframes starLayerDrift {
   0% {
-    transform: translate3d(-1.8%, 1.2%, 0) scale(0.985);
+    transform: translate3d(-3.1%, 1.9%, 0) scale(0.978);
   }
 
   100% {
-    transform: translate3d(1.9%, -1.6%, 0) scale(1.03);
+    transform: translate3d(3.5%, -2.6%, 0) scale(1.04);
   }
 }
 
@@ -540,6 +592,49 @@
 
   100% {
     transform: translate3d(2%, -1%, 0) rotate(1.2deg);
+  }
+}
+
+@keyframes driftFieldShift {
+  0% {
+    transform: translate3d(-1.2%, 0.8%, 0);
+  }
+
+  100% {
+    transform: translate3d(1.2%, -0.8%, 0);
+  }
+}
+
+@keyframes particleDriftLong {
+  0% {
+    transform: translate3d(-126px, -10px, 0) scale(0.76);
+  }
+
+  24% {
+    transform: translate3d(-42px, 8px, 0) scale(0.94);
+  }
+
+  52% {
+    transform: translate3d(24px, -12px, 0) scale(1);
+  }
+
+  76% {
+    transform: translate3d(94px, 6px, 0) scale(0.9);
+  }
+
+  100% {
+    transform: translate3d(154px, -8px, 0) scale(0.74);
+  }
+}
+
+@keyframes particlePulse {
+  0%,
+  100% {
+    opacity: 0.16;
+  }
+
+  50% {
+    opacity: 0.56;
   }
 }
 
@@ -687,6 +782,10 @@
 
   .bgRings {
     opacity: 0.24;
+  }
+
+  .bgDriftParticles {
+    opacity: 0.62;
   }
 }
 

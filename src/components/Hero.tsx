@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import type { CSSProperties } from 'react';
 import styles from './Hero.module.css';
 
 const topicBlocks = [
@@ -42,6 +43,17 @@ const topicBlocks = [
   },
 ];
 
+const driftParticles = [
+  { x: 8, y: 18, size: 7, duration: 20, delay: -2.5 },
+  { x: 22, y: 30, size: 8, duration: 24, delay: -8.2 },
+  { x: 36, y: 14, size: 6, duration: 19, delay: -5.3 },
+  { x: 52, y: 26, size: 9, duration: 26, delay: -11.7 },
+  { x: 68, y: 18, size: 7, duration: 21, delay: -3.8 },
+  { x: 82, y: 34, size: 8, duration: 28, delay: -14.1 },
+  { x: 28, y: 68, size: 6, duration: 23, delay: -6.4 },
+  { x: 74, y: 72, size: 7, duration: 25, delay: -9.6 },
+];
+
 export function Hero() {
   return (
     <div className={styles.hero}>
@@ -49,6 +61,19 @@ export function Hero() {
       <div className={styles.bgStars} />
       <div className={styles.bgStarsSoft} />
       <div className={styles.bgAurora} />
+      <div className={styles.bgDriftParticles} aria-hidden>
+        {driftParticles.map((particle, index) => {
+          const style = {
+            '--p-x': `${particle.x}%`,
+            '--p-y': `${particle.y}%`,
+            '--p-size': `${particle.size}px`,
+            '--p-duration': `${particle.duration}s`,
+            '--p-delay': `${particle.delay}s`,
+          } as CSSProperties;
+
+          return <span key={`particle-${index}`} className={styles.driftParticle} style={style} />;
+        })}
+      </div>
       <div className={styles.bgRings} />
       <div className={styles.bgGlow} />
       <div className={styles.bgGrain} />
