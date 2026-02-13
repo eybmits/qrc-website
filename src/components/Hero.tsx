@@ -61,7 +61,10 @@ export function Hero() {
   return (
     <div className={styles.hero}>
       <div className={styles.bgStars} />
+      <div className={styles.bgLattice} />
+      <div className={styles.bgAurora} />
       <div className={styles.bgMesh} />
+      <div className={styles.bgInterference} />
       <div className={styles.bgWave} />
       <div className={styles.bgNoise} />
       <div className={styles.driftField} aria-hidden>
