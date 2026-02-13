@@ -43,6 +43,25 @@ const topicBlocks = [
   },
 ];
 
+const driftParticles = [
+  { x: 9, y: 16, size: 14, duration: 24, delay: 0 },
+  { x: 22, y: 34, size: 11, duration: 20, delay: -6 },
+  { x: 38, y: 18, size: 9, duration: 22, delay: -11 },
+  { x: 57, y: 30, size: 12, duration: 26, delay: -3 },
+  { x: 72, y: 14, size: 10, duration: 18, delay: -9 },
+  { x: 84, y: 36, size: 15, duration: 29, delay: -14 },
+  { x: 15, y: 62, size: 10, duration: 21, delay: -8 },
+  { x: 31, y: 74, size: 13, duration: 25, delay: -12 },
+  { x: 49, y: 66, size: 8, duration: 19, delay: -5 },
+  { x: 66, y: 78, size: 12, duration: 27, delay: -16 },
+  { x: 81, y: 68, size: 10, duration: 23, delay: -7 },
+];
+
+const atoms = [
+  { x: 16, y: 28, scale: 1.02, duration: 15, delay: -1.2 },
+  { x: 82, y: 66, scale: 0.96, duration: 17, delay: -5.8 },
+];
+
 type WaveBand = {
   baseY: number;
   className: string;
@@ -87,17 +106,6 @@ const waveBands: WaveBand[] = [
   },
 ];
 
-const formulaOverlay = [
-  { text: 'x', x: 14, y: 24, size: 6.9, opacity: 0.22, blur: 0.8, duration: 19, delay: -4 },
-  { text: 'x + y = s', x: 76, y: 26, size: 3.3, opacity: 0.18, blur: 0.5, duration: 16, delay: -9 },
-  { text: 'dy / dt = f(x,u)', x: 32, y: 64, size: 2.5, opacity: 0.14, blur: 1.1, duration: 22, delay: -6 },
-  { text: 'W_out', x: 58, y: 68, size: 2.8, opacity: 0.15, blur: 1, duration: 18, delay: -11 },
-  { text: 'phi(x_t)', x: 44, y: 80, size: 2.3, opacity: 0.12, blur: 1.4, duration: 20, delay: -7 },
-  { text: 'x_(t+1)', x: 12, y: 86, size: 2.1, opacity: 0.12, blur: 1.2, duration: 21, delay: -10 },
-  { text: 'A x + B u', x: 71, y: 58, size: 2.1, opacity: 0.13, blur: 1.3, duration: 24, delay: -5 },
-  { text: 'H = sum(w_i z_i)', x: 46, y: 34, size: 2.5, opacity: 0.13, blur: 1.1, duration: 23, delay: -13 },
-];
-
 const PATH_STEPS = 84;
 const PATH_X_MIN = -16;
 const PATH_X_MAX = 116;
@@ -125,6 +133,13 @@ function buildWavePath(
 export function Hero() {
   return (
     <div className={styles.hero}>
+      <div className={styles.bgStars} />
+      <div className={styles.bgLattice} />
+      <div className={styles.bgAurora} />
+      <div className={styles.bgMesh} />
+      <div className={styles.bgInterference} />
+      <div className={styles.bgWave} />
+
       <div className={styles.bgWaveScene} aria-hidden>
         <svg className={styles.waveSvg} viewBox="-8 -8 116 116" preserveAspectRatio="none" role="presentation">
           {waveBands.map((band) => (
@@ -153,30 +168,58 @@ export function Hero() {
         </svg>
       </div>
 
-      <div className={styles.bgRightBlob} aria-hidden />
+      <div className={styles.bgNoise} />
 
-      <div className={styles.bgFormulaFog} aria-hidden>
-        {formulaOverlay.map((item, index) => {
-          const formulaStyle = {
-            '--formula-blur': `${item.blur}px`,
-            '--formula-delay': `${item.delay}s`,
-            '--formula-duration': `${item.duration}s`,
-            '--formula-opacity': item.opacity,
-            '--formula-size': `${item.size}rem`,
-            '--formula-x': `${item.x}%`,
-            '--formula-y': `${item.y}%`,
+      <div className={styles.driftField} aria-hidden>
+        {driftParticles.map((particle, index) => {
+          const vars = {
+            '--dot-x': `${particle.x}%`,
+            '--dot-y': `${particle.y}%`,
+            '--dot-size': `${particle.size}px`,
+            '--dot-duration': `${particle.duration}s`,
+            '--dot-delay': `${particle.delay}s`,
+          } as CSSProperties;
+
+          return <span key={`drift-${index}`} className={styles.driftDot} style={vars} />;
+        })}
+      </div>
+
+      <div className={styles.atomField} aria-hidden>
+        {atoms.map((atom, index) => {
+          const vars = {
+            '--atom-x': `${atom.x}%`,
+            '--atom-y': `${atom.y}%`,
+            '--atom-scale': atom.scale,
+            '--orbit-duration': `${atom.duration}s`,
+            '--orbit-delay': `${atom.delay}s`,
           } as CSSProperties;
 
           return (
-            <span key={`formula-${index}`} className={styles.formulaGlyph} style={formulaStyle}>
-              {item.text}
-            </span>
+            <div key={`atom-${index}`} className={styles.atom} style={vars}>
+              <span className={`${styles.cloud} ${styles.cloudS}`} />
+              <span className={`${styles.cloud} ${styles.cloudP1}`} />
+              <span className={`${styles.cloud} ${styles.cloudP2}`} />
+              <span className={`${styles.probabilityShell} ${styles.shellA}`} />
+              <span className={`${styles.probabilityShell} ${styles.shellB}`} />
+              <span className={styles.pointCloud} />
+              <span className={styles.nucleus} />
+
+              <span className={`${styles.electronPath} ${styles.electronPathA}`}>
+                <span className={`${styles.electron} ${styles.electronA}`} />
+              </span>
+              <span className={`${styles.electronPath} ${styles.electronPathB}`}>
+                <span className={`${styles.electron} ${styles.electronB}`} />
+              </span>
+              <span className={`${styles.electronPath} ${styles.electronPathC}`}>
+                <span className={`${styles.electron} ${styles.electronC}`} />
+              </span>
+            </div>
           );
         })}
       </div>
 
-      <div className={styles.bgVignette} />
-      <div className={styles.bgNoise} />
+      <div className={styles.orbitOne} />
+      <div className={styles.orbitTwo} />
 
       <div className={styles.content}>
         <div className={styles.badge}>Interactive QRC Learning Project</div>
