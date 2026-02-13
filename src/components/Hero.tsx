@@ -43,43 +43,135 @@ const topicBlocks = [
   },
 ];
 
-const driftParticles = [
-  { x: 8, y: 18, size: 7, duration: 20, delay: -2.5 },
-  { x: 22, y: 30, size: 8, duration: 24, delay: -8.2 },
-  { x: 36, y: 14, size: 6, duration: 19, delay: -5.3 },
-  { x: 52, y: 26, size: 9, duration: 26, delay: -11.7 },
-  { x: 68, y: 18, size: 7, duration: 21, delay: -3.8 },
-  { x: 82, y: 34, size: 8, duration: 28, delay: -14.1 },
-  { x: 28, y: 68, size: 6, duration: 23, delay: -6.4 },
-  { x: 74, y: 72, size: 7, duration: 25, delay: -9.6 },
+type WaveBand = {
+  baseY: number;
+  className: string;
+  frequency: number;
+  id: string;
+  lineCount: number;
+  lineGap: number;
+  phase: number;
+  amplitude: number;
+};
+
+const waveBands: WaveBand[] = [
+  {
+    id: 'band-a',
+    className: styles.waveBandA,
+    baseY: 50,
+    amplitude: 13.2,
+    frequency: 1.85,
+    phase: 0.22,
+    lineCount: 14,
+    lineGap: 1.06,
+  },
+  {
+    id: 'band-b',
+    className: styles.waveBandB,
+    baseY: 53,
+    amplitude: 10.8,
+    frequency: 2.1,
+    phase: 1.24,
+    lineCount: 12,
+    lineGap: 0.98,
+  },
+  {
+    id: 'band-c',
+    className: styles.waveBandC,
+    baseY: 46,
+    amplitude: 8.2,
+    frequency: 2.55,
+    phase: 2.06,
+    lineCount: 10,
+    lineGap: 0.92,
+  },
 ];
+
+const formulaOverlay = [
+  { text: 'x', x: 14, y: 24, size: 6.9, opacity: 0.22, blur: 0.8, duration: 19, delay: -4 },
+  { text: 'x + y = s', x: 76, y: 26, size: 3.3, opacity: 0.18, blur: 0.5, duration: 16, delay: -9 },
+  { text: 'dy / dt = f(x,u)', x: 32, y: 64, size: 2.5, opacity: 0.14, blur: 1.1, duration: 22, delay: -6 },
+  { text: 'W_out', x: 58, y: 68, size: 2.8, opacity: 0.15, blur: 1, duration: 18, delay: -11 },
+  { text: 'phi(x_t)', x: 44, y: 80, size: 2.3, opacity: 0.12, blur: 1.4, duration: 20, delay: -7 },
+  { text: 'x_(t+1)', x: 12, y: 86, size: 2.1, opacity: 0.12, blur: 1.2, duration: 21, delay: -10 },
+  { text: 'A x + B u', x: 71, y: 58, size: 2.1, opacity: 0.13, blur: 1.3, duration: 24, delay: -5 },
+  { text: 'H = sum(w_i z_i)', x: 46, y: 34, size: 2.5, opacity: 0.13, blur: 1.1, duration: 23, delay: -13 },
+];
+
+const PATH_STEPS = 84;
+
+function buildWavePath(
+  baseY: number,
+  amplitude: number,
+  frequency: number,
+  phase: number,
+  verticalOffset: number
+): string {
+  const points: string[] = [];
+
+  for (let step = 0; step <= PATH_STEPS; step += 1) {
+    const x = (step / PATH_STEPS) * 100;
+    const theta = (x / 100) * Math.PI * 2 * frequency + phase;
+    const y = baseY + verticalOffset + Math.sin(theta) * amplitude;
+    points.push(`${x.toFixed(3)} ${y.toFixed(3)}`);
+  }
+
+  return `M ${points.join(' L ')}`;
+}
 
 export function Hero() {
   return (
     <div className={styles.hero}>
-      <div className={styles.bgSky} />
-      <div className={styles.bgBreathBlob} />
-      <div className={styles.bgStars} />
-      <div className={styles.bgStarsSoft} />
-      <div className={styles.bgAurora} />
-      <div className={styles.bgDriftParticles} aria-hidden>
-        {driftParticles.map((particle, index) => {
-          const style = {
-            '--p-x': `${particle.x}%`,
-            '--p-y': `${particle.y}%`,
-            '--p-size': `${particle.size}px`,
-            '--p-duration': `${particle.duration}s`,
-            '--p-delay': `${particle.delay}s`,
+      <div className={styles.bgWaveScene} aria-hidden>
+        <svg className={styles.waveSvg} viewBox="0 0 100 100" preserveAspectRatio="none" role="presentation">
+          {waveBands.map((band) => (
+            <g key={band.id} className={`${styles.waveGroup} ${band.className}`}>
+              {Array.from({ length: band.lineCount }, (_, lineIndex) => {
+                const centered = lineIndex - (band.lineCount - 1) / 2;
+                const lineAmp = band.amplitude * (1 - Math.abs(centered) * 0.022);
+                const linePhase = band.phase + centered * 0.078;
+                const path = buildWavePath(
+                  band.baseY,
+                  lineAmp,
+                  band.frequency,
+                  linePhase,
+                  centered * band.lineGap
+                );
+
+                return (
+                  <g key={`${band.id}-line-${lineIndex}`}>
+                    <path className={styles.waveGlow} d={path} />
+                    <path className={styles.waveLine} d={path} />
+                  </g>
+                );
+              })}
+            </g>
+          ))}
+        </svg>
+      </div>
+
+      <div className={styles.bgFormulaFog} aria-hidden>
+        {formulaOverlay.map((item, index) => {
+          const formulaStyle = {
+            '--formula-blur': `${item.blur}px`,
+            '--formula-delay': `${item.delay}s`,
+            '--formula-duration': `${item.duration}s`,
+            '--formula-opacity': item.opacity,
+            '--formula-size': `${item.size}rem`,
+            '--formula-x': `${item.x}%`,
+            '--formula-y': `${item.y}%`,
           } as CSSProperties;
 
-          return <span key={`particle-${index}`} className={styles.driftParticle} style={style} />;
+          return (
+            <span key={`formula-${index}`} className={styles.formulaGlyph} style={formulaStyle}>
+              {item.text}
+            </span>
+          );
         })}
       </div>
-      <div className={styles.bgRings} />
-      <div className={styles.bgGlow} />
-      <div className={styles.bgGrain} />
-      <div className={styles.orbitOne} />
-      <div className={styles.orbitTwo} />
+
+      <div className={styles.bgVignette} />
+      <div className={styles.bgNoise} />
 
       <div className={styles.content}>
         <div className={styles.badge}>Interactive QRC Learning Project</div>
