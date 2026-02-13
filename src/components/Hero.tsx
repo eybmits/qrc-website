@@ -153,6 +153,8 @@ export function Hero() {
         </svg>
       </div>
 
+      <div className={styles.bgRightBlob} aria-hidden />
+
       <div className={styles.bgFormulaFog} aria-hidden>
         {formulaOverlay.map((item, index) => {
           const formulaStyle = {
