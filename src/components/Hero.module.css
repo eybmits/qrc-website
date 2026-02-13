@@ -703,26 +703,3 @@
     min-height: auto;
   }
 }
-
-@media (prefers-reduced-motion: reduce) {
-  .bgSky,
-  .bgStars,
-  .bgStars::before,
-  .bgStars::after,
-  .bgStarsSoft,
-  .bgAurora,
-  .bgRings,
-  .bgGlow,
-  .bgGrain,
-  .orbitOne,
-  .orbitTwo,
-  .badge,
-  .strapline,
-  .title,
-  .subtitle,
-  .actions,
-  .topicGrid,
-  .primaryCta::after {
-    animation: none !important;
-  }
-}
