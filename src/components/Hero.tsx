@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { essays } from '@/data/toc';
 import styles from './Hero.module.css';
 
 const topicBlocks = [
@@ -170,6 +171,26 @@ export function Hero() {
           <Link href="/qrc#introduction" className={styles.primaryCta}>
             Introduction
           </Link>
+        </div>
+
+        <div className={styles.essayGrid}>
+          <div className={styles.essayGridLabel}>Reading Path</div>
+          <div className={styles.essayCards}>
+            {essays.map((essay, i) => (
+              <Link
+                key={essay.slug}
+                href={`${essay.slug}#${essay.sections[0].id}`}
+                className={styles.essayCard}
+              >
+                <div className={styles.essayCardTop}>
+                  <span className={styles.essayNumber}>{String(i + 1).padStart(2, '0')}</span>
+                  {i === 0 && <span className={styles.startBadge}>Start here</span>}
+                </div>
+                <h2 className={styles.essayTitle}>{essay.shortTitle}</h2>
+                <p className={styles.essayDesc}>{essay.description}</p>
+              </Link>
+            ))}
+          </div>
         </div>
 
         <div className={styles.topicGrid}>

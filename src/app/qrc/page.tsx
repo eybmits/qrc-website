@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { Essay, Section, SubSection } from '@/components/Essay';
 import { MathBlock } from '@/components/MathBlock';
 import { ReviewCardSet } from '@/components/ReviewCardSet';
@@ -198,6 +199,7 @@ export default function QRCPage() {
     <Essay
       title="Quantum Reservoir Computing for the Very Curious"
       subtitle="A deep path from classical temporal learning to quantum reservoirs: intuitive first steps, then full mathematical structure and realistic implementation constraints."
+      slug="/qrc"
     >
       <Section id="introduction" title="Introduction">
         <p>
@@ -212,6 +214,13 @@ export default function QRCPage() {
           If a section feels dense, pause at the intuition sentence first, then read the equation line-by-line. This
           text is written so each equation directly corresponds to one physical or algorithmic mechanism.
         </p>
+
+        <div className={styles.primerNote}>
+          New to quantum mechanics? The{' '}
+          <Link href="/quantum-primer">Quantum Mechanics Primer</Link> covers states, gates,
+          measurement, and open-system dynamics — everything you need before the quantum sections
+          of this essay.
+        </div>
 
         <div className={styles.quickMap}>
           <div className={styles.quickMapTitle}>Learning Path</div>

@@ -52,82 +52,6 @@
   margin: 0.8rem 0 0;
 }
 
-.primerNote {
-  background: linear-gradient(145deg, rgba(10, 21, 39, 0.72), rgba(9, 17, 31, 0.78));
-  border-left: 3px solid var(--accent-primary);
-  border-radius: 0 10px 10px 0;
-  color: #a9bbda;
-  font-size: 0.92rem;
-  line-height: 1.65;
-  margin: 1rem 0;
-  padding: 0.8rem 1rem;
-}
-
-.primerNote a {
-  color: var(--accent-primary);
-  text-decoration: none;
-}
-
-.primerNote a:hover {
-  text-decoration: underline;
-}
-
-.pipelineVisual {
-  align-items: center;
-  background:
-    radial-gradient(circle at 16% 50%, rgba(78, 155, 255, 0.18), transparent 32%),
-    radial-gradient(circle at 84% 50%, rgba(66, 227, 255, 0.18), transparent 32%),
-    linear-gradient(165deg, rgba(9, 18, 33, 0.94), rgba(6, 12, 23, 0.96));
-  border: 1px solid rgba(112, 165, 236, 0.3);
-  border-radius: 14px;
-  display: grid;
-  gap: 0.55rem;
-  grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
-  margin: 0.95rem 0 1.25rem;
-  padding: 0.9rem;
-}
-
-.pipelineNode {
-  background: linear-gradient(150deg, rgba(17, 34, 60, 0.92), rgba(11, 22, 40, 0.94));
-  border: 1px solid rgba(122, 189, 255, 0.35);
-  border-radius: 11px;
-  box-shadow:
-    0 9px 24px rgba(5, 9, 20, 0.44),
-    inset 0 1px 0 rgba(199, 227, 255, 0.08);
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-  min-height: 62px;
-  justify-content: center;
-  padding: 0.58rem 0.62rem;
-}
-
-.nodeLabel {
-  color: #edf8ff;
-  font-family: var(--font-ui), sans-serif;
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.03em;
-}
-
-.nodeSub {
-  color: #89a5cf;
-  font-size: 0.66rem;
-  line-height: 1.3;
-}
-
-.pipelineConnector {
-  background: linear-gradient(90deg, rgba(91, 179, 255, 0.1), rgba(91, 179, 255, 0.86), rgba(91, 179, 255, 0.1));
-  border-radius: 99px;
-  display: block;
-  height: 2px;
-  width: 100%;
-}
-
-.gentleList {
-  margin-top: 0.4rem;
-}
-
 .figureFrame {
   background: linear-gradient(150deg, rgba(11, 22, 40, 0.9), rgba(8, 16, 29, 0.94));
   border: 1px solid rgba(104, 160, 236, 0.34);
@@ -188,16 +112,6 @@
 }
 
 @media (max-width: 900px) {
-  .pipelineVisual {
-    grid-template-columns: 1fr;
-  }
-
-  .pipelineConnector {
-    height: 16px;
-    margin: -0.05rem auto;
-    width: 2px;
-  }
-
   .figureCanvas {
     padding: 0.55rem 0.45rem 0.45rem;
   }

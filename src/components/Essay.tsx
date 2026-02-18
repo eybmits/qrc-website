@@ -1,12 +1,19 @@
+import Link from 'next/link';
+import { essays } from '@/data/toc';
 import styles from './Essay.module.css';
 
 interface EssayProps {
   title: string;
   subtitle?: string;
+  slug?: string;
   children: React.ReactNode;
 }
 
-export function Essay({ title, subtitle, children }: EssayProps) {
+export function Essay({ title, subtitle, slug, children }: EssayProps) {
+  const essayIndex = slug ? essays.findIndex((e) => e.slug === slug) : -1;
+  const prev = essayIndex > 0 ? essays[essayIndex - 1] : null;
+  const next = essayIndex >= 0 && essayIndex < essays.length - 1 ? essays[essayIndex + 1] : null;
+
   return (
     <article className={styles.essay}>
       <header className={styles.header}>
@@ -14,6 +21,26 @@ export function Essay({ title, subtitle, children }: EssayProps) {
         {subtitle && <p className={styles.subtitle}>{subtitle}</p>}
       </header>
       <div className={styles.content}>{children}</div>
+      {(prev || next) && (
+        <nav className={styles.essayNav}>
+          {prev ? (
+            <Link href={prev.slug} className={styles.navLink}>
+              <span className={styles.navDirection}>Previous</span>
+              <span className={styles.navTitle}>{prev.shortTitle}</span>
+            </Link>
+          ) : (
+            <span />
+          )}
+          {next ? (
+            <Link href={next.slug} className={`${styles.navLink} ${styles.navLinkNext}`}>
+              <span className={styles.navDirection}>Next</span>
+              <span className={styles.navTitle}>{next.shortTitle}</span>
+            </Link>
+          ) : (
+            <span />
+          )}
+        </nav>
+      )}
     </article>
   );
 }

@@ -153,6 +153,7 @@ export default function EchoStatePage() {
     <Essay
       title="How Echo State Networks Work"
       subtitle="A full guide to ESNs: intuitive start, then formal dynamics, diagnostics, and design decisions you can actually deploy."
+      slug="/echo-state"
     >
       <Section id="esn-introduction" title="Introduction">
         <p>

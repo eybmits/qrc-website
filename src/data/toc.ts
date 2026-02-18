@@ -13,6 +13,25 @@ export interface TocEssay {
 
 export const essays: TocEssay[] = [
   {
+    slug: '/quantum-primer',
+    title: 'Quantum Mechanics Primer',
+    shortTitle: 'Quantum Primer',
+    description:
+      'Essential quantum mechanics for reservoir computing: states, gates, measurement, density matrices, and open-system dynamics.',
+    sections: [
+      { id: 'qp-introduction', title: 'Introduction' },
+      { id: 'qp-classical-vs-quantum', title: 'Classical vs Quantum' },
+      { id: 'qp-bloch-sphere', title: 'The Bloch Sphere' },
+      { id: 'qp-quantum-gates', title: 'Quantum Gates' },
+      { id: 'qp-measurement', title: 'Measurement' },
+      { id: 'qp-density-matrices', title: 'Density Matrices' },
+      { id: 'qp-entanglement', title: 'Entanglement' },
+      { id: 'qp-dynamics', title: 'Quantum Dynamics' },
+      { id: 'qp-open-systems', title: 'Open Quantum Systems' },
+      { id: 'qp-bridge', title: 'Bridge to Reservoir Computing' },
+    ],
+  },
+  {
     slug: '/qrc',
     title: 'Quantum Reservoir Computing for the Very Curious',
     shortTitle: 'Quantum RC',

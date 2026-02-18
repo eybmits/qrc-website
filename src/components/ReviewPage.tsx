@@ -16,6 +16,7 @@ import {
 } from '@/lib/spaced-repetition';
 import { loadState, saveState } from '@/lib/storage';
 import { ReviewCard } from './ReviewCard';
+import { quantumPrimerCards } from '@/data/quantum-primer-cards';
 import { qrcCards } from '@/data/qrc-cards';
 import { echoStateCards } from '@/data/echo-state-cards';
 import { physicalReservoirCards } from '@/data/physical-reservoir-cards';
@@ -59,6 +60,11 @@ interface SessionState {
 
 const essayGroups: EssayGroup[] = [
   {
+    title: 'Quantum Mechanics Primer',
+    slug: '/quantum-primer',
+    cards: quantumPrimerCards,
+  },
+  {
     title: 'Quantum Reservoir Computing',
     slug: '/qrc',
     cards: qrcCards,
@@ -75,7 +81,7 @@ const essayGroups: EssayGroup[] = [
   },
 ];
 
-const allCards = [...qrcCards, ...echoStateCards, ...physicalReservoirCards];
+const allCards = [...quantumPrimerCards, ...qrcCards, ...echoStateCards, ...physicalReservoirCards];
 
 const EMPTY_SESSION: SessionState = {
   active: false,
@@ -89,6 +95,7 @@ const EMPTY_SESSION: SessionState = {
 export function ReviewPage() {
   const [activeTab, setActiveTab] = useState<FilterTab>('due');
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({
+    '/quantum-primer': true,
     '/qrc': true,
     '/echo-state': true,
     '/physical-reservoirs': true,

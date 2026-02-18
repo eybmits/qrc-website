@@ -124,6 +124,7 @@ export default function PhysicalReservoirsPage() {
     <Essay
       title="Physical Reservoir Computing"
       subtitle="A hardware-first guide: photonic, spintronic, mechanical, and quantum reservoirs with realistic engineering constraints."
+      slug="/physical-reservoirs"
     >
       <Section id="phys-introduction" title="Introduction">
         <p>
