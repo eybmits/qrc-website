@@ -60,7 +60,7 @@ interface SessionState {
 
 const essayGroups: EssayGroup[] = [
   {
-    title: 'Quantum Mechanics Primer',
+    title: 'Quantum Mechanics Basics',
     slug: '/quantum-primer',
     cards: quantumPrimerCards,
   },
@@ -70,12 +70,12 @@ const essayGroups: EssayGroup[] = [
     cards: qrcCards,
   },
   {
-    title: 'Echo State Networks',
+    title: 'Why Go Quantum? From Classical to Quantum Reservoirs',
     slug: '/echo-state',
     cards: echoStateCards,
   },
   {
-    title: 'Physical Reservoir Computing',
+    title: 'Physical Quantum Reservoirs',
     slug: '/physical-reservoirs',
     cards: physicalReservoirCards,
   },
@@ -346,11 +346,7 @@ export function ReviewPage() {
   return (
     <div className={styles.page}>
       <div className={styles.headerSection}>
-        <h1 className={styles.pageTitle}>Review Reactor</h1>
-        <p className={styles.pageSubtitle}>
-          Anki-like scheduling with live queue dynamics. Hard cards return faster,
-          stable cards expand their interval.
-        </p>
+        <h1 className={styles.pageTitle}>Review Cards</h1>
       </div>
 
       <section className={styles.sessionPanel}>
@@ -364,7 +360,7 @@ export function ReviewPage() {
           <div className={styles.sessionControls}>
             {!session.active ? (
               <button className={`${styles.sessionBtn} ${styles.primaryBtn}`} onClick={startSession}>
-                Start Session
+                Start Review
               </button>
             ) : (
               <>
@@ -372,10 +368,10 @@ export function ReviewPage() {
                   {session.paused ? 'Resume' : 'Pause'}
                 </button>
                 <button className={styles.sessionBtn} onClick={rebuildSessionQueue}>
-                  Rebuild Queue
+                  Refresh Queue
                 </button>
                 <button className={`${styles.sessionBtn} ${styles.dangerBtn}`} onClick={endSession}>
-                  End Session
+                  End Review
                 </button>
               </>
             )}
@@ -390,7 +386,7 @@ export function ReviewPage() {
         </div>
 
         {session.active && session.paused && (
-          <div className={styles.sessionMessage}>Session paused. Resume to continue reviewing.</div>
+          <div className={styles.sessionMessage}>Review paused. Resume when you want the next card.</div>
         )}
 
         {session.active && !session.paused && currentCard && (
@@ -407,17 +403,17 @@ export function ReviewPage() {
 
         {session.active && !session.paused && !currentCard && (
           <div className={styles.sessionMessage}>
-            No due unlocked cards left in this queue. Rebuild queue or end session.
+            Nothing due remains in this queue. Refresh the queue or finish the review.
           </div>
         )}
 
         {!session.active && (
           <div className={styles.sessionMessage}>
             {queueMeta.total > 0
-              ? 'Start a session to review due unlocked cards with dynamic reinsertion.'
+              ? 'Start a review to work through the cards that are due right now.'
               : stats.total > 0
-                ? 'Unlocked cards exist, but none are due right now. Use the All tab or come back at the next due interval.'
-                : 'No unlocked cards yet. Answer in-text cards inside an essay to unlock them for this hub.'}
+                ? 'You have unlocked cards, but none are due at the moment. Use the All tab or return at the next interval.'
+                : 'No cards are unlocked yet. Reveal and answer in-text cards inside an essay to bring them here.'}
           </div>
         )}
 
@@ -513,7 +509,7 @@ export function ReviewPage() {
 
       {stats.total === 0 && (
         <div className={styles.emptyState}>
-          <div className={styles.emptyIcon}>◈</div>
+          <div className={styles.emptyIcon}>◇</div>
           <div className={styles.emptyTitle}>No unlocked cards yet</div>
           <div className={styles.emptyDesc}>
             Cards appear here only after you answer them once in the essay text.
@@ -523,7 +519,7 @@ export function ReviewPage() {
 
       {stats.total > 0 && essayGroups.every((group) => filterCards(group.cards).length === 0) && (
         <div className={styles.emptyState}>
-          <div className={styles.emptyIcon}>◈</div>
+          <div className={styles.emptyIcon}>◇</div>
           <div className={styles.emptyTitle}>No cards in this filter</div>
           <div className={styles.emptyDesc}>Try another tab or start a new review session.</div>
         </div>

@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { essays } from '@/data/toc';
 import styles from './Sidebar.module.css';
 
@@ -42,7 +42,7 @@ export function Sidebar() {
           }
         }
       },
-      { rootMargin: '-20% 0px -60% 0px' }
+      { rootMargin: '-18% 0px -64% 0px' }
     );
 
     for (const section of currentEssay.sections) {
@@ -51,99 +51,95 @@ export function Sidebar() {
     }
 
     return () => observer.disconnect();
-  }, [currentEssay, pathname]);
+  }, [currentEssay]);
 
   return (
     <>
       <button
         className={styles.hamburger}
         onClick={() => setMobileOpen((open) => !open)}
-        aria-label="Toggle navigation"
+        aria-expanded={mobileOpen}
+        aria-label="Toggle contents"
       >
         <span className={`${styles.hamburgerLine} ${mobileOpen ? styles.open : ''}`} />
         <span className={`${styles.hamburgerLine} ${mobileOpen ? styles.open : ''}`} />
         <span className={`${styles.hamburgerLine} ${mobileOpen ? styles.open : ''}`} />
       </button>
 
-      {mobileOpen && (
-        <div className={styles.overlay} onClick={() => setMobileOpen(false)} />
-      )}
+      {mobileOpen && <div className={styles.overlay} onClick={() => setMobileOpen(false)} />}
 
       <aside className={`${styles.sidebar} ${mobileOpen ? styles.sidebarOpen : ''}`}>
-        <div className={styles.logo}>
+        <div className={styles.brand}>
           <Link href="/" onClick={() => setMobileOpen(false)}>
-            <span className={styles.logoIcon}>◈</span>
-            <span>
-              <span className={styles.logoText}>QRC Nexus</span>
-              <span className={styles.logoSub}>Quantum memory playground</span>
+            <span className={styles.brandMark}>QRC</span>
+            <span className={styles.brandText}>
+              <span className={styles.brandTitle}>Quantum Reservoir</span>
+              <span className={styles.brandSub}>for the very curious</span>
             </span>
           </Link>
         </div>
 
-        <nav className={styles.nav}>
-          <div className={styles.navLabel}>Explore</div>
+        <nav className={styles.contents}>
+          <p className={styles.contentsLabel}>{currentEssay ? 'Contents' : 'Reading path'}</p>
 
-          <Link
-            href="/"
-            className={`${styles.essayLink} ${matchesRoute(pathname, '/') ? styles.active : ''}`}
-            onClick={() => setMobileOpen(false)}
-          >
-            Overview
-          </Link>
-
-          <Link
-            href="/review"
-            className={`${styles.reviewLink} ${matchesRoute(pathname, '/review') ? styles.active : ''}`}
-            onClick={() => setMobileOpen(false)}
-          >
-            <span className={styles.reviewLinkText}>
-              <span className={styles.reviewLinkIcon}>◉</span>
-              Review Hub
-            </span>
-            <span className={styles.badge}>Spaced</span>
-          </Link>
-
-          <div className={styles.navDivider} />
-
-          <div className={styles.navLabel}>Essays</div>
-          {essays.map((essay) => {
-            const isActive = matchesRoute(pathname, essay.slug);
-
-            return (
-              <div key={essay.slug} className={styles.essayGroup}>
+          {currentEssay ? (
+            <>
+              <Link
+                href={currentEssay.slug}
+                className={styles.currentEssay}
+                onClick={() => setMobileOpen(false)}
+              >
+                {currentEssay.title}
+              </Link>
+              <div className={styles.contentsList}>
+                {currentEssay.sections.map((section) => (
+                  <a
+                    key={section.id}
+                    href={`#${section.id}`}
+                    className={`${styles.sectionLink} ${
+                      activeSection === section.id ? styles.sectionActive : ''
+                    }`}
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    {section.title}
+                  </a>
+                ))}
+              </div>
+            </>
+          ) : (
+            <div className={styles.contentsList}>
+              {essays.map((essay, index) => (
                 <Link
-                  href={essay.slug}
-                  className={`${styles.essayLink} ${isActive ? styles.active : ''}`}
+                  key={essay.slug}
+                  href={`${essay.slug}#${essay.sections[0].id}`}
+                  className={`${styles.essayLink} ${
+                    matchesRoute(pathname, essay.slug) ? styles.sectionActive : ''
+                  }`}
                   onClick={() => setMobileOpen(false)}
                 >
-                  {essay.shortTitle}
+                  <span className={styles.essayIndex}>Part {index + 1}</span>
+                  <span>{essay.title}</span>
                 </Link>
-
-                {isActive && currentEssay && (
-                  <div className={styles.sections}>
-                    {currentEssay.sections.map((section) => (
-                      <a
-                        key={section.id}
-                        href={`#${section.id}`}
-                        className={`${styles.sectionLink} ${
-                          activeSection === section.id ? styles.sectionActive : ''
-                        }`}
-                        onClick={() => setMobileOpen(false)}
-                      >
-                        {section.title}
-                      </a>
-                    ))}
-                  </div>
-                )}
-              </div>
-            );
-          })}
+              ))}
+            </div>
+          )}
         </nav>
 
-        <div className={styles.footer}>
-          <span className={styles.footerText}>
-            A mnemonic medium for quantum computing
-          </span>
+        <div className={styles.meta}>
+          <Link
+            href="/"
+            className={matchesRoute(pathname, '/') ? styles.metaActive : ''}
+            onClick={() => setMobileOpen(false)}
+          >
+            Home
+          </Link>
+          <Link
+            href="/review"
+            className={matchesRoute(pathname, '/review') ? styles.metaActive : ''}
+            onClick={() => setMobileOpen(false)}
+          >
+            Review cards
+          </Link>
         </div>
       </aside>
     </>

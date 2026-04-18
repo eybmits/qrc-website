@@ -14,8 +14,8 @@ export interface TocEssay {
 export const essays: TocEssay[] = [
   {
     slug: '/quantum-primer',
-    title: 'Quantum Mechanics Primer',
-    shortTitle: 'Quantum Primer',
+    title: 'Quantum Mechanics Basics',
+    shortTitle: 'Quantum Mechanics Basics',
     description:
       'Essential quantum mechanics for reservoir computing: states, gates, measurement, density matrices, and open-system dynamics.',
     sections: [
@@ -33,8 +33,8 @@ export const essays: TocEssay[] = [
   },
   {
     slug: '/qrc',
-    title: 'Quantum Reservoir Computing for the Very Curious',
-    shortTitle: 'Quantum RC',
+    title: 'Quantum Reservoir Computing',
+    shortTitle: 'Quantum Reservoir Computing',
     description:
       'A full-path introduction to quantum reservoir computing: intuition first, mathematics next, and implementation details last.',
     sections: [
@@ -56,8 +56,8 @@ export const essays: TocEssay[] = [
   },
   {
     slug: '/echo-state',
-    title: 'How Echo State Networks Work',
-    shortTitle: 'Echo State Networks',
+    title: 'Why Go Quantum? From Classical to Quantum Reservoirs',
+    shortTitle: 'Why Go Quantum? From Classical to Quantum Reservoirs',
     description:
       'From intuitive dynamics to full ESN mathematics, diagnostics, and design patterns for practical temporal learning.',
     sections: [
@@ -76,8 +76,8 @@ export const essays: TocEssay[] = [
   },
   {
     slug: '/physical-reservoirs',
-    title: 'Physical Reservoir Computing',
-    shortTitle: 'Physical Reservoirs',
+    title: 'Physical Quantum Reservoirs',
+    shortTitle: 'Physical Quantum Reservoirs',
     description:
       'A hardware-first guide to reservoirs in photonics, magnetics, mechanics, and quantum platforms with realistic constraints.',
     sections: [

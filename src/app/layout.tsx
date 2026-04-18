@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import 'katex/dist/katex.min.css';
 import './globals.css';
+import { AmbientBackground } from '@/components/AmbientBackground';
 import { Sidebar } from '@/components/Sidebar';
 
 export const metadata: Metadata = {
@@ -17,6 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <AmbientBackground />
         <Sidebar />
         <main className="main-content">{children}</main>
       </body>

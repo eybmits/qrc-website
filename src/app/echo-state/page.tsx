@@ -15,8 +15,9 @@ function Figure({ title, caption, children }: FigureProps) {
   return (
     <figure
       style={{
-        background: 'linear-gradient(150deg, rgba(11,22,40,0.9), rgba(8,16,29,0.94))',
-        border: '1px solid rgba(104,160,236,0.34)',
+        background: 'rgba(248, 252, 255, 0.78)',
+        border: '1px solid rgba(67, 104, 138, 0.12)',
+        boxShadow: 'var(--shadow-soft)',
         borderRadius: 14,
         margin: '1rem 0 1.2rem',
         overflow: 'hidden',
@@ -24,16 +25,16 @@ function Figure({ title, caption, children }: FigureProps) {
     >
       <figcaption
         style={{
-          background: 'linear-gradient(120deg, rgba(44,77,126,0.38), rgba(20,39,68,0.42))',
-          borderBottom: '1px solid rgba(105,158,230,0.34)',
-          padding: '0.65rem 0.84rem',
+          background: 'rgba(240, 247, 254, 0.92)',
+          borderBottom: '1px solid rgba(67, 104, 138, 0.12)',
+          padding: '0.72rem 0.9rem',
         }}
       >
         <div
           style={{
-            color: '#def1ff',
+            color: 'var(--accent-secondary)',
             fontFamily: 'var(--font-ui), sans-serif',
-            fontSize: '0.7rem',
+            fontSize: '0.72rem',
             fontWeight: 700,
             letterSpacing: '0.09em',
             textTransform: 'uppercase',
@@ -41,9 +42,9 @@ function Figure({ title, caption, children }: FigureProps) {
         >
           {title}
         </div>
-        <div style={{ color: '#92aacc', fontSize: '0.78rem', lineHeight: 1.45 }}>{caption}</div>
+        <div style={{ color: 'var(--text-muted)', fontSize: '0.8rem', lineHeight: 1.48 }}>{caption}</div>
       </figcaption>
-      <div style={{ padding: '0.64rem 0.7rem 0.52rem' }}>{children}</div>
+      <div style={{ padding: '0.75rem 0.8rem 0.62rem' }}>{children}</div>
     </figure>
   );
 }
@@ -57,33 +58,33 @@ function EsnFlowVisual() {
       <svg viewBox="0 0 860 190" style={{ display: 'block', width: '100%', height: 'auto' }} role="img" aria-label="ESN update flow">
         <defs>
           <linearGradient id="esnNode" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#1f3f72" />
-            <stop offset="100%" stopColor="#10233d" />
+            <stop offset="0%" stopColor="#fdf9f1" />
+            <stop offset="100%" stopColor="#efe6d6" />
           </linearGradient>
           <marker id="esnArrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
-            <path d="M0,0 L8,4 L0,8 Z" fill="#86dbff" />
+            <path d="M0,0 L8,4 L0,8 Z" fill="#1d5f54" />
           </marker>
         </defs>
 
-        <rect x="24" y="52" width="150" height="84" rx="12" fill="url(#esnNode)" stroke="#7ec6ff" strokeWidth="1.2" />
-        <text x="99" y="84" textAnchor="middle" fill="#e8f6ff" fontSize="16" fontWeight="700">x(t)</text>
-        <text x="99" y="106" textAnchor="middle" fill="#95b0d2" fontSize="13">input</text>
+        <rect x="24" y="52" width="150" height="84" rx="12" fill="url(#esnNode)" stroke="#7d8f84" strokeWidth="1.2" />
+        <text x="99" y="84" textAnchor="middle" fill="#1e241e" fontSize="16" fontWeight="700">x(t)</text>
+        <text x="99" y="106" textAnchor="middle" fill="#6b7265" fontSize="13">input</text>
 
-        <rect x="244" y="52" width="168" height="84" rx="12" fill="url(#esnNode)" stroke="#7ec6ff" strokeWidth="1.2" />
-        <text x="328" y="84" textAnchor="middle" fill="#e8f6ff" fontSize="16" fontWeight="700">h(t-1)</text>
-        <text x="328" y="106" textAnchor="middle" fill="#95b0d2" fontSize="13">memory</text>
+        <rect x="244" y="52" width="168" height="84" rx="12" fill="url(#esnNode)" stroke="#7d8f84" strokeWidth="1.2" />
+        <text x="328" y="84" textAnchor="middle" fill="#1e241e" fontSize="16" fontWeight="700">h(t-1)</text>
+        <text x="328" y="106" textAnchor="middle" fill="#6b7265" fontSize="13">memory</text>
 
-        <rect x="482" y="40" width="176" height="108" rx="12" fill="#163054" stroke="#8de1ff" strokeWidth="1.3" />
-        <text x="570" y="82" textAnchor="middle" fill="#e8f6ff" fontSize="16" fontWeight="700">tanh(·)</text>
-        <text x="570" y="106" textAnchor="middle" fill="#95b0d2" fontSize="13">fixed reservoir</text>
+        <rect x="482" y="40" width="176" height="108" rx="12" fill="#ebe2d1" stroke="#7d8f84" strokeWidth="1.3" />
+        <text x="570" y="82" textAnchor="middle" fill="#1e241e" fontSize="16" fontWeight="700">tanh(·)</text>
+        <text x="570" y="106" textAnchor="middle" fill="#6b7265" fontSize="13">fixed reservoir</text>
 
-        <rect x="714" y="52" width="122" height="84" rx="12" fill="url(#esnNode)" stroke="#7ec6ff" strokeWidth="1.2" />
-        <text x="775" y="84" textAnchor="middle" fill="#e8f6ff" fontSize="16" fontWeight="700">h(t)</text>
-        <text x="775" y="106" textAnchor="middle" fill="#95b0d2" fontSize="13">state</text>
+        <rect x="714" y="52" width="122" height="84" rx="12" fill="url(#esnNode)" stroke="#7d8f84" strokeWidth="1.2" />
+        <text x="775" y="84" textAnchor="middle" fill="#1e241e" fontSize="16" fontWeight="700">h(t)</text>
+        <text x="775" y="106" textAnchor="middle" fill="#6b7265" fontSize="13">state</text>
 
-        <line x1="174" y1="92" x2="244" y2="92" stroke="#86dbff" strokeWidth="2" markerEnd="url(#esnArrow)" />
-        <line x1="412" y1="92" x2="482" y2="92" stroke="#86dbff" strokeWidth="2" markerEnd="url(#esnArrow)" />
-        <line x1="658" y1="92" x2="714" y2="92" stroke="#86dbff" strokeWidth="2" markerEnd="url(#esnArrow)" />
+        <line x1="174" y1="92" x2="244" y2="92" stroke="#1d5f54" strokeWidth="2" markerEnd="url(#esnArrow)" />
+        <line x1="412" y1="92" x2="482" y2="92" stroke="#1d5f54" strokeWidth="2" markerEnd="url(#esnArrow)" />
+        <line x1="658" y1="92" x2="714" y2="92" stroke="#1d5f54" strokeWidth="2" markerEnd="url(#esnArrow)" />
       </svg>
     </Figure>
   );
@@ -96,16 +97,16 @@ function RadiusVisual() {
       caption="Small radius forgets quickly, near-one radius increases memory but can destabilize."
     >
       <svg viewBox="0 0 860 210" style={{ display: 'block', width: '100%', height: 'auto' }} role="img" aria-label="Spectral radius regimes">
-        <line x1="60" y1="174" x2="810" y2="174" stroke="#6da0d8" strokeWidth="1.2" />
-        <line x1="60" y1="24" x2="60" y2="174" stroke="#6da0d8" strokeWidth="1.2" />
+        <line x1="60" y1="174" x2="810" y2="174" stroke="#9b9586" strokeWidth="1.2" />
+        <line x1="60" y1="24" x2="60" y2="174" stroke="#9b9586" strokeWidth="1.2" />
 
-        <path d="M70 124 C 220 132, 360 142, 510 152 C 640 160, 730 166, 800 170" fill="none" stroke="#6fd7ff" strokeWidth="3" />
-        <path d="M70 110 C 220 96, 360 84, 510 68 C 640 54, 730 46, 800 38" fill="none" stroke="#ffd185" strokeWidth="3" />
-        <path d="M70 96 C 220 66, 360 38, 510 24 C 630 14, 730 18, 800 40" fill="none" stroke="#ff8b9b" strokeWidth="3" />
+        <path d="M70 124 C 220 132, 360 142, 510 152 C 640 160, 730 166, 800 170" fill="none" stroke="#3d6d61" strokeWidth="3" />
+        <path d="M70 110 C 220 96, 360 84, 510 68 C 640 54, 730 46, 800 38" fill="none" stroke="#b0883f" strokeWidth="3" />
+        <path d="M70 96 C 220 66, 360 38, 510 24 C 630 14, 730 18, 800 40" fill="none" stroke="#c46459" strokeWidth="3" />
 
-        <text x="710" y="170" fill="#6fd7ff" fontSize="14" fontWeight="700">rho small</text>
-        <text x="698" y="46" fill="#ffd185" fontSize="14" fontWeight="700">rho near 1</text>
-        <text x="706" y="24" fill="#ff8b9b" fontSize="14" fontWeight="700">rho too large</text>
+        <text x="710" y="170" fill="#3d6d61" fontSize="14" fontWeight="700">rho small</text>
+        <text x="698" y="46" fill="#b0883f" fontSize="14" fontWeight="700">rho near 1</text>
+        <text x="706" y="24" fill="#c46459" fontSize="14" fontWeight="700">rho too large</text>
       </svg>
     </Figure>
   );
@@ -118,21 +119,21 @@ function ReadoutVisual() {
       caption="Collect states H, solve ridge regression once, deploy fast inference."
     >
       <svg viewBox="0 0 860 220" style={{ display: 'block', width: '100%', height: 'auto' }} role="img" aria-label="Ridge readout overview">
-        <rect x="40" y="36" width="210" height="148" rx="10" fill="#122949" stroke="#7dc8ff" />
-        <text x="145" y="72" textAnchor="middle" fill="#e8f6ff" fontSize="16" fontWeight="700">State Matrix H</text>
-        <text x="145" y="96" textAnchor="middle" fill="#95b0d2" fontSize="13">rows: time</text>
-        <text x="145" y="114" textAnchor="middle" fill="#95b0d2" fontSize="13">cols: reservoir nodes</text>
+        <rect x="40" y="36" width="210" height="148" rx="10" fill="#faf5ea" stroke="#7d8f84" />
+        <text x="145" y="72" textAnchor="middle" fill="#1e241e" fontSize="16" fontWeight="700">State Matrix H</text>
+        <text x="145" y="96" textAnchor="middle" fill="#6b7265" fontSize="13">rows: time</text>
+        <text x="145" y="114" textAnchor="middle" fill="#6b7265" fontSize="13">cols: reservoir nodes</text>
 
-        <rect x="330" y="60" width="196" height="100" rx="10" fill="#17345d" stroke="#89ddff" />
-        <text x="428" y="96" textAnchor="middle" fill="#e8f6ff" fontSize="16" fontWeight="700">Ridge Solve</text>
-        <text x="428" y="120" textAnchor="middle" fill="#95b0d2" fontSize="13">W_out = YH^T(HH^T+lambda I)^(-1)</text>
+        <rect x="330" y="60" width="196" height="100" rx="10" fill="#ebe2d1" stroke="#7d8f84" />
+        <text x="428" y="96" textAnchor="middle" fill="#1e241e" fontSize="16" fontWeight="700">Ridge Solve</text>
+        <text x="428" y="120" textAnchor="middle" fill="#6b7265" fontSize="13">W_out = YH^T(HH^T+lambda I)^(-1)</text>
 
-        <rect x="620" y="60" width="190" height="100" rx="10" fill="#122949" stroke="#7dc8ff" />
-        <text x="715" y="96" textAnchor="middle" fill="#e8f6ff" fontSize="16" fontWeight="700">Prediction</text>
-        <text x="715" y="120" textAnchor="middle" fill="#95b0d2" fontSize="13">y(t) = W_out h(t)</text>
+        <rect x="620" y="60" width="190" height="100" rx="10" fill="#faf5ea" stroke="#7d8f84" />
+        <text x="715" y="96" textAnchor="middle" fill="#1e241e" fontSize="16" fontWeight="700">Prediction</text>
+        <text x="715" y="120" textAnchor="middle" fill="#6b7265" fontSize="13">y(t) = W_out h(t)</text>
 
-        <line x1="250" y1="110" x2="330" y2="110" stroke="#83deff" strokeWidth="2" />
-        <line x1="526" y1="110" x2="620" y2="110" stroke="#83deff" strokeWidth="2" />
+        <line x1="250" y1="110" x2="330" y2="110" stroke="#1d5f54" strokeWidth="2" />
+        <line x1="526" y1="110" x2="620" y2="110" stroke="#1d5f54" strokeWidth="2" />
       </svg>
     </Figure>
   );
@@ -151,7 +152,7 @@ export default function EchoStatePage() {
 
   return (
     <Essay
-      title="How Echo State Networks Work"
+      title="Why Go Quantum? From Classical to Quantum Reservoirs"
       subtitle="A full guide to ESNs: intuitive start, then formal dynamics, diagnostics, and design decisions you can actually deploy."
       slug="/echo-state"
     >

@@ -10,6 +10,7 @@ interface ReviewCardProps {
   onRate: (rating: Rating) => void;
   nextDueByRating?: Record<Rating, string>;
   disabled?: boolean;
+  className?: string;
 }
 
 const RATINGS: { rating: Rating; color: string }[] = [
@@ -25,6 +26,7 @@ export function ReviewCard({
   onRate,
   nextDueByRating,
   disabled = false,
+  className,
 }: ReviewCardProps) {
   const [flipped, setFlipped] = useState(false);
   const [rated, setRated] = useState(false);
@@ -62,7 +64,11 @@ export function ReviewCard({
   };
 
   return (
-    <div className={`${styles.card} ${flipped ? styles.flipped : ''} ${rated ? styles.rated : ''}`}>
+    <div
+      className={`${styles.card} ${flipped ? styles.flipped : ''} ${rated ? styles.rated : ''} ${
+        className ?? ''
+      }`}
+    >
       <div className={styles.inner}>
         <div className={styles.front}>
           <div className={styles.label}>Question</div>

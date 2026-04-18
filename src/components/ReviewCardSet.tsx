@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ReviewCard as ReviewCardData,
   Rating,
@@ -19,8 +19,21 @@ interface ReviewCardSetProps {
 
 export function ReviewCardSet({ cards }: ReviewCardSetProps) {
   const [reviewedCount, setReviewedCount] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isAdvancing, setIsAdvancing] = useState(false);
+  const advanceTimeoutRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (advanceTimeoutRef.current !== null) {
+        window.clearTimeout(advanceTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const handleRate = useCallback((cardId: string, rating: Rating) => {
+    if (isAdvancing) return;
+
     const state = loadState();
     const now = Date.now();
     const currentState = state.cards[cardId] ?? createInitialCardState();
@@ -51,9 +64,16 @@ export function ReviewCardSet({ cards }: ReviewCardSetProps) {
     saveState(state);
 
     setReviewedCount((count) => count + 1);
-  }, []);
+    setIsAdvancing(true);
+
+    advanceTimeoutRef.current = window.setTimeout(() => {
+      setActiveIndex((index) => Math.min(index + 1, cards.length));
+      setIsAdvancing(false);
+    }, 380);
+  }, [cards.length, isAdvancing]);
 
   const progress = cards.length > 0 ? (reviewedCount / cards.length) * 100 : 0;
+  const activeCard = cards[activeIndex];
 
   return (
     <div className={styles.container}>
@@ -74,26 +94,43 @@ export function ReviewCardSet({ cards }: ReviewCardSetProps) {
         />
       </div>
 
-      <div className={styles.cards}>
-        {cards.map((card) => {
-          const cardState = getCardState(card.id);
-          const nextDueByRating = {
-            again: previewNextDue(cardState, 'again'),
-            hard: previewNextDue(cardState, 'hard'),
-            good: previewNextDue(cardState, 'good'),
-            easy: previewNextDue(cardState, 'easy'),
-          };
+      <div className={styles.stage}>
+        {activeCard ? (
+          <div
+            key={activeCard.id}
+            className={`${styles.cardFrame} ${isAdvancing ? styles.cardFrameLeaving : ''}`}
+          >
+            {(() => {
+              const cardState = getCardState(activeCard.id);
+              const nextDueByRating = {
+                again: previewNextDue(cardState, 'again'),
+                hard: previewNextDue(cardState, 'hard'),
+                good: previewNextDue(cardState, 'good'),
+                easy: previewNextDue(cardState, 'easy'),
+              };
 
-          return (
-            <ReviewCard
-              key={card.id}
-              question={card.question}
-              answer={card.answer}
-              nextDueByRating={nextDueByRating}
-              onRate={(rating) => handleRate(card.id, rating)}
-            />
-          );
-        })}
+              return (
+                <ReviewCard
+                  key={activeCard.id}
+                  className={styles.singleCard}
+                  question={activeCard.question}
+                  answer={activeCard.answer}
+                  nextDueByRating={nextDueByRating}
+                  onRate={(rating) => handleRate(activeCard.id, rating)}
+                  disabled={isAdvancing}
+                />
+              );
+            })()}
+          </div>
+        ) : (
+          <div className={styles.completeState}>
+            <div className={styles.completeEyebrow}>Review complete</div>
+            <div className={styles.completeTitle}>All cards in this set are done.</div>
+            <p className={styles.completeText}>
+              The next card will only appear when it becomes due again.
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

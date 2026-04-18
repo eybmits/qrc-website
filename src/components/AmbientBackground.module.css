@@ -1,0 +1,253 @@
+.ambient {
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  position: fixed;
+  z-index: 0;
+}
+
+.washPrimary,
+.washSecondary,
+.washTertiary,
+.centerGlow {
+  border-radius: 999px;
+  filter: blur(18px);
+  position: absolute;
+}
+
+.washPrimary {
+  background: radial-gradient(circle, rgba(221, 239, 255, 0.56) 0%, rgba(221, 239, 255, 0) 72%);
+  height: 720px;
+  left: -10%;
+  top: -14%;
+  width: 720px;
+}
+
+.washSecondary {
+  background: radial-gradient(circle, rgba(210, 231, 255, 0.34) 0%, rgba(210, 231, 255, 0) 72%);
+  height: 620px;
+  right: -6%;
+  top: 8%;
+  width: 620px;
+}
+
+.washTertiary {
+  background: radial-gradient(circle, rgba(238, 247, 255, 0.68) 0%, rgba(238, 247, 255, 0) 74%);
+  bottom: -16%;
+  height: 620px;
+  left: 24%;
+  width: 680px;
+}
+
+.centerGlow {
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.82) 0%, rgba(255, 255, 255, 0) 72%);
+  height: 580px;
+  left: 22%;
+  top: 18%;
+  width: 720px;
+}
+
+.squareField,
+.atomField {
+  inset: 0;
+  position: absolute;
+}
+
+.square {
+  animation-delay: var(--ambient-delay);
+  animation-duration: var(--ambient-duration);
+  animation-iteration-count: infinite;
+  animation-name: squareFloat;
+  animation-timing-function: ease-in-out;
+  border-radius: 10px;
+  height: var(--ambient-size);
+  left: var(--ambient-left);
+  position: absolute;
+  top: var(--ambient-top);
+  width: var(--ambient-size);
+}
+
+.squareSoft {
+  background: rgba(132, 187, 232, 0.16);
+  box-shadow: 0 0 0 1px rgba(132, 187, 232, 0.05);
+}
+
+.squareOutline {
+  background: rgba(255, 255, 255, 0.24);
+  border: 1px solid rgba(178, 209, 236, 0.46);
+}
+
+.squareGhost {
+  background: rgba(228, 241, 255, 0.12);
+  border: 1px solid rgba(214, 233, 250, 0.3);
+}
+
+.atom {
+  animation-delay: var(--atom-delay);
+  animation-duration: var(--atom-duration);
+  animation-iteration-count: infinite;
+  animation-name: atomPulse;
+  animation-timing-function: ease-in-out;
+  height: var(--atom-size);
+  left: var(--atom-left);
+  opacity: 0;
+  overflow: visible;
+  position: absolute;
+  top: var(--atom-top);
+  will-change: opacity, transform;
+  width: var(--atom-size);
+}
+
+.atomSvg {
+  height: 100%;
+  overflow: visible;
+  transform: rotate(var(--atom-tilt));
+  transform-origin: center;
+  width: 100%;
+}
+
+.nucleusGlow {
+  fill: rgba(206, 233, 252, 0.36);
+  filter: blur(18px);
+}
+
+.nucleusCore {
+  fill: rgba(161, 207, 246, 0.92);
+  filter: drop-shadow(0 0 16px rgba(160, 208, 246, 0.54));
+}
+
+.orbit {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.orbitA {
+  animation: orbitSpinFast 2.6s linear infinite;
+}
+
+.orbitB {
+  animation: orbitSpinFast 4.4s linear infinite reverse;
+}
+
+.orbitC {
+  animation: orbitSpinFast 1.95s linear infinite;
+}
+
+.orbitD {
+  animation: orbitSpinFast 3.15s linear infinite reverse;
+}
+
+.orbitPath,
+.orbitPathSoft {
+  fill: none;
+}
+
+.orbitPath {
+  stroke: rgba(181, 214, 239, 0.28);
+  stroke-width: 1.6;
+}
+
+.orbitPathSoft {
+  stroke: rgba(198, 225, 244, 0.22);
+  stroke-width: 1.15;
+}
+
+.orbitElectronBright {
+  fill: rgba(214, 241, 255, 0.96);
+  filter: drop-shadow(0 0 12px rgba(164, 214, 248, 0.84));
+}
+
+.orbitElectronSoft {
+  fill: rgba(204, 235, 255, 0.88);
+  filter: drop-shadow(0 0 10px rgba(152, 208, 247, 0.6));
+}
+
+@keyframes squareFloat {
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: translate3d(0, 0, 0);
+  }
+
+  35% {
+    opacity: 0.9;
+    transform: translate3d(10px, -14px, 0);
+  }
+
+  70% {
+    opacity: 0.72;
+    transform: translate3d(-8px, 12px, 0);
+  }
+}
+
+@keyframes atomPulse {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0) scale(0.88);
+  }
+
+  14% {
+    opacity: calc(var(--atom-opacity) * 0.92);
+  }
+
+  42% {
+    opacity: calc(var(--atom-opacity) * 1.18);
+  }
+
+  76% {
+    opacity: calc(var(--atom-opacity) * 0.96);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate3d(0, -14px, 0) scale(1.04);
+  }
+}
+
+@keyframes orbitSpinFast {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 1200px) {
+  .squareField {
+    opacity: 0.82;
+  }
+}
+
+@media (max-width: 720px) {
+  .square {
+    border-radius: 8px;
+  }
+
+  .washPrimary,
+  .washSecondary,
+  .washTertiary,
+  .centerGlow {
+    filter: blur(24px);
+  }
+
+  .atom {
+    opacity: 0.12;
+  }
+
+  .atom:nth-child(2) {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .square,
+  .atom,
+  .orbitA,
+  .orbitB,
+  .orbitC,
+  .orbitD {
+    animation: none;
+  }
+}

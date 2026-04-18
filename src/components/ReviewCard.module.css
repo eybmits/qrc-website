@@ -12,8 +12,8 @@
 }
 
 .card.rated {
-  opacity: 0.62;
-  transform: scale(0.985);
+  opacity: 0.72;
+  transform: scale(0.99);
 }
 
 .inner {
@@ -23,33 +23,28 @@
 
 .front,
 .back {
-  background: linear-gradient(150deg, rgba(16, 27, 47, 0.9), rgba(8, 15, 27, 0.86));
-  border: 1px solid rgba(111, 143, 197, 0.3);
+  background: rgba(255, 255, 255, 0.76);
+  border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
-  box-shadow:
-    var(--shadow-soft),
-    inset 0 1px 0 rgba(188, 218, 255, 0.1);
+  box-shadow: var(--shadow-soft);
   padding: 1.15rem;
 }
 
 .front {
   transition:
     border-color var(--transition-fast),
-    box-shadow var(--transition-fast),
+    background-color var(--transition-fast),
     transform var(--transition-fast);
 }
 
 .front:hover {
-  border-color: rgba(133, 193, 255, 0.5);
-  box-shadow:
-    var(--shadow-soft),
-    0 0 20px rgba(56, 217, 255, 0.16);
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(67, 104, 138, 0.18);
   transform: translateY(-1px);
 }
 
 .back {
   animation: fadeIn 0.28s ease;
-  border-color: rgba(122, 187, 255, 0.46);
 }
 
 .flipped .front {
@@ -57,49 +52,49 @@
 }
 
 .label {
-  color: #7be8ff;
+  color: var(--accent-secondary);
   font-family: var(--font-ui), sans-serif;
-  font-size: 0.61rem;
+  font-size: 0.62rem;
   font-weight: 700;
   letter-spacing: 0.12em;
-  margin-bottom: 0.38rem;
+  margin-bottom: 0.4rem;
   text-transform: uppercase;
 }
 
 .questionText {
-  color: #f0f6ff;
-  font-size: 0.95rem;
-  line-height: 1.57;
-  margin-bottom: 0.9rem;
+  color: var(--text-heading);
+  font-size: 0.98rem;
+  line-height: 1.6;
+  margin-bottom: 0.92rem;
 }
 
 .questionTextSmall {
-  color: #97aac8;
-  font-size: 0.84rem;
-  line-height: 1.55;
-  margin-bottom: 0.4rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  line-height: 1.56;
+  margin-bottom: 0.42rem;
 }
 
 .answerText {
-  color: #f2f7ff;
-  font-size: 0.94rem;
-  line-height: 1.58;
-  margin-bottom: 0.7rem;
+  color: var(--text-body);
+  font-size: 0.96rem;
+  line-height: 1.62;
+  margin-bottom: 0.72rem;
 }
 
 .moreBtn {
-  background: rgba(18, 33, 57, 0.82);
-  border: 1px solid rgba(122, 180, 255, 0.48);
+  background: rgba(247, 251, 255, 0.94);
+  border: 1px solid rgba(67, 104, 138, 0.14);
   border-radius: 8px;
-  color: #b8dcff;
+  color: var(--text-body);
   cursor: pointer;
   display: inline-flex;
   font-family: var(--font-ui), sans-serif;
   font-size: 0.69rem;
   font-weight: 700;
   letter-spacing: 0.04em;
-  margin-bottom: 0.9rem;
-  padding: 0.42rem 0.62rem;
+  margin-bottom: 0.92rem;
+  padding: 0.44rem 0.66rem;
   text-transform: uppercase;
   transition:
     border-color var(--transition-fast),
@@ -108,81 +103,79 @@
 }
 
 .moreBtn:hover {
-  background: rgba(25, 44, 74, 0.9);
-  border-color: rgba(162, 214, 255, 0.7);
+  background: rgba(255, 255, 255, 0.98);
+  border-color: rgba(67, 104, 138, 0.24);
   transform: translateY(-1px);
 }
 
 .fullAnswer {
-  background: linear-gradient(145deg, rgba(12, 22, 40, 0.92), rgba(8, 14, 26, 0.9));
-  border: 1px solid rgba(101, 136, 188, 0.34);
-  border-radius: 10px;
-  margin-bottom: 0.9rem;
-  padding: 0.78rem;
+  background: rgba(240, 247, 254, 0.88);
+  border: 1px solid rgba(67, 104, 138, 0.1);
+  border-radius: 12px;
+  margin-bottom: 0.92rem;
+  padding: 0.8rem;
 }
 
 .divider {
-  background: linear-gradient(90deg, rgba(112, 147, 200, 0.5), transparent 66%);
+  background: linear-gradient(90deg, rgba(109, 149, 188, 0.32), transparent 66%);
   height: 1px;
-  margin: 0.62rem 0;
+  margin: 0.65rem 0;
 }
 
 .revealBtn {
-  background: rgba(56, 217, 255, 0.16);
-  border: 1px solid rgba(114, 202, 255, 0.46);
+  background: var(--text-heading);
+  border: 1px solid var(--text-heading);
   border-radius: 10px;
-  color: #ddf4ff;
+  color: #fffdf8;
   cursor: pointer;
   display: block;
   font-family: var(--font-ui), sans-serif;
   font-size: 0.79rem;
   font-weight: 700;
   letter-spacing: 0.038em;
-  padding: 0.67rem;
+  padding: 0.7rem;
   transition:
     background-color var(--transition-fast),
     transform var(--transition-fast),
-    box-shadow var(--transition-fast),
     border-color var(--transition-fast);
   width: 100%;
 }
 
 .revealBtn:hover {
-  background: rgba(56, 217, 255, 0.24);
-  border-color: rgba(160, 226, 255, 0.72);
-  box-shadow: 0 9px 22px rgba(18, 135, 177, 0.24);
+  background: #184a75;
+  border-color: #184a75;
   transform: translateY(-1px);
 }
 
 .ratingButtons {
-  margin-top: 0.9rem;
+  margin-top: 0.92rem;
 }
 
 .ratingLabel {
-  color: #92a7c6;
+  color: var(--text-muted);
   font-family: var(--font-ui), sans-serif;
-  font-size: 0.68rem;
+  font-size: 0.69rem;
   font-weight: 600;
-  margin-bottom: 0.44rem;
+  margin-bottom: 0.45rem;
 }
 
 .buttons {
+  align-items: flex-start;
   display: flex;
   gap: 0.36rem;
-  align-items: flex-start;
 }
 
 .rateBtnWrap {
-  flex: 1;
   display: flex;
+  flex: 1;
   flex-direction: column;
   gap: 0.2rem;
 }
 
 .rateBtn {
-  background: rgba(9, 17, 31, 0.72);
+  background: rgba(255, 255, 255, 0.88);
   border: 1px solid var(--btn-color);
-  border-radius: 9px;
+  border-radius: 10px;
   color: var(--btn-color);
   cursor: pointer;
   flex: 1;
@@ -190,40 +183,38 @@
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.02em;
-  padding: 0.56rem 0.38rem;
+  padding: 0.58rem 0.4rem;
   transition:
     background-color var(--transition-fast),
     transform var(--transition-fast),
-    box-shadow var(--transition-fast);
+    border-color var(--transition-fast);
 }
 
 .rateBtn:hover {
-  background: rgba(16, 27, 47, 0.98);
-  box-shadow:
-    0 7px 18px rgba(3, 7, 17, 0.55),
-    0 0 14px rgba(56, 217, 255, 0.12);
+  background: rgba(255, 255, 255, 1);
+  border-color: var(--btn-color);
   transform: translateY(-1px);
 }
 
 .rateBtn:disabled,
 .revealBtn:disabled,
 .moreBtn:disabled {
+  box-shadow: none;
   cursor: not-allowed;
   opacity: 0.55;
   transform: none;
-  box-shadow: none;
 }
 
 .dueHint {
-  color: #7f95b8;
+  color: var(--text-muted);
   font-family: var(--font-ui), sans-serif;
   font-size: 0.6rem;
-  text-align: center;
   letter-spacing: 0.03em;
+  text-align: center;
 }
 
 .doneMessage {
-  color: #63ebb4;
+  color: var(--accent-success);
   font-family: var(--font-ui), sans-serif;
   font-size: 0.77rem;
   font-weight: 700;

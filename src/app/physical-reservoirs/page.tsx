@@ -15,8 +15,9 @@ function Figure({ title, caption, children }: FigureProps) {
   return (
     <figure
       style={{
-        background: 'linear-gradient(150deg, rgba(11,22,40,0.9), rgba(8,16,29,0.94))',
-        border: '1px solid rgba(104,160,236,0.34)',
+        background: 'rgba(248, 252, 255, 0.78)',
+        border: '1px solid rgba(67, 104, 138, 0.12)',
+        boxShadow: 'var(--shadow-soft)',
         borderRadius: 14,
         margin: '1rem 0 1.2rem',
         overflow: 'hidden',
@@ -24,16 +25,16 @@ function Figure({ title, caption, children }: FigureProps) {
     >
       <figcaption
         style={{
-          background: 'linear-gradient(120deg, rgba(44,77,126,0.38), rgba(20,39,68,0.42))',
-          borderBottom: '1px solid rgba(105,158,230,0.34)',
-          padding: '0.65rem 0.84rem',
+          background: 'rgba(240, 247, 254, 0.92)',
+          borderBottom: '1px solid rgba(67, 104, 138, 0.12)',
+          padding: '0.72rem 0.9rem',
         }}
       >
         <div
           style={{
-            color: '#def1ff',
+            color: 'var(--accent-secondary)',
             fontFamily: 'var(--font-ui), sans-serif',
-            fontSize: '0.7rem',
+            fontSize: '0.72rem',
             fontWeight: 700,
             letterSpacing: '0.09em',
             textTransform: 'uppercase',
@@ -41,9 +42,9 @@ function Figure({ title, caption, children }: FigureProps) {
         >
           {title}
         </div>
-        <div style={{ color: '#92aacc', fontSize: '0.78rem', lineHeight: 1.45 }}>{caption}</div>
+        <div style={{ color: 'var(--text-muted)', fontSize: '0.8rem', lineHeight: 1.48 }}>{caption}</div>
       </figcaption>
-      <div style={{ padding: '0.64rem 0.7rem 0.52rem' }}>{children}</div>
+      <div style={{ padding: '0.75rem 0.8rem 0.62rem' }}>{children}</div>
     </figure>
   );
 }
@@ -55,24 +56,24 @@ function DelayLineVisual() {
       caption="A single nonlinear optical node plus delayed feedback creates many virtual nodes."
     >
       <svg viewBox="0 0 860 230" style={{ display: 'block', width: '100%', height: 'auto' }} role="img" aria-label="Delay-line reservoir">
-        <rect x="70" y="84" width="190" height="70" rx="12" fill="#17345d" stroke="#84d7ff" />
-        <text x="165" y="120" textAnchor="middle" fill="#e8f6ff" fontSize="16" fontWeight="700">Nonlinear Node</text>
+        <rect x="70" y="84" width="190" height="70" rx="12" fill="#faf5ea" stroke="#7d8f84" />
+        <text x="165" y="120" textAnchor="middle" fill="#1e241e" fontSize="16" fontWeight="700">Nonlinear Node</text>
 
-        <rect x="356" y="84" width="170" height="70" rx="12" fill="#17345d" stroke="#84d7ff" />
-        <text x="441" y="120" textAnchor="middle" fill="#e8f6ff" fontSize="16" fontWeight="700">Delay Loop</text>
+        <rect x="356" y="84" width="170" height="70" rx="12" fill="#f0eadc" stroke="#7d8f84" />
+        <text x="441" y="120" textAnchor="middle" fill="#1e241e" fontSize="16" fontWeight="700">Delay Loop</text>
 
-        <rect x="620" y="84" width="170" height="70" rx="12" fill="#17345d" stroke="#84d7ff" />
-        <text x="705" y="120" textAnchor="middle" fill="#e8f6ff" fontSize="16" fontWeight="700">Readout</text>
+        <rect x="620" y="84" width="170" height="70" rx="12" fill="#faf5ea" stroke="#7d8f84" />
+        <text x="705" y="120" textAnchor="middle" fill="#1e241e" fontSize="16" fontWeight="700">Readout</text>
 
-        <line x1="260" y1="119" x2="356" y2="119" stroke="#83deff" strokeWidth="2" />
-        <line x1="526" y1="119" x2="620" y2="119" stroke="#83deff" strokeWidth="2" />
+        <line x1="260" y1="119" x2="356" y2="119" stroke="#1d5f54" strokeWidth="2" />
+        <line x1="526" y1="119" x2="620" y2="119" stroke="#1d5f54" strokeWidth="2" />
 
-        <path d="M 520 84 C 610 36, 770 38, 780 84" fill="none" stroke="#74c8ff" strokeWidth="2" />
-        <path d="M 780 154 C 700 208, 280 208, 180 154" fill="none" stroke="#74c8ff" strokeWidth="2" />
-        <line x1="180" y1="154" x2="180" y2="119" stroke="#74c8ff" strokeWidth="2" />
+        <path d="M 520 84 C 610 36, 770 38, 780 84" fill="none" stroke="#1d5f54" strokeWidth="2" />
+        <path d="M 780 154 C 700 208, 280 208, 180 154" fill="none" stroke="#1d5f54" strokeWidth="2" />
+        <line x1="180" y1="154" x2="180" y2="119" stroke="#1d5f54" strokeWidth="2" />
 
-        <text x="432" y="56" textAnchor="middle" fill="#95b0d2" fontSize="13">feedback path</text>
-        <text x="436" y="198" textAnchor="middle" fill="#95b0d2" fontSize="13">virtual nodes sampled over time</text>
+        <text x="432" y="56" textAnchor="middle" fill="#6b7265" fontSize="13">feedback path</text>
+        <text x="436" y="198" textAnchor="middle" fill="#6b7265" fontSize="13">virtual nodes sampled over time</text>
       </svg>
     </Figure>
   );
@@ -85,10 +86,10 @@ function PlatformMapVisual() {
       caption="Different hardware substrates occupy different corners of speed, control, and scalability."
     >
       <svg viewBox="0 0 860 220" style={{ display: 'block', width: '100%', height: 'auto' }} role="img" aria-label="Platform map">
-        <line x1="70" y1="178" x2="810" y2="178" stroke="#6da0d8" strokeWidth="1.2" />
-        <line x1="70" y1="24" x2="70" y2="178" stroke="#6da0d8" strokeWidth="1.2" />
-        <text x="740" y="202" fill="#95b0d2" fontSize="13">speed</text>
-        <text x="20" y="28" fill="#95b0d2" fontSize="13">control</text>
+        <line x1="70" y1="178" x2="810" y2="178" stroke="#9b9586" strokeWidth="1.2" />
+        <line x1="70" y1="24" x2="70" y2="178" stroke="#9b9586" strokeWidth="1.2" />
+        <text x="740" y="202" fill="#6b7265" fontSize="13">speed</text>
+        <text x="20" y="28" fill="#6b7265" fontSize="13">control</text>
 
         <circle cx="600" cy="90" r="22" fill="#65d8ff" opacity="0.8" />
         <text x="600" y="95" textAnchor="middle" fill="#062233" fontSize="12" fontWeight="700">Photonic</text>
@@ -122,7 +123,7 @@ export default function PhysicalReservoirsPage() {
 
   return (
     <Essay
-      title="Physical Reservoir Computing"
+      title="Physical Quantum Reservoirs"
       subtitle="A hardware-first guide: photonic, spintronic, mechanical, and quantum reservoirs with realistic engineering constraints."
       slug="/physical-reservoirs"
     >

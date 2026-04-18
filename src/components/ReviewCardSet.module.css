@@ -1,24 +1,12 @@
 .container {
-  background: linear-gradient(145deg, rgba(13, 25, 45, 0.92), rgba(7, 15, 28, 0.88));
-  border: 1px solid rgba(109, 142, 196, 0.32);
+  background: rgba(247, 251, 255, 0.74);
+  border: 1px solid var(--border-subtle);
   border-radius: var(--radius-xl);
-  box-shadow:
-    var(--shadow-soft),
-    inset 0 1px 0 rgba(188, 219, 255, 0.08);
+  box-shadow: var(--shadow-soft);
   margin: 2.7rem 0;
   overflow: hidden;
   padding: 1.2rem;
   position: relative;
-}
-
-.container::before {
-  background: linear-gradient(90deg, rgba(56, 217, 255, 0), rgba(56, 217, 255, 0.4), rgba(139, 92, 246, 0.34), rgba(56, 217, 255, 0));
-  content: '';
-  height: 1px;
-  left: 0;
-  position: absolute;
-  right: 0;
-  top: 0;
 }
 
 .header {
@@ -35,13 +23,12 @@
 }
 
 .icon {
-  animation: glowPulse 5.8s ease-in-out infinite;
-  color: #79e7ff;
+  color: var(--accent-secondary);
   font-size: 0.92rem;
 }
 
 .headerTitle {
-  color: #eef6ff;
+  color: var(--text-heading);
   font-family: var(--font-ui), sans-serif;
   font-size: 0.84rem;
   font-weight: 700;
@@ -49,7 +36,7 @@
 }
 
 .count {
-  color: #89a0c4;
+  color: var(--text-muted);
   font-family: var(--font-ui), sans-serif;
   font-size: 0.68rem;
   font-weight: 700;
@@ -58,7 +45,7 @@
 }
 
 .progressBar {
-  background: rgba(80, 101, 137, 0.38);
+  background: rgba(109, 149, 188, 0.16);
   border-radius: 999px;
   height: 6px;
   margin-bottom: 0.92rem;
@@ -66,14 +53,80 @@
 }
 
 .progressFill {
-  background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+  background: linear-gradient(90deg, var(--accent-secondary), var(--accent-primary));
   border-radius: 999px;
   height: 100%;
   transition: width var(--transition-normal);
 }
 
-.cards {
+.stage {
+  position: relative;
+}
+
+.cardFrame {
+  animation: cardEnter 0.34s ease both;
+}
+
+.cardFrameLeaving {
+  opacity: 0.48;
+  transform: translateY(-10px) scale(0.988);
+  transition:
+    opacity 0.34s ease,
+    transform 0.34s ease;
+}
+
+.singleCard {
+  margin: 0;
+}
+
+.completeState {
+  align-items: center;
+  animation: cardEnter 0.34s ease both;
+  background: rgba(255, 255, 255, 0.76);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
   display: flex;
   flex-direction: column;
-  gap: 0.32rem;
+  justify-content: center;
+  padding: 2rem 1.4rem;
+  text-align: center;
+}
+
+.completeEyebrow {
+  color: var(--accent-secondary);
+  font-family: var(--font-ui), sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.7rem;
+  text-transform: uppercase;
+}
+
+.completeTitle {
+  color: var(--text-heading);
+  font-family: var(--font-display), serif;
+  font-size: 1.42rem;
+  line-height: 1.1;
+  margin-bottom: 0.55rem;
+}
+
+.completeText {
+  color: var(--text-muted);
+  font-size: 0.96rem;
+  line-height: 1.62;
+  margin: 0;
+  max-width: 34ch;
+}
+
+@keyframes cardEnter {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

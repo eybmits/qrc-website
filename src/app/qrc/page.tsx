@@ -34,33 +34,33 @@ function StateUpdateVisual() {
       <svg viewBox="0 0 860 200" className={styles.figureSvg} role="img" aria-label="State update flow">
         <defs>
           <linearGradient id="qrcFlowNode" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#1f3f72" />
-            <stop offset="100%" stopColor="#10233d" />
+            <stop offset="0%" stopColor="#fdf9f1" />
+            <stop offset="100%" stopColor="#efe6d6" />
           </linearGradient>
           <marker id="qrcArrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
-            <path d="M0,0 L8,4 L0,8 Z" fill="#86dbff" />
+            <path d="M0,0 L8,4 L0,8 Z" fill="#1d5f54" />
           </marker>
         </defs>
 
-        <rect x="20" y="56" width="154" height="84" rx="12" fill="url(#qrcFlowNode)" stroke="#7ec6ff" strokeWidth="1.2" />
+        <rect x="20" y="56" width="154" height="84" rx="12" fill="url(#qrcFlowNode)" stroke="#7d8f84" strokeWidth="1.2" />
         <text x="97" y="88" textAnchor="middle" className={styles.svgLabel}>x(t)</text>
         <text x="97" y="110" textAnchor="middle" className={styles.svgSub}>input</text>
 
-        <rect x="248" y="56" width="180" height="84" rx="12" fill="url(#qrcFlowNode)" stroke="#7ec6ff" strokeWidth="1.2" />
+        <rect x="248" y="56" width="180" height="84" rx="12" fill="url(#qrcFlowNode)" stroke="#7d8f84" strokeWidth="1.2" />
         <text x="338" y="88" textAnchor="middle" className={styles.svgLabel}>h(t-1)</text>
         <text x="338" y="110" textAnchor="middle" className={styles.svgSub}>memory</text>
 
-        <rect x="494" y="42" width="176" height="112" rx="12" fill="#163054" stroke="#8de1ff" strokeWidth="1.3" />
+        <rect x="494" y="42" width="176" height="112" rx="12" fill="#ebe2d1" stroke="#7d8f84" strokeWidth="1.3" />
         <text x="582" y="84" textAnchor="middle" className={styles.svgLabel}>f(·)</text>
         <text x="582" y="108" textAnchor="middle" className={styles.svgSub}>fixed dynamics</text>
 
-        <rect x="726" y="56" width="116" height="84" rx="12" fill="url(#qrcFlowNode)" stroke="#7ec6ff" strokeWidth="1.2" />
+        <rect x="726" y="56" width="116" height="84" rx="12" fill="url(#qrcFlowNode)" stroke="#7d8f84" strokeWidth="1.2" />
         <text x="784" y="88" textAnchor="middle" className={styles.svgLabel}>h(t)</text>
         <text x="784" y="110" textAnchor="middle" className={styles.svgSub}>new state</text>
 
-        <line x1="174" y1="98" x2="248" y2="98" stroke="#86dbff" strokeWidth="2" markerEnd="url(#qrcArrow)" />
-        <line x1="428" y1="98" x2="494" y2="98" stroke="#86dbff" strokeWidth="2" markerEnd="url(#qrcArrow)" />
-        <line x1="670" y1="98" x2="726" y2="98" stroke="#86dbff" strokeWidth="2" markerEnd="url(#qrcArrow)" />
+        <line x1="174" y1="98" x2="248" y2="98" stroke="#1d5f54" strokeWidth="2" markerEnd="url(#qrcArrow)" />
+        <line x1="428" y1="98" x2="494" y2="98" stroke="#1d5f54" strokeWidth="2" markerEnd="url(#qrcArrow)" />
+        <line x1="670" y1="98" x2="726" y2="98" stroke="#1d5f54" strokeWidth="2" markerEnd="url(#qrcArrow)" />
       </svg>
     </FigureFrame>
   );
@@ -73,14 +73,14 @@ function GradientVisual() {
       caption="Long chains can contract gradients to zero or expand them uncontrollably."
     >
       <svg viewBox="0 0 860 210" className={styles.figureSvg} role="img" aria-label="Gradient regimes">
-        <line x1="62" y1="176" x2="810" y2="176" stroke="#6da0d8" strokeWidth="1.2" />
-        <line x1="62" y1="26" x2="62" y2="176" stroke="#6da0d8" strokeWidth="1.2" />
+        <line x1="62" y1="176" x2="810" y2="176" stroke="#9b9586" strokeWidth="1.2" />
+        <line x1="62" y1="26" x2="62" y2="176" stroke="#9b9586" strokeWidth="1.2" />
 
-        <path d="M70 98 C 220 86, 380 62, 540 34 C 650 16, 740 16, 800 24" fill="none" stroke="#ff8b9b" strokeWidth="3" />
-        <path d="M70 98 C 220 112, 380 136, 540 156 C 650 166, 740 170, 800 172" fill="none" stroke="#6fd7ff" strokeWidth="3" />
+        <path d="M70 98 C 220 86, 380 62, 540 34 C 650 16, 740 16, 800 24" fill="none" stroke="#c46459" strokeWidth="3" />
+        <path d="M70 98 C 220 112, 380 136, 540 156 C 650 166, 740 170, 800 172" fill="none" stroke="#3d6d61" strokeWidth="3" />
 
-        <text x="736" y="26" fill="#ff8b9b" fontSize="14" fontWeight="700">exploding</text>
-        <text x="720" y="170" fill="#6fd7ff" fontSize="14" fontWeight="700">vanishing</text>
+        <text x="736" y="26" fill="#c46459" fontSize="14" fontWeight="700">exploding</text>
+        <text x="720" y="170" fill="#3d6d61" fontSize="14" fontWeight="700">vanishing</text>
       </svg>
     </FigureFrame>
   );
@@ -93,37 +93,37 @@ function ReservoirReadoutVisual() {
       caption="A fixed dynamic core plus a trainable linear layer."
     >
       <svg viewBox="0 0 860 220" className={styles.figureSvg} role="img" aria-label="Reservoir readout architecture">
-        <rect x="24" y="64" width="118" height="88" rx="12" fill="#1b3660" stroke="#81ccff" />
+        <rect x="24" y="64" width="118" height="88" rx="12" fill="#faf5ea" stroke="#7d8f84" />
         <text x="83" y="102" textAnchor="middle" className={styles.svgLabel}>Input</text>
         <text x="83" y="124" textAnchor="middle" className={styles.svgSub}>x(t)</text>
 
-        <ellipse cx="372" cy="108" rx="188" ry="84" fill="#112742" stroke="#7fd1ff" strokeWidth="1.2" />
+        <ellipse cx="372" cy="108" rx="188" ry="84" fill="#f0eadc" stroke="#7d8f84" strokeWidth="1.2" />
         <text x="372" y="36" textAnchor="middle" className={styles.svgLabel}>Fixed Reservoir Dynamics</text>
 
-        <circle cx="290" cy="95" r="8" fill="#8ce4ff" />
-        <circle cx="328" cy="128" r="7" fill="#9ab7ff" />
-        <circle cx="368" cy="88" r="9" fill="#7fe2ff" />
-        <circle cx="408" cy="120" r="8" fill="#8cc7ff" />
-        <circle cx="442" cy="84" r="7" fill="#7fe2ff" />
-        <circle cx="474" cy="126" r="8" fill="#8cc7ff" />
+        <circle cx="290" cy="95" r="8" fill="#a6bbae" />
+        <circle cx="328" cy="128" r="7" fill="#cdb98d" />
+        <circle cx="368" cy="88" r="9" fill="#9cb5ad" />
+        <circle cx="408" cy="120" r="8" fill="#b8c7c0" />
+        <circle cx="442" cy="84" r="7" fill="#a6bbae" />
+        <circle cx="474" cy="126" r="8" fill="#cdb98d" />
 
-        <line x1="290" y1="95" x2="328" y2="128" stroke="#72b5ec" />
-        <line x1="328" y1="128" x2="368" y2="88" stroke="#72b5ec" />
-        <line x1="368" y1="88" x2="408" y2="120" stroke="#72b5ec" />
-        <line x1="408" y1="120" x2="442" y2="84" stroke="#72b5ec" />
-        <line x1="442" y1="84" x2="474" y2="126" stroke="#72b5ec" />
-        <line x1="474" y1="126" x2="328" y2="128" stroke="#72b5ec" />
+        <line x1="290" y1="95" x2="328" y2="128" stroke="#a59a83" />
+        <line x1="328" y1="128" x2="368" y2="88" stroke="#a59a83" />
+        <line x1="368" y1="88" x2="408" y2="120" stroke="#a59a83" />
+        <line x1="408" y1="120" x2="442" y2="84" stroke="#a59a83" />
+        <line x1="442" y1="84" x2="474" y2="126" stroke="#a59a83" />
+        <line x1="474" y1="126" x2="328" y2="128" stroke="#a59a83" />
 
-        <rect x="616" y="58" width="122" height="100" rx="12" fill="#1b3660" stroke="#81ccff" />
+        <rect x="616" y="58" width="122" height="100" rx="12" fill="#faf5ea" stroke="#7d8f84" />
         <text x="677" y="98" textAnchor="middle" className={styles.svgLabel}>Readout</text>
         <text x="677" y="122" textAnchor="middle" className={styles.svgSub}>ridge fit</text>
 
-        <rect x="774" y="72" width="66" height="72" rx="10" fill="#163054" stroke="#81ccff" />
+        <rect x="774" y="72" width="66" height="72" rx="10" fill="#ebe3d3" stroke="#7d8f84" />
         <text x="807" y="110" textAnchor="middle" className={styles.svgLabel}>y(t)</text>
 
-        <line x1="142" y1="108" x2="186" y2="108" stroke="#83deff" strokeWidth="2" />
-        <line x1="560" y1="108" x2="616" y2="108" stroke="#83deff" strokeWidth="2" />
-        <line x1="738" y1="108" x2="774" y2="108" stroke="#83deff" strokeWidth="2" />
+        <line x1="142" y1="108" x2="186" y2="108" stroke="#1d5f54" strokeWidth="2" />
+        <line x1="560" y1="108" x2="616" y2="108" stroke="#1d5f54" strokeWidth="2" />
+        <line x1="738" y1="108" x2="774" y2="108" stroke="#1d5f54" strokeWidth="2" />
       </svg>
     </FigureFrame>
   );
@@ -136,13 +136,13 @@ function QuantumPotentialVisual() {
       caption="A driven quantum system can retain a tunneled component after a barrier interaction."
     >
       <svg viewBox="0 0 860 220" className={styles.figureSvg} role="img" aria-label="Quantum barrier and tunneling intuition">
-        <line x1="52" y1="176" x2="810" y2="176" stroke="#6b9acd" strokeWidth="1.2" />
-        <path d="M60 176 L250 176 L340 90 L520 90 L610 176 L810 176" fill="none" stroke="#8dc1ff" strokeWidth="3" />
-        <path d="M86 138 C 140 90, 198 90, 252 138" fill="none" stroke="#79e2ff" strokeWidth="3" />
-        <path d="M252 138 C 304 156, 334 152, 356 142" fill="none" stroke="#79e2ff" strokeWidth="2.4" opacity="0.58" />
-        <path d="M520 140 C 566 112, 618 112, 664 140" fill="none" stroke="#79e2ff" strokeWidth="2.2" opacity="0.58" />
-        <circle cx="150" cy="128" r="8" fill="#a9f0ff" />
-        <circle cx="602" cy="134" r="6" fill="#a9f0ff" opacity="0.75" />
+        <line x1="52" y1="176" x2="810" y2="176" stroke="#9b9586" strokeWidth="1.2" />
+        <path d="M60 176 L250 176 L340 90 L520 90 L610 176 L810 176" fill="none" stroke="#8d8778" strokeWidth="3" />
+        <path d="M86 138 C 140 90, 198 90, 252 138" fill="none" stroke="#1d5f54" strokeWidth="3" />
+        <path d="M252 138 C 304 156, 334 152, 356 142" fill="none" stroke="#1d5f54" strokeWidth="2.4" opacity="0.58" />
+        <path d="M520 140 C 566 112, 618 112, 664 140" fill="none" stroke="#1d5f54" strokeWidth="2.2" opacity="0.58" />
+        <circle cx="150" cy="128" r="8" fill="#b8c7c0" />
+        <circle cx="602" cy="134" r="6" fill="#b8c7c0" opacity="0.75" />
         <text x="378" y="78" textAnchor="middle" className={styles.svgSub}>potential barrier</text>
         <text x="112" y="196" className={styles.svgSub}>incoming packet</text>
         <text x="552" y="196" className={styles.svgSub}>transmitted component</text>
@@ -158,26 +158,26 @@ function MeasurementVisual() {
       caption="Observable expectations are converted into classical readout features."
     >
       <svg viewBox="0 0 860 220" className={styles.figureSvg} role="img" aria-label="Measurement and feature extraction">
-        <rect x="34" y="58" width="172" height="104" rx="12" fill="#143058" stroke="#86cdff" />
+        <rect x="34" y="58" width="172" height="104" rx="12" fill="#faf5ea" stroke="#7d8f84" />
         <text x="120" y="100" textAnchor="middle" className={styles.svgLabel}>rho(t)</text>
         <text x="120" y="122" textAnchor="middle" className={styles.svgSub}>quantum state</text>
 
-        <rect x="282" y="46" width="212" height="128" rx="14" fill="#122946" stroke="#7ec8ff" />
+        <rect x="282" y="46" width="212" height="128" rx="14" fill="#f0eadc" stroke="#7d8f84" />
         <text x="388" y="82" textAnchor="middle" className={styles.svgLabel}>Measure O_k</text>
         <text x="388" y="108" textAnchor="middle" className={styles.svgSub}>⟨sigma_x⟩, ⟨sigma_y⟩, ...</text>
         <text x="388" y="136" textAnchor="middle" className={styles.svgSub}>z(t) in R^k</text>
 
-        <rect x="566" y="58" width="126" height="104" rx="12" fill="#15325a" stroke="#84d7ff" />
+        <rect x="566" y="58" width="126" height="104" rx="12" fill="#faf5ea" stroke="#7d8f84" />
         <text x="629" y="100" textAnchor="middle" className={styles.svgLabel}>Features</text>
         <text x="629" y="122" textAnchor="middle" className={styles.svgSub}>z(t)</text>
 
-        <rect x="730" y="72" width="104" height="78" rx="10" fill="#173764" stroke="#84d7ff" />
+        <rect x="730" y="72" width="104" height="78" rx="10" fill="#ebe3d3" stroke="#7d8f84" />
         <text x="782" y="108" textAnchor="middle" className={styles.svgLabel}>y(t)</text>
         <text x="782" y="128" textAnchor="middle" className={styles.svgSub}>readout</text>
 
-        <line x1="206" y1="110" x2="282" y2="110" stroke="#83deff" strokeWidth="2" />
-        <line x1="494" y1="110" x2="566" y2="110" stroke="#83deff" strokeWidth="2" />
-        <line x1="692" y1="110" x2="730" y2="110" stroke="#83deff" strokeWidth="2" />
+        <line x1="206" y1="110" x2="282" y2="110" stroke="#1d5f54" strokeWidth="2" />
+        <line x1="494" y1="110" x2="566" y2="110" stroke="#1d5f54" strokeWidth="2" />
+        <line x1="692" y1="110" x2="730" y2="110" stroke="#1d5f54" strokeWidth="2" />
       </svg>
     </FigureFrame>
   );
@@ -197,7 +197,7 @@ export default function QRCPage() {
 
   return (
     <Essay
-      title="Quantum Reservoir Computing for the Very Curious"
+      title="Quantum Reservoir Computing"
       subtitle="A deep path from classical temporal learning to quantum reservoirs: intuitive first steps, then full mathematical structure and realistic implementation constraints."
       slug="/qrc"
     >
@@ -217,7 +217,7 @@ export default function QRCPage() {
 
         <div className={styles.primerNote}>
           New to quantum mechanics? The{' '}
-          <Link href="/quantum-primer">Quantum Mechanics Primer</Link> covers states, gates,
+          <Link href="/quantum-primer">Quantum Mechanics Basics</Link> covers states, gates,
           measurement, and open-system dynamics — everything you need before the quantum sections
           of this essay.
         </div>

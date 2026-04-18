@@ -33,35 +33,35 @@ function BlochSphereVisual() {
       <svg viewBox="0 0 400 380" className={styles.figureSvg} role="img" aria-label="Bloch sphere with qubit state">
         <defs>
           <radialGradient id="qpSphereGrad" cx="0.4" cy="0.35" r="0.6">
-            <stop offset="0%" stopColor="rgba(100,180,255,0.12)" />
-            <stop offset="100%" stopColor="rgba(10,20,40,0.02)" />
+            <stop offset="0%" stopColor="rgba(164, 187, 176, 0.18)" />
+            <stop offset="100%" stopColor="rgba(187, 172, 143, 0.05)" />
           </radialGradient>
           <marker id="qpArrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
-            <path d="M0,0 L8,4 L0,8 Z" fill="#86dbff" />
+            <path d="M0,0 L8,4 L0,8 Z" fill="#1d5f54" />
           </marker>
           <marker id="qpArrowState" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
-            <path d="M0,0 L8,4 L0,8 Z" fill="#ff9b6a" />
+            <path d="M0,0 L8,4 L0,8 Z" fill="#c26a58" />
           </marker>
         </defs>
 
         {/* Sphere outline */}
-        <ellipse cx="200" cy="200" rx="140" ry="140" fill="url(#qpSphereGrad)" stroke="#5a9ad6" strokeWidth="1" opacity="0.5" />
+        <ellipse cx="200" cy="200" rx="140" ry="140" fill="url(#qpSphereGrad)" stroke="#938d7d" strokeWidth="1" opacity="0.7" />
         {/* Equator ellipse */}
-        <ellipse cx="200" cy="200" rx="140" ry="40" fill="none" stroke="#4a7fb8" strokeWidth="0.8" strokeDasharray="4 3" />
+        <ellipse cx="200" cy="200" rx="140" ry="40" fill="none" stroke="#a39c8e" strokeWidth="0.8" strokeDasharray="4 3" />
 
         {/* Z axis */}
-        <line x1="200" y1="46" x2="200" y2="354" stroke="#6da0d8" strokeWidth="1.2" />
+        <line x1="200" y1="46" x2="200" y2="354" stroke="#9b9586" strokeWidth="1.2" />
         {/* X axis */}
-        <line x1="60" y1="200" x2="340" y2="200" stroke="#6da0d8" strokeWidth="1.0" strokeDasharray="4 3" />
+        <line x1="60" y1="200" x2="340" y2="200" stroke="#9b9586" strokeWidth="1.0" strokeDasharray="4 3" />
         {/* Y axis (projected) */}
-        <line x1="130" y1="260" x2="270" y2="140" stroke="#6da0d8" strokeWidth="1.0" strokeDasharray="4 3" />
+        <line x1="130" y1="260" x2="270" y2="140" stroke="#9b9586" strokeWidth="1.0" strokeDasharray="4 3" />
 
         {/* |0⟩ label at north pole */}
-        <circle cx="200" cy="56" r="4" fill="#8ce4ff" />
+        <circle cx="200" cy="56" r="4" fill="#b7a47c" />
         <text x="218" y="54" className={styles.svgLabel}>|0⟩</text>
 
         {/* |1⟩ label at south pole */}
-        <circle cx="200" cy="344" r="4" fill="#8ce4ff" />
+        <circle cx="200" cy="344" r="4" fill="#b7a47c" />
         <text x="218" y="348" className={styles.svgLabel}>|1⟩</text>
 
         {/* Axis labels */}
@@ -70,16 +70,16 @@ function BlochSphereVisual() {
         <text x="206" y="38" className={styles.svgSub}>z</text>
 
         {/* State vector |ψ⟩ */}
-        <line x1="200" y1="200" x2="290" y2="110" stroke="#ff9b6a" strokeWidth="2.5" markerEnd="url(#qpArrowState)" />
-        <text x="296" y="106" fill="#ff9b6a" className={styles.svgLabel}>|ψ⟩</text>
+        <line x1="200" y1="200" x2="290" y2="110" stroke="#c26a58" strokeWidth="2.5" markerEnd="url(#qpArrowState)" />
+        <text x="296" y="106" fill="#c26a58" className={styles.svgLabel}>|ψ⟩</text>
 
         {/* Theta arc */}
-        <path d="M200,180 Q210,168 214,160" fill="none" stroke="#ffb88a" strokeWidth="1.2" />
-        <text x="218" y="168" fill="#ffb88a" fontSize="13" fontStyle="italic">θ</text>
+        <path d="M200,180 Q210,168 214,160" fill="none" stroke="#c28a5b" strokeWidth="1.2" />
+        <text x="218" y="168" fill="#c28a5b" fontSize="13" fontStyle="italic">θ</text>
 
         {/* Phi arc on equator */}
-        <path d="M230,200 Q226,210 220,215" fill="none" stroke="#88d4ff" strokeWidth="1.2" />
-        <text x="232" y="218" fill="#88d4ff" fontSize="13" fontStyle="italic">φ</text>
+        <path d="M230,200 Q226,210 220,215" fill="none" stroke="#1d5f54" strokeWidth="1.2" />
+        <text x="232" y="218" fill="#1d5f54" fontSize="13" fontStyle="italic">φ</text>
       </svg>
     </FigureFrame>
   );
@@ -93,26 +93,26 @@ function GateCircuitVisual() {
     >
       <svg viewBox="0 0 580 180" className={styles.figureSvg} role="img" aria-label="H gate and CNOT circuit creating Bell state">
         {/* Qubit wires */}
-        <line x1="60" y1="60" x2="520" y2="60" stroke="#6da0d8" strokeWidth="1.5" />
-        <line x1="60" y1="120" x2="520" y2="120" stroke="#6da0d8" strokeWidth="1.5" />
+        <line x1="60" y1="60" x2="520" y2="60" stroke="#9b9586" strokeWidth="1.5" />
+        <line x1="60" y1="120" x2="520" y2="120" stroke="#9b9586" strokeWidth="1.5" />
 
         {/* Input labels */}
         <text x="28" y="64" className={styles.svgLabel}>|0⟩</text>
         <text x="28" y="124" className={styles.svgLabel}>|0⟩</text>
 
         {/* Hadamard gate */}
-        <rect x="140" y="36" width="52" height="48" rx="6" fill="#1b3660" stroke="#81ccff" strokeWidth="1.3" />
+        <rect x="140" y="36" width="52" height="48" rx="6" fill="#faf5ea" stroke="#7d8f84" strokeWidth="1.3" />
         <text x="166" y="66" textAnchor="middle" className={styles.svgLabel}>H</text>
 
         {/* CNOT gate */}
         {/* Control dot on qubit 0 */}
-        <circle cx="290" cy="60" r="7" fill="#8ce4ff" />
+        <circle cx="290" cy="60" r="7" fill="#1d5f54" />
         {/* Vertical line to target */}
-        <line x1="290" y1="67" x2="290" y2="103" stroke="#8ce4ff" strokeWidth="2" />
+        <line x1="290" y1="67" x2="290" y2="103" stroke="#1d5f54" strokeWidth="2" />
         {/* Target circle on qubit 1 */}
-        <circle cx="290" cy="120" r="17" fill="none" stroke="#8ce4ff" strokeWidth="2" />
-        <line x1="290" y1="103" x2="290" y2="137" stroke="#8ce4ff" strokeWidth="2" />
-        <line x1="273" y1="120" x2="307" y2="120" stroke="#8ce4ff" strokeWidth="2" />
+        <circle cx="290" cy="120" r="17" fill="none" stroke="#1d5f54" strokeWidth="2" />
+        <line x1="290" y1="103" x2="290" y2="137" stroke="#1d5f54" strokeWidth="2" />
+        <line x1="273" y1="120" x2="307" y2="120" stroke="#1d5f54" strokeWidth="2" />
 
         {/* Output label */}
         <text x="400" y="90" textAnchor="middle" className={styles.svgSub}>(|00⟩ + |11⟩) / √2</text>
@@ -130,36 +130,36 @@ function MeasurementCollapseVisual() {
       <svg viewBox="0 0 700 200" className={styles.figureSvg} role="img" aria-label="Measurement collapse from superposition to basis state">
         <defs>
           <marker id="qpMeasArrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
-            <path d="M0,0 L8,4 L0,8 Z" fill="#86dbff" />
+            <path d="M0,0 L8,4 L0,8 Z" fill="#1d5f54" />
           </marker>
         </defs>
 
         {/* Superposition state */}
-        <rect x="30" y="50" width="160" height="100" rx="12" fill="#1b3660" stroke="#81ccff" strokeWidth="1.2" />
+        <rect x="30" y="50" width="160" height="100" rx="12" fill="#faf5ea" stroke="#7d8f84" strokeWidth="1.2" />
         <text x="110" y="88" textAnchor="middle" className={styles.svgLabel}>α|0⟩ + β|1⟩</text>
         <text x="110" y="116" textAnchor="middle" className={styles.svgSub}>superposition</text>
 
         {/* Measurement box */}
-        <rect x="260" y="50" width="120" height="100" rx="12" fill="#163054" stroke="#8de1ff" strokeWidth="1.3" />
+        <rect x="260" y="50" width="120" height="100" rx="12" fill="#f0eadc" stroke="#7d8f84" strokeWidth="1.3" />
         <text x="320" y="92" textAnchor="middle" className={styles.svgLabel}>Measure</text>
         <text x="320" y="116" textAnchor="middle" className={styles.svgSub}>in Z basis</text>
 
         {/* Arrows in */}
-        <line x1="190" y1="100" x2="260" y2="100" stroke="#86dbff" strokeWidth="2" markerEnd="url(#qpMeasArrow)" />
+        <line x1="190" y1="100" x2="260" y2="100" stroke="#1d5f54" strokeWidth="2" markerEnd="url(#qpMeasArrow)" />
 
         {/* Outcome |0⟩ */}
-        <rect x="460" y="24" width="100" height="56" rx="10" fill="#1b3660" stroke="#7ec6ff" strokeWidth="1.1" />
+        <rect x="460" y="24" width="100" height="56" rx="10" fill="#faf5ea" stroke="#7d8f84" strokeWidth="1.1" />
         <text x="510" y="50" textAnchor="middle" className={styles.svgLabel}>|0⟩</text>
         <text x="510" y="68" textAnchor="middle" className={styles.svgSub}>prob |α|²</text>
 
         {/* Outcome |1⟩ */}
-        <rect x="460" y="120" width="100" height="56" rx="10" fill="#1b3660" stroke="#7ec6ff" strokeWidth="1.1" />
+        <rect x="460" y="120" width="100" height="56" rx="10" fill="#faf5ea" stroke="#7d8f84" strokeWidth="1.1" />
         <text x="510" y="146" textAnchor="middle" className={styles.svgLabel}>|1⟩</text>
         <text x="510" y="164" textAnchor="middle" className={styles.svgSub}>prob |β|²</text>
 
         {/* Arrows out */}
-        <line x1="380" y1="80" x2="460" y2="52" stroke="#86dbff" strokeWidth="2" markerEnd="url(#qpMeasArrow)" />
-        <line x1="380" y1="120" x2="460" y2="148" stroke="#86dbff" strokeWidth="2" markerEnd="url(#qpMeasArrow)" />
+        <line x1="380" y1="80" x2="460" y2="52" stroke="#1d5f54" strokeWidth="2" markerEnd="url(#qpMeasArrow)" />
+        <line x1="380" y1="120" x2="460" y2="148" stroke="#1d5f54" strokeWidth="2" markerEnd="url(#qpMeasArrow)" />
       </svg>
     </FigureFrame>
   );
@@ -174,34 +174,34 @@ function OpenSystemVisual() {
       <svg viewBox="0 0 700 240" className={styles.figureSvg} role="img" aria-label="Open quantum system with environment coupling">
         <defs>
           <marker id="qpEnvArrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
-            <path d="M0,0 L8,4 L0,8 Z" fill="#86dbff" />
+            <path d="M0,0 L8,4 L0,8 Z" fill="#1d5f54" />
           </marker>
         </defs>
 
         {/* System box */}
-        <rect x="200" y="50" width="200" height="100" rx="14" fill="#143058" stroke="#86cdff" strokeWidth="1.3" />
+        <rect x="200" y="50" width="200" height="100" rx="14" fill="#f0eadc" stroke="#7d8f84" strokeWidth="1.3" />
         <text x="300" y="88" textAnchor="middle" className={styles.svgLabel}>System ρ</text>
         <text x="300" y="114" textAnchor="middle" className={styles.svgSub}>Ĥ drives unitary part</text>
 
         {/* Environment cloud */}
-        <ellipse cx="560" cy="100" rx="90" ry="60" fill="rgba(100,160,220,0.08)" stroke="#5a8fba" strokeWidth="1" strokeDasharray="5 3" />
+        <ellipse cx="560" cy="100" rx="90" ry="60" fill="rgba(167, 157, 137, 0.08)" stroke="#9a9484" strokeWidth="1" strokeDasharray="5 3" />
         <text x="560" y="96" textAnchor="middle" className={styles.svgSub}>Environment</text>
         <text x="560" y="114" textAnchor="middle" className={styles.svgSub}>(thermal, photon loss...)</text>
 
         {/* Coupling arrows */}
-        <line x1="400" y1="82" x2="470" y2="82" stroke="#ff9b6a" strokeWidth="1.8" markerEnd="url(#qpEnvArrow)" />
-        <line x1="470" y1="118" x2="400" y2="118" stroke="#ff9b6a" strokeWidth="1.8" markerEnd="url(#qpEnvArrow)" />
-        <text x="435" y="72" fill="#ff9b6a" fontSize="12">Lₖ</text>
+        <line x1="400" y1="82" x2="470" y2="82" stroke="#c26a58" strokeWidth="1.8" markerEnd="url(#qpEnvArrow)" />
+        <line x1="470" y1="118" x2="400" y2="118" stroke="#c26a58" strokeWidth="1.8" markerEnd="url(#qpEnvArrow)" />
+        <text x="435" y="72" fill="#c26a58" fontSize="12">Lₖ</text>
 
         {/* Hamiltonian arrow */}
-        <line x1="100" y1="100" x2="200" y2="100" stroke="#86dbff" strokeWidth="2" markerEnd="url(#qpEnvArrow)" />
+        <line x1="100" y1="100" x2="200" y2="100" stroke="#1d5f54" strokeWidth="2" markerEnd="url(#qpEnvArrow)" />
         <text x="130" y="88" className={styles.svgSub}>Ĥ(t)</text>
 
         {/* Lindblad label */}
         <text x="300" y="190" textAnchor="middle" className={styles.svgSub}>dρ/dt = −i[Ĥ,ρ] + Σₖ dissipator(Lₖ)</text>
 
         {/* Decoherence note */}
-        <text x="300" y="218" textAnchor="middle" fill="#92aacc" fontSize="12">Moderate noise → fading memory (useful for RC)</text>
+        <text x="300" y="218" textAnchor="middle" fill="#6b7265" fontSize="12">Moderate noise → fading memory (useful for RC)</text>
       </svg>
     </FigureFrame>
   );
@@ -220,7 +220,7 @@ export default function QuantumPrimerPage() {
 
   return (
     <Essay
-      title="Quantum Mechanics Primer"
+      title="Quantum Mechanics Basics"
       subtitle="Essential quantum mechanics for understanding quantum reservoir computing: states, gates, measurement, density matrices, and open-system dynamics."
       slug="/quantum-primer"
     >
