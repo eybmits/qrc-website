@@ -111,7 +111,7 @@ export function Sidebar() {
               {essays.map((essay, index) => (
                 <Link
                   key={essay.slug}
-                  href={`${essay.slug}#${essay.sections[0].id}`}
+                  href={essay.slug}
                   className={`${styles.essayLink} ${
                     matchesRoute(pathname, essay.slug) ? styles.sectionActive : ''
                   }`}

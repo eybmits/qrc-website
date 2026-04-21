@@ -8,13 +8,6 @@ export function Hero() {
   return (
     <div className={styles.hero}>
       <section className={styles.masthead}>
-        <div className={styles.mastheadTop}>
-          <div className={styles.brandLockup}>
-            <span className={styles.brandMark}>QRC</span>
-            <span className={styles.brandName}>Quantum Reservoir Computing</span>
-          </div>
-        </div>
-
         <h1 className={styles.title}>
           Introduction to quantum reservoir computing
         </h1>
@@ -25,9 +18,12 @@ export function Hero() {
             extract useful information from the result.
           </p>
           <div className={styles.actions}>
-            <Link href="/qrc#introduction" className={styles.primaryLink}>
-              Start reading
-            </Link>
+            <div className={styles.primaryActionShell}>
+              <span className={`${styles.ctaSquare} ${styles.ctaSquareMain}`} aria-hidden="true" />
+              <Link href="/qrc" className={styles.primaryLink}>
+                Start reading
+              </Link>
+            </div>
             <Link href="/review" className={styles.secondaryLink}>
               Open review cards
             </Link>
@@ -67,7 +63,7 @@ export function Hero() {
           {essays.map((essay, index) => (
             <Link
               key={essay.slug}
-              href={`${essay.slug}#${essay.sections[0].id}`}
+              href={essay.slug}
               className={styles.pathItem}
             >
               <div className={styles.pathMeta}>

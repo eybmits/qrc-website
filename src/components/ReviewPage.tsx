@@ -1,9 +1,10 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import {
   ReviewCard as ReviewCardData,
   Rating,
+  SessionQueueBuild,
   buildSessionQueue,
   createInitialCardState,
   getDueLabel,
@@ -14,7 +15,8 @@ import {
   scheduleAnswer,
   unlockCardState,
 } from '@/lib/spaced-repetition';
-import { loadState, saveState } from '@/lib/storage';
+import { StoredState, loadState, saveState, updateState } from '@/lib/storage';
+import { useStoredReviewState } from '@/lib/useStoredReviewState';
 import { ReviewCard } from './ReviewCard';
 import { quantumPrimerCards } from '@/data/quantum-primer-cards';
 import { qrcCards } from '@/data/qrc-cards';
@@ -92,7 +94,49 @@ const EMPTY_SESSION: SessionState = {
   streak: 0,
 };
 
+function buildQueueFromState(state: StoredState): SessionQueueBuild {
+  const unlockedCards = allCards.filter((card) =>
+    isCardUnlocked(state.cards[card.id] ?? createInitialCardState())
+  );
+
+  return buildSessionQueue(
+    unlockedCards,
+    state.cards,
+    state.config,
+    {
+      newSeen: state.dailyStats.newSeen,
+      reviewSeen: state.dailyStats.reviewSeen,
+    }
+  );
+}
+
+function buildPageStats(state: StoredState): PageStats {
+  let total = 0;
+  let due = 0;
+  let mastered = 0;
+
+  for (const card of allCards) {
+    const cardState = state.cards[card.id] ?? createInitialCardState();
+    if (!isCardUnlocked(cardState)) continue;
+
+    total += 1;
+    if (isDue(cardState)) due += 1;
+    if (isMastered(cardState)) mastered += 1;
+  }
+
+  return {
+    total,
+    due,
+    mastered,
+    newSeen: state.dailyStats.newSeen,
+    reviewSeen: state.dailyStats.reviewSeen,
+    sessionsCompleted: state.dailyStats.sessionsCompleted,
+    answers: state.dailyStats.answers,
+  };
+}
+
 export function ReviewPage() {
+  const storedState = useStoredReviewState();
   const [activeTab, setActiveTab] = useState<FilterTab>('due');
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({
     '/quantum-primer': true,
@@ -101,24 +145,6 @@ export function ReviewPage() {
     '/physical-reservoirs': true,
   });
   const [session, setSession] = useState<SessionState>(EMPTY_SESSION);
-  const [cardStates, setCardStates] = useState<Record<string, ReturnType<typeof createInitialCardState>>>({});
-  const [stats, setStats] = useState<PageStats>({
-    total: 0,
-    due: 0,
-    mastered: 0,
-    newSeen: 0,
-    reviewSeen: 0,
-    sessionsCompleted: 0,
-    answers: 0,
-  });
-  const [queueMeta, setQueueMeta] = useState<QueueMeta>({
-    total: 0,
-    dueLearning: 0,
-    dueReview: 0,
-    queuedNew: 0,
-    reviewRemaining: 0,
-    newRemaining: 0,
-  });
 
   const cardById = useMemo(() => {
     const map: Record<string, ReviewCardData> = {};
@@ -126,70 +152,23 @@ export function ReviewPage() {
     return map;
   }, []);
 
-  const refreshFromStorage = useCallback(() => {
-    const state = loadState();
-    let total = 0;
-    let due = 0;
-    let mastered = 0;
-
-    for (const card of allCards) {
-      const cs = state.cards[card.id] ?? createInitialCardState();
-      if (!isCardUnlocked(cs)) continue;
-      total += 1;
-      if (isDue(cs)) due += 1;
-      if (isMastered(cs)) mastered += 1;
-    }
-
-    setCardStates(state.cards);
-    setStats({
-      total,
-      due,
-      mastered,
-      newSeen: state.dailyStats.newSeen,
-      reviewSeen: state.dailyStats.reviewSeen,
-      sessionsCompleted: state.dailyStats.sessionsCompleted,
-      answers: state.dailyStats.answers,
-    });
-  }, []);
-
-  const rebuildQueueMeta = useCallback(() => {
-    const state = loadState();
-    const unlockedCards = allCards.filter((card) =>
-      isCardUnlocked(state.cards[card.id] ?? createInitialCardState())
-    );
-    const built = buildSessionQueue(
-      unlockedCards,
-      state.cards,
-      state.config,
-      {
-        newSeen: state.dailyStats.newSeen,
-        reviewSeen: state.dailyStats.reviewSeen,
-      }
-    );
-
-    setQueueMeta({
-      total: built.queue.length,
-      dueLearning: built.dueLearning,
-      dueReview: built.dueReview,
-      queuedNew: built.queuedNew,
-      reviewRemaining: built.reviewRemaining,
-      newRemaining: built.newRemaining,
-    });
-
-    return built.queue;
-  }, []);
-
-  useEffect(() => {
-    refreshFromStorage();
-    rebuildQueueMeta();
-  }, [refreshFromStorage, rebuildQueueMeta]);
+  const stats = useMemo(() => buildPageStats(storedState), [storedState]);
+  const queueBuild = useMemo(() => buildQueueFromState(storedState), [storedState]);
+  const queueMeta: QueueMeta = useMemo(() => ({
+    total: queueBuild.queue.length,
+    dueLearning: queueBuild.dueLearning,
+    dueReview: queueBuild.dueReview,
+    queuedNew: queueBuild.queuedNew,
+    reviewRemaining: queueBuild.reviewRemaining,
+    newRemaining: queueBuild.newRemaining,
+  }), [queueBuild]);
 
   const toggleGroup = (slug: string) => {
     setOpenGroups((prev) => ({ ...prev, [slug]: !prev[slug] }));
   };
 
   const startSession = () => {
-    const queue = rebuildQueueMeta();
+    const queue = queueBuild.queue.slice();
     setSession({
       active: true,
       paused: false,
@@ -208,21 +187,17 @@ export function ReviewPage() {
   };
 
   const endSession = () => {
-    setSession((prev) => {
-      if (prev.active && prev.answered > 0) {
-        const state = loadState();
+    if (session.active && session.answered > 0) {
+      updateState((state) => {
         state.dailyStats.sessionsCompleted += 1;
-        saveState(state);
-      }
-      return EMPTY_SESSION;
-    });
+      });
+    }
 
-    refreshFromStorage();
-    rebuildQueueMeta();
+    setSession(EMPTY_SESSION);
   };
 
   const rebuildSessionQueue = () => {
-    const queue = rebuildQueueMeta();
+    const queue = queueBuild.queue.slice();
     setSession((prev) => {
       if (!prev.active) {
         return {
@@ -256,13 +231,13 @@ export function ReviewPage() {
       );
       const previousStatus = currentCardState.status;
 
-      const result = scheduleAnswer(currentCardState, rating, {
+      const scheduleResult = scheduleAnswer(currentCardState, rating, {
         config: state.config,
         now,
       });
 
       const nextCardState = {
-        ...result.state,
+        ...scheduleResult.state,
         unlockedAt: currentCardState.unlockedAt,
       };
 
@@ -285,8 +260,8 @@ export function ReviewPage() {
         const remaining = prev.queue.slice(1);
         let queue = remaining;
 
-        if (result.reinsertAfter !== null) {
-          const insertAt = Math.min(Math.max(0, result.reinsertAfter), queue.length);
+        if (scheduleResult.reinsertAfter !== null) {
+          const insertAt = Math.min(Math.max(0, scheduleResult.reinsertAfter), queue.length);
           queue = [
             ...queue.slice(0, insertAt),
             currentCardId,
@@ -301,11 +276,8 @@ export function ReviewPage() {
           streak: rating === 'again' ? 0 : prev.streak + 1,
         };
       });
-
-      refreshFromStorage();
-      rebuildQueueMeta();
     },
-    [session, refreshFromStorage, rebuildQueueMeta]
+    [session]
   );
 
   const currentCardId = session.queue[0];
@@ -314,18 +286,18 @@ export function ReviewPage() {
   const nextDueByRating = useMemo(() => {
     if (!currentCardId) return undefined;
 
-    const state = cardStates[currentCardId] ?? createInitialCardState();
+    const state = storedState.cards[currentCardId] ?? createInitialCardState();
     return {
       again: previewNextDue(state, 'again'),
       hard: previewNextDue(state, 'hard'),
       good: previewNextDue(state, 'good'),
       easy: previewNextDue(state, 'easy'),
     };
-  }, [currentCardId, cardStates]);
+  }, [currentCardId, storedState.cards]);
 
   const filterCards = (cards: ReviewCardData[]): ReviewCardData[] => {
     return cards.filter((card) => {
-      const state = cardStates[card.id] ?? createInitialCardState();
+      const state = storedState.cards[card.id] ?? createInitialCardState();
       if (!isCardUnlocked(state)) return false;
       if (activeTab === 'all') return true;
       if (activeTab === 'due') return isDue(state);
@@ -489,7 +461,7 @@ export function ReviewPage() {
             {isOpen && (
               <div className={styles.libraryList}>
                 {filtered.map((card) => {
-                  const state = cardStates[card.id] ?? createInitialCardState();
+                  const state = storedState.cards[card.id] ?? createInitialCardState();
                   return (
                     <div key={card.id} className={styles.libraryItem}>
                       <div className={styles.libraryQuestion}>{card.question}</div>

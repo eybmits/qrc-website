@@ -1,15 +1,17 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   ReviewCard as ReviewCardData,
   Rating,
   createInitialCardState,
+  isCardUnlocked,
   previewNextDue,
   scheduleAnswer,
   unlockCardState,
 } from '@/lib/spaced-repetition';
-import { getCardState, loadState, saveState } from '@/lib/storage';
+import { updateState } from '@/lib/storage';
+import { useStoredReviewState } from '@/lib/useStoredReviewState';
 import { ReviewCard } from './ReviewCard';
 import styles from './ReviewCardSet.module.css';
 
@@ -18,10 +20,18 @@ interface ReviewCardSetProps {
 }
 
 export function ReviewCardSet({ cards }: ReviewCardSetProps) {
-  const [reviewedCount, setReviewedCount] = useState(0);
+  const storedState = useStoredReviewState();
   const [activeIndex, setActiveIndex] = useState(0);
   const [isAdvancing, setIsAdvancing] = useState(false);
   const advanceTimeoutRef = useRef<number | null>(null);
+
+  const reviewedCount = useMemo(() => {
+    return cards.filter((card) => isCardUnlocked(storedState.cards[card.id] ?? createInitialCardState())).length;
+  }, [cards, storedState.cards]);
+
+  const persistedActiveIndex = reviewedCount >= cards.length
+    ? cards.length
+    : reviewedCount;
 
   useEffect(() => {
     return () => {
@@ -31,46 +41,51 @@ export function ReviewCardSet({ cards }: ReviewCardSetProps) {
     };
   }, []);
 
+  useEffect(() => {
+    if (!isAdvancing) {
+      setActiveIndex(persistedActiveIndex);
+    }
+  }, [isAdvancing, persistedActiveIndex]);
+
   const handleRate = useCallback((cardId: string, rating: Rating) => {
     if (isAdvancing) return;
 
-    const state = loadState();
-    const now = Date.now();
-    const currentState = state.cards[cardId] ?? createInitialCardState();
-    const unlockedState = unlockCardState(currentState, now);
-    const previousStatus = unlockedState.status;
+    updateState((state) => {
+      const now = Date.now();
+      const currentState = state.cards[cardId] ?? createInitialCardState();
+      const unlockedState = unlockCardState(currentState, now);
+      const previousStatus = unlockedState.status;
 
-    const result = scheduleAnswer(unlockedState, rating, {
-      config: state.config,
-      now,
+      const result = scheduleAnswer(unlockedState, rating, {
+        config: state.config,
+        now,
+      });
+
+      const nextState = {
+        ...result.state,
+        unlockedAt: unlockedState.unlockedAt,
+      };
+
+      if (nextState.lastSeenDayKey !== state.dailyStats.dayKey) {
+        if (previousStatus === 'new') {
+          state.dailyStats.newSeen += 1;
+        } else {
+          state.dailyStats.reviewSeen += 1;
+        }
+        nextState.lastSeenDayKey = state.dailyStats.dayKey;
+      }
+
+      state.dailyStats.answers += 1;
+      state.cards[cardId] = nextState;
     });
 
-    const nextState = {
-      ...result.state,
-      unlockedAt: unlockedState.unlockedAt,
-    };
-
-    if (nextState.lastSeenDayKey !== state.dailyStats.dayKey) {
-      if (previousStatus === 'new') {
-        state.dailyStats.newSeen += 1;
-      } else {
-        state.dailyStats.reviewSeen += 1;
-      }
-      nextState.lastSeenDayKey = state.dailyStats.dayKey;
-    }
-
-    state.dailyStats.answers += 1;
-    state.cards[cardId] = nextState;
-    saveState(state);
-
-    setReviewedCount((count) => count + 1);
     setIsAdvancing(true);
 
     advanceTimeoutRef.current = window.setTimeout(() => {
-      setActiveIndex((index) => Math.min(index + 1, cards.length));
+      setActiveIndex(Math.min(persistedActiveIndex + 1, cards.length));
       setIsAdvancing(false);
     }, 380);
-  }, [cards.length, isAdvancing]);
+  }, [cards.length, isAdvancing, persistedActiveIndex]);
 
   const progress = cards.length > 0 ? (reviewedCount / cards.length) * 100 : 0;
   const activeCard = cards[activeIndex];
@@ -101,7 +116,7 @@ export function ReviewCardSet({ cards }: ReviewCardSetProps) {
             className={`${styles.cardFrame} ${isAdvancing ? styles.cardFrameLeaving : ''}`}
           >
             {(() => {
-              const cardState = getCardState(activeCard.id);
+              const cardState = storedState.cards[activeCard.id] ?? createInitialCardState();
               const nextDueByRating = {
                 again: previewNextDue(cardState, 'again'),
                 hard: previewNextDue(cardState, 'hard'),
@@ -127,7 +142,7 @@ export function ReviewCardSet({ cards }: ReviewCardSetProps) {
             <div className={styles.completeEyebrow}>Review complete</div>
             <div className={styles.completeTitle}>All cards in this set are done.</div>
             <p className={styles.completeText}>
-              The next card will only appear when it becomes due again.
+              Your progress is saved in this browser. Continue with due cards from the review hub.
             </p>
           </div>
         )}

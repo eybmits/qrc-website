@@ -12,6 +12,8 @@ import {
 const STORAGE_KEY = 'qrc-review-state';
 const STORAGE_VERSION = 4;
 
+type StateListener = () => void;
+
 export interface DailyStats {
   dayKey: string;
   newSeen: number;
@@ -26,6 +28,13 @@ export interface StoredState {
   dailyStats: DailyStats;
   version: 4;
 }
+
+const stateListeners = new Set<StateListener>();
+
+let cachedState: StoredState | null = null;
+let cachedPayload: string | null = null;
+let storageEventsBound = false;
+let memoryFallbackActive = false;
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null;
@@ -72,6 +81,25 @@ function getDefaultState(): StoredState {
   };
 }
 
+function cloneCardState(state: CardState): CardState {
+  return { ...state };
+}
+
+function cloneStoredState(state: StoredState): StoredState {
+  return {
+    cards: Object.fromEntries(
+      Object.entries(state.cards).map(([cardId, cardState]) => [cardId, cloneCardState(cardState)])
+    ),
+    config: { ...state.config },
+    dailyStats: { ...state.dailyStats },
+    version: STORAGE_VERSION,
+  };
+}
+
+function serializeState(state: StoredState): string {
+  return JSON.stringify(state);
+}
+
 function normalizeCardState(raw: unknown): CardState {
   const fallback = createInitialCardState();
   if (!isRecord(raw)) return fallback;
@@ -97,9 +125,10 @@ function normalizeCardState(raw: unknown): CardState {
 function normalizeDailyStats(raw: unknown): DailyStats {
   if (!isRecord(raw)) return createDailyStats();
 
-  const dayKey = typeof raw.dayKey === 'string' && raw.dayKey.length > 0
-    ? raw.dayKey
-    : getTodayKey();
+  const dayKey =
+    typeof raw.dayKey === 'string' && raw.dayKey.length > 0
+      ? raw.dayKey
+      : getTodayKey();
 
   return {
     dayKey,
@@ -139,81 +168,221 @@ function normalizeV4(raw: unknown): StoredState {
   return normalized;
 }
 
-function resetStateAndPersist(): StoredState {
-  const reset = getDefaultState();
-  try {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(reset));
-    }
-  } catch {
-    // localStorage might be full or unavailable
+function notifyStateListeners(): void {
+  for (const listener of Array.from(stateListeners)) {
+    listener();
   }
-  return reset;
 }
 
-export function loadState(): StoredState {
-  if (typeof window === 'undefined') return getDefaultState();
+function persistPayload(payload: string): void {
+  if (typeof window === 'undefined' || memoryFallbackActive) return;
 
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return getDefaultState();
+    localStorage.setItem(STORAGE_KEY, payload);
+  } catch {
+    memoryFallbackActive = true;
+  }
+}
 
+function hydrateState(raw: string | null): {
+  state: StoredState;
+  payload: string | null;
+  persist: boolean;
+} {
+  if (!raw) {
+    return {
+      state: getDefaultState(),
+      payload: null,
+      persist: false,
+    };
+  }
+
+  try {
     const parsed = JSON.parse(raw) as Record<string, unknown>;
     const version = typeof parsed.version === 'number' ? parsed.version : 0;
 
-    // Curriculum reset policy: any pre-v4 state is discarded.
     if (version !== STORAGE_VERSION) {
-      return resetStateAndPersist();
+      const reset = getDefaultState();
+      return {
+        state: reset,
+        payload: serializeState(reset),
+        persist: true,
+      };
     }
 
-    return normalizeV4(parsed);
+    return {
+      state: normalizeV4(parsed),
+      payload: raw,
+      persist: false,
+    };
   } catch {
+    return {
+      state: getDefaultState(),
+      payload: raw,
+      persist: false,
+    };
+  }
+}
+
+function setCurrentState(
+  state: StoredState,
+  options?: {
+    notify?: boolean;
+    persist?: boolean;
+  }
+): void {
+  const normalized = normalizeV4(state);
+  const payload = serializeState(normalized);
+
+  cachedState = normalized;
+  cachedPayload = payload;
+
+  if (options?.persist !== false) {
+    persistPayload(payload);
+  }
+
+  if (options?.notify !== false) {
+    notifyStateListeners();
+  }
+}
+
+function bindStorageEvents(): void {
+  if (typeof window === 'undefined' || storageEventsBound) return;
+
+  window.addEventListener('storage', (event) => {
+    if (event.storageArea !== window.localStorage) return;
+    if (event.key !== null && event.key !== STORAGE_KEY) return;
+
+    memoryFallbackActive = false;
+
+    let raw: string | null = null;
+    try {
+      raw = localStorage.getItem(STORAGE_KEY);
+    } catch {
+      raw = cachedPayload;
+    }
+
+    const hydrated = hydrateState(raw);
+    cachedState = hydrated.state;
+    cachedPayload = hydrated.payload;
+
+    if (hydrated.persist && hydrated.payload) {
+      persistPayload(hydrated.payload);
+      cachedPayload = hydrated.payload;
+    }
+
+    notifyStateListeners();
+  });
+
+  storageEventsBound = true;
+}
+
+function getCurrentState(): StoredState {
+  if (typeof window === 'undefined') {
     return getDefaultState();
   }
+
+  bindStorageEvents();
+
+  if (memoryFallbackActive && cachedState) {
+    return cachedState;
+  }
+
+  let raw: string | null = null;
+
+  try {
+    raw = localStorage.getItem(STORAGE_KEY);
+    memoryFallbackActive = false;
+  } catch {
+    memoryFallbackActive = true;
+    return cachedState ?? getDefaultState();
+  }
+
+  if (cachedState === null || raw !== cachedPayload) {
+    const hydrated = hydrateState(raw);
+    cachedState = hydrated.state;
+    cachedPayload = hydrated.payload;
+
+    if (hydrated.persist && hydrated.payload) {
+      persistPayload(hydrated.payload);
+      cachedPayload = hydrated.payload;
+    }
+  }
+
+  if (cachedState) {
+    const currentDay = getTodayKey();
+    if (cachedState.dailyStats.dayKey !== currentDay) {
+      setCurrentState(
+        {
+          ...cachedState,
+          dailyStats: createDailyStats(currentDay),
+        },
+        { notify: false }
+      );
+    }
+  }
+
+  return cachedState ?? getDefaultState();
+}
+
+export function subscribeToStoredState(listener: StateListener): () => void {
+  bindStorageEvents();
+  stateListeners.add(listener);
+
+  return () => {
+    stateListeners.delete(listener);
+  };
+}
+
+export function getStoredStateSnapshot(): StoredState {
+  return getCurrentState();
+}
+
+export function getStoredStateServerSnapshot(): StoredState {
+  return getDefaultState();
+}
+
+export function loadState(): StoredState {
+  return cloneStoredState(getCurrentState());
 }
 
 export function saveState(state: StoredState): void {
-  if (typeof window === 'undefined') return;
+  setCurrentState(state);
+}
 
-  try {
-    const normalized: StoredState = {
-      ...state,
-      config: normalizeSchedulerConfig(state.config),
-      dailyStats: normalizeDailyStats(state.dailyStats),
-      version: STORAGE_VERSION,
-    };
-    ensureCurrentDay(normalized);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized));
-  } catch {
-    // localStorage might be full or unavailable
-  }
+export function updateState(mutator: (state: StoredState) => void): StoredState {
+  const nextState = loadState();
+  mutator(nextState);
+  saveState(nextState);
+  return cloneStoredState(getCurrentState());
 }
 
 export function getSchedulerConfig(): SchedulerConfig {
-  return loadState().config;
+  return { ...getCurrentState().config };
 }
 
 export function updateSchedulerConfig(
   partial: Partial<SchedulerConfig>
 ): SchedulerConfig {
-  const state = loadState();
-  state.config = normalizeSchedulerConfig({
-    ...state.config,
-    ...partial,
+  const nextState = updateState((state) => {
+    state.config = normalizeSchedulerConfig({
+      ...state.config,
+      ...partial,
+    });
   });
-  saveState(state);
-  return state.config;
+
+  return { ...nextState.config };
 }
 
 export function getCardState(cardId: string): CardState {
-  const state = loadState();
-  return state.cards[cardId] || createInitialCardState();
+  const state = getCurrentState();
+  return state.cards[cardId] ? cloneCardState(state.cards[cardId]) : createInitialCardState();
 }
 
 export function updateCardState(cardId: string, cardState: CardState): void {
-  const state = loadState();
-  state.cards[cardId] = normalizeCardState(cardState);
-  saveState(state);
+  updateState((state) => {
+    state.cards[cardId] = normalizeCardState(cardState);
+  });
 }
 
 export function getEssayProgress(cardIds: string[]): {
@@ -221,7 +390,7 @@ export function getEssayProgress(cardIds: string[]): {
   reviewed: number;
   mastered: number;
 } {
-  const state = loadState();
+  const state = getCurrentState();
   let reviewed = 0;
   let mastered = 0;
 

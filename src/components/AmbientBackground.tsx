@@ -23,30 +23,38 @@ interface AtomDef {
 }
 
 const squares: SquareDef[] = [
-  { left: -2, top: 16, size: 96, delay: -5, duration: 24, tone: 'soft' },
-  { left: 3, top: 31, size: 68, delay: -11, duration: 19, tone: 'outline' },
+  { left: -6, top: 8, size: 96, delay: -5, duration: 24, tone: 'soft' },
+  { left: -2, top: 56, size: 128, delay: -9, duration: 30, tone: 'soft' },
+  { left: 6, top: 48, size: 68, delay: -11, duration: 19, tone: 'outline' },
   { left: 9, top: 10, size: 34, delay: -2, duration: 18, tone: 'ghost' },
-  { left: 12, top: 18, size: 112, delay: -7, duration: 22, tone: 'soft' },
+  { left: 16, top: 72, size: 112, delay: -7, duration: 22, tone: 'soft' },
+  { left: 22, top: 58, size: 76, delay: -6, duration: 21, tone: 'outline' },
   { left: 16, top: 43, size: 88, delay: -14, duration: 26, tone: 'ghost' },
   { left: 22, top: 7, size: 44, delay: -3, duration: 17, tone: 'outline' },
-  { left: 29, top: 14, size: 160, delay: -8, duration: 28, tone: 'soft' },
-  { left: 33, top: 27, size: 54, delay: -12, duration: 20, tone: 'outline' },
-  { left: 36, top: 51, size: 102, delay: -18, duration: 23, tone: 'ghost' },
-  { left: 43, top: 12, size: 52, delay: -6, duration: 21, tone: 'ghost' },
-  { left: 50, top: 34, size: 74, delay: -10, duration: 18, tone: 'outline' },
+  { left: 32, top: 76, size: 118, delay: -16, duration: 25, tone: 'soft' },
+  { left: 72, top: 4, size: 160, delay: -8, duration: 28, tone: 'soft' },
+  { left: 64, top: 18, size: 54, delay: -12, duration: 20, tone: 'outline' },
+  { left: 38, top: 60, size: 102, delay: -18, duration: 23, tone: 'ghost' },
+  { left: 56, top: 70, size: 52, delay: -6, duration: 21, tone: 'ghost' },
+  { left: 78, top: 18, size: 138, delay: -11, duration: 29, tone: 'soft' },
+  { left: 86, top: 40, size: 74, delay: -10, duration: 18, tone: 'outline' },
   { left: 58, top: 6, size: 104, delay: -15, duration: 24, tone: 'soft' },
-  { left: 61, top: 40, size: 142, delay: -20, duration: 29, tone: 'ghost' },
+  { left: 66, top: 56, size: 92, delay: -4, duration: 22, tone: 'outline' },
+  { left: 72, top: 66, size: 142, delay: -20, duration: 29, tone: 'ghost' },
   { left: 66, top: 22, size: 46, delay: -4, duration: 16, tone: 'outline' },
-  { left: 71, top: 48, size: 126, delay: -13, duration: 25, tone: 'soft' },
-  { left: 76, top: 13, size: 64, delay: -17, duration: 21, tone: 'ghost' },
-  { left: 81, top: 28, size: 154, delay: -9, duration: 27, tone: 'soft' },
-  { left: 86, top: 9, size: 40, delay: -1, duration: 18, tone: 'outline' },
-  { left: 90, top: 36, size: 92, delay: -16, duration: 23, tone: 'ghost' },
-  { left: 94, top: 19, size: 122, delay: -22, duration: 26, tone: 'soft' },
+  { left: 82, top: 62, size: 126, delay: -13, duration: 25, tone: 'soft' },
+  { left: 92, top: 14, size: 64, delay: -17, duration: 21, tone: 'ghost' },
+  { left: 94, top: 52, size: 174, delay: -24, duration: 31, tone: 'soft' },
+  { left: 88, top: 26, size: 154, delay: -9, duration: 27, tone: 'soft' },
+  { left: 98, top: 6, size: 40, delay: -1, duration: 18, tone: 'outline' },
+  { left: 96, top: 34, size: 92, delay: -16, duration: 23, tone: 'ghost' },
+  { left: 100, top: 64, size: 122, delay: -22, duration: 26, tone: 'soft' },
   { left: 4, top: 56, size: 58, delay: -7, duration: 18, tone: 'outline' },
   { left: 21, top: 66, size: 36, delay: -5, duration: 15, tone: 'ghost' },
+  { left: 35, top: 68, size: 108, delay: -14, duration: 24, tone: 'soft' },
   { left: 47, top: 64, size: 82, delay: -19, duration: 22, tone: 'soft' },
   { left: 73, top: 62, size: 50, delay: -8, duration: 17, tone: 'outline' },
+  { left: 88, top: 58, size: 116, delay: -20, duration: 28, tone: 'ghost' },
 ];
 
 const atoms: AtomDef[] = [
@@ -56,12 +64,19 @@ const atoms: AtomDef[] = [
 ];
 
 function squareStyle(square: SquareDef): CSSProperties {
+  const driftX = Math.max(18, Math.round(square.size * 0.24));
+  const driftY = Math.max(16, Math.round(square.size * 0.2));
+  const tilt = Math.max(3, Math.round(square.size * 0.035));
+
   return {
     '--ambient-left': `${square.left}%`,
     '--ambient-top': `${square.top}%`,
     '--ambient-size': `${square.size}px`,
     '--ambient-delay': `${square.delay}s`,
     '--ambient-duration': `${square.duration}s`,
+    '--ambient-shift-x': `${driftX}px`,
+    '--ambient-shift-y': `${driftY}px`,
+    '--ambient-tilt': `${tilt}deg`,
   } as CSSProperties;
 }
 
