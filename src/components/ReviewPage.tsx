@@ -22,6 +22,7 @@ import { quantumPrimerCards } from '@/data/quantum-primer-cards';
 import { qrcCards } from '@/data/qrc-cards';
 import { echoStateCards } from '@/data/echo-state-cards';
 import { physicalReservoirCards } from '@/data/physical-reservoir-cards';
+import { measurementCards } from '@/data/measurement-cards';
 import styles from './ReviewPage.module.css';
 
 type FilterTab = 'all' | 'due' | 'mastered';
@@ -81,9 +82,14 @@ const essayGroups: EssayGroup[] = [
     slug: '/physical-reservoirs',
     cards: physicalReservoirCards,
   },
+  {
+    title: 'Measurement and Readout',
+    slug: '/measurement',
+    cards: measurementCards,
+  },
 ];
 
-const allCards = [...quantumPrimerCards, ...qrcCards, ...echoStateCards, ...physicalReservoirCards];
+const allCards = [...quantumPrimerCards, ...qrcCards, ...echoStateCards, ...physicalReservoirCards, ...measurementCards];
 
 const EMPTY_SESSION: SessionState = {
   active: false,
@@ -143,6 +149,7 @@ export function ReviewPage() {
     '/qrc': true,
     '/echo-state': true,
     '/physical-reservoirs': true,
+    '/measurement': true,
   });
   const [session, setSession] = useState<SessionState>(EMPTY_SESSION);
 

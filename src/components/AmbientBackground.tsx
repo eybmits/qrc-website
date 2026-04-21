@@ -12,16 +12,6 @@ interface SquareDef {
   tone: SquareTone;
 }
 
-interface AtomDef {
-  left: number;
-  top: number;
-  size: number;
-  tilt: number;
-  delay: number;
-  duration: number;
-  opacity: number;
-}
-
 const squares: SquareDef[] = [
   { left: -6, top: 8, size: 96, delay: -5, duration: 24, tone: 'soft' },
   { left: -2, top: 56, size: 128, delay: -9, duration: 30, tone: 'soft' },
@@ -57,12 +47,6 @@ const squares: SquareDef[] = [
   { left: 88, top: 58, size: 116, delay: -20, duration: 28, tone: 'ghost' },
 ];
 
-const atoms: AtomDef[] = [
-  { left: 4, top: 10, size: 224, tilt: -14, delay: -1.2, duration: 12.6, opacity: 0.22 },
-  { left: 69, top: 9, size: 188, tilt: 11, delay: -5.2, duration: 10.8, opacity: 0.18 },
-  { left: 54, top: 61, size: 204, tilt: -8, delay: -8.4, duration: 11.8, opacity: 0.16 },
-];
-
 function squareStyle(square: SquareDef): CSSProperties {
   const driftX = Math.max(18, Math.round(square.size * 0.24));
   const driftY = Math.max(16, Math.round(square.size * 0.2));
@@ -77,18 +61,6 @@ function squareStyle(square: SquareDef): CSSProperties {
     '--ambient-shift-x': `${driftX}px`,
     '--ambient-shift-y': `${driftY}px`,
     '--ambient-tilt': `${tilt}deg`,
-  } as CSSProperties;
-}
-
-function atomStyle(atom: AtomDef): CSSProperties {
-  return {
-    '--atom-left': `${atom.left}%`,
-    '--atom-top': `${atom.top}%`,
-    '--atom-size': `${atom.size}px`,
-    '--atom-tilt': `${atom.tilt}deg`,
-    '--atom-delay': `${atom.delay}s`,
-    '--atom-duration': `${atom.duration}s`,
-    '--atom-opacity': `${atom.opacity}`,
   } as CSSProperties;
 }
 
@@ -112,37 +84,6 @@ export function AmbientBackground() {
             }`}
             style={squareStyle(square)}
           />
-        ))}
-      </div>
-
-      <div className={styles.atomField}>
-        {atoms.map((atom, index) => (
-          <div key={`${atom.left}-${atom.top}-${index}`} className={styles.atom} style={atomStyle(atom)}>
-            <svg className={styles.atomSvg} viewBox="0 0 200 200" preserveAspectRatio="xMidYMid meet">
-              <circle cx="100" cy="100" r="38" className={styles.nucleusGlow} />
-              <circle cx="100" cy="100" r="10.5" className={styles.nucleusCore} />
-
-              <g className={`${styles.orbit} ${styles.orbitA}`}>
-                <ellipse cx="100" cy="100" rx="74" ry="23" className={styles.orbitPath} />
-                <circle cx="174" cy="100" r="4.7" className={styles.orbitElectronBright} />
-              </g>
-
-              <g className={`${styles.orbit} ${styles.orbitB}`}>
-                <ellipse cx="100" cy="100" rx="74" ry="23" className={styles.orbitPath} />
-                <circle cx="26" cy="100" r="4.2" className={styles.orbitElectronSoft} />
-              </g>
-
-              <g className={`${styles.orbit} ${styles.orbitC}`}>
-                <ellipse cx="100" cy="100" rx="60" ry="17" className={styles.orbitPathSoft} />
-                <circle cx="160" cy="100" r="3.8" className={styles.orbitElectronSoft} />
-              </g>
-
-              <g className={`${styles.orbit} ${styles.orbitD}`}>
-                <ellipse cx="100" cy="100" rx="88" ry="30" className={styles.orbitPathSoft} />
-                <circle cx="12" cy="100" r="3.4" className={styles.orbitElectronBright} />
-              </g>
-            </svg>
-          </div>
         ))}
       </div>
 

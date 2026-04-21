@@ -47,8 +47,7 @@
   width: 720px;
 }
 
-.squareField,
-.atomField {
+.squareField {
   inset: 0;
   position: absolute;
 }
@@ -91,86 +90,6 @@
   box-shadow: 0 18px 44px rgba(88, 133, 172, 0.05);
 }
 
-.atom {
-  animation-delay: var(--atom-delay);
-  animation-duration: var(--atom-duration);
-  animation-iteration-count: infinite;
-  animation-name: atomPulse;
-  animation-timing-function: ease-in-out;
-  height: var(--atom-size);
-  left: var(--atom-left);
-  opacity: 0;
-  overflow: visible;
-  position: absolute;
-  top: var(--atom-top);
-  will-change: opacity, transform;
-  width: var(--atom-size);
-}
-
-.atomSvg {
-  height: 100%;
-  overflow: visible;
-  transform: rotate(var(--atom-tilt));
-  transform-origin: center;
-  width: 100%;
-}
-
-.nucleusGlow {
-  fill: rgba(206, 233, 252, 0.36);
-  filter: blur(18px);
-}
-
-.nucleusCore {
-  fill: rgba(161, 207, 246, 0.92);
-  filter: drop-shadow(0 0 16px rgba(160, 208, 246, 0.54));
-}
-
-.orbit {
-  transform-box: fill-box;
-  transform-origin: center;
-}
-
-.orbitA {
-  animation: orbitSpinFast 2.6s linear infinite;
-}
-
-.orbitB {
-  animation: orbitSpinFast 4.4s linear infinite reverse;
-}
-
-.orbitC {
-  animation: orbitSpinFast 1.95s linear infinite;
-}
-
-.orbitD {
-  animation: orbitSpinFast 3.15s linear infinite reverse;
-}
-
-.orbitPath,
-.orbitPathSoft {
-  fill: none;
-}
-
-.orbitPath {
-  stroke: rgba(181, 214, 239, 0.28);
-  stroke-width: 1.6;
-}
-
-.orbitPathSoft {
-  stroke: rgba(198, 225, 244, 0.22);
-  stroke-width: 1.15;
-}
-
-.orbitElectronBright {
-  fill: rgba(214, 241, 255, 0.96);
-  filter: drop-shadow(0 0 12px rgba(164, 214, 248, 0.84));
-}
-
-.orbitElectronSoft {
-  fill: rgba(204, 235, 255, 0.88);
-  filter: drop-shadow(0 0 10px rgba(152, 208, 247, 0.6));
-}
-
 @keyframes squareFloat {
   0%,
   100% {
@@ -201,40 +120,6 @@
   }
 }
 
-@keyframes atomPulse {
-  0% {
-    opacity: 0;
-    transform: translate3d(0, 18px, 0) scale(0.88);
-  }
-
-  14% {
-    opacity: calc(var(--atom-opacity) * 0.92);
-  }
-
-  42% {
-    opacity: calc(var(--atom-opacity) * 1.18);
-  }
-
-  76% {
-    opacity: calc(var(--atom-opacity) * 0.96);
-  }
-
-  100% {
-    opacity: 0;
-    transform: translate3d(0, -14px, 0) scale(1.04);
-  }
-}
-
-@keyframes orbitSpinFast {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 @media (max-width: 1200px) {
   .squareField {
     opacity: 0.82;
@@ -252,23 +137,10 @@
   .centerGlow {
     filter: blur(24px);
   }
-
-  .atom {
-    opacity: 0.12;
-  }
-
-  .atom:nth-child(2) {
-    display: none;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .square,
-  .atom,
-  .orbitA,
-  .orbitB,
-  .orbitC,
-  .orbitD {
+  .square {
     animation: none;
   }
 }
