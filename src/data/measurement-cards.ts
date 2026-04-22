@@ -45,8 +45,8 @@ export const measurementCards: ReviewCard[] = [
   },
   {
     id: 'meas-8',
-    question: 'What should a measurement-focused paper dossier capture?',
+    question: 'What should a measurement-focused QRC benchmark report explicitly?',
     answer:
-      'At minimum: the task, the measured observables, when measurement occurs, how many shots are used, how outcomes are aggregated into features, the main empirical gain, and what tradeoff or limitation remains.',
+      'At minimum: the task, measured observables, measurement timing, shot budget, feature aggregation pipeline, runtime or latency implications, and the main remaining tradeoff or limitation.',
   },
 ];

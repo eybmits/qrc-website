@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { Essay, Section, SubSection } from '@/components/Essay';
 import { MathBlock } from '@/components/MathBlock';
 import { ReviewCardSet } from '@/components/ReviewCardSet';
@@ -389,6 +390,11 @@ export default function QuantumPrimerPage() {
         <p>
           In QRC, observables like the Pauli operators are measured on the reservoir state, and
           their expectation values become the classical feature vector fed to the readout layer.
+        </p>
+        <p>
+          Part 5, <Link href="/measurement">Measurement and Readout</Link>, picks up from here and
+          treats observable choice, shot budgets, and measurement backaction as first-class design
+          problems rather than small implementation details.
         </p>
       </Section>
 

@@ -3,11 +3,28 @@ import 'katex/dist/katex.min.css';
 import './globals.css';
 import { AmbientBackground } from '@/components/AmbientBackground';
 import { Sidebar } from '@/components/Sidebar';
+import { siteConfig } from '@/lib/site';
 
 export const metadata: Metadata = {
-  title: 'Quantum Reservoir Computing',
-  description:
-    'An explorable introduction to quantum reservoir computing, using spaced repetition to build deep understanding.',
+  metadataBase: new URL(siteConfig.url),
+  title: siteConfig.name,
+  description: siteConfig.description,
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    type: 'website',
+    url: '/',
+    title: siteConfig.name,
+    description: siteConfig.description,
+    siteName: siteConfig.name,
+    locale: 'en_US',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: siteConfig.name,
+    description: siteConfig.description,
+  },
 };
 
 export default function RootLayout({

@@ -452,6 +452,10 @@ export default function QRCPage() {
           A useful workflow is to begin with a compact observable set, verify stability, then expand features
           incrementally while tracking calibration and shot budgets.
         </p>
+        <p>
+          For a dedicated treatment of observables, finite-shot estimation, and backaction tradeoffs, continue to
+          <Link href="/measurement"> Measurement and Readout</Link>.
+        </p>
         <MeasurementVisual />
       </Section>
 

@@ -1,6 +1,5 @@
 'use client';
 
-import type { CSSProperties } from 'react';
 import { Essay, Section } from '@/components/Essay';
 import { MathBlock } from '@/components/MathBlock';
 import { ReviewCardSet } from '@/components/ReviewCardSet';
@@ -10,11 +9,6 @@ interface FigureProps {
   title: string;
   caption: string;
   children: React.ReactNode;
-}
-
-interface DossierProps {
-  label: string;
-  prompt: string;
 }
 
 function Figure({ title, caption, children }: FigureProps) {
@@ -125,83 +119,6 @@ function TradeoffVisual() {
         <text x="530" y="188" textAnchor="middle" fill="#66788a" fontSize="13">still affordable</text>
       </svg>
     </Figure>
-  );
-}
-
-function DossierCard({ label, prompt }: DossierProps) {
-  const rowStyle: CSSProperties = {
-    borderTop: '1px solid rgba(67, 104, 138, 0.1)',
-    display: 'grid',
-    gap: '0.85rem',
-    gridTemplateColumns: '160px minmax(0, 1fr)',
-    padding: '0.82rem 0',
-  };
-
-  const rows = [
-    ['Citation', 'Add title, authors, venue, year, and link/DOI.'],
-    ['Question', 'What measurement problem does this paper actually solve?'],
-    ['System', 'What reservoir or quantum platform is used?'],
-    ['Measurement protocol', 'Which observables are measured, when, and how often?'],
-    ['Feature construction', 'How are raw outcomes converted into readout features?'],
-    ['Main result', 'What empirical or theoretical result matters most?'],
-    ['Why it matters', 'Explain the consequence for QRC design rather than just restating the result.'],
-    ['Limits', 'What still looks fragile, expensive, noisy, or underspecified?'],
-  ] as const;
-
-  return (
-    <div
-      style={{
-        background: 'rgba(255, 255, 255, 0.8)',
-        border: '1px solid rgba(67, 104, 138, 0.12)',
-        borderRadius: 18,
-        boxShadow: 'var(--shadow-soft)',
-        margin: '1rem 0 1.4rem',
-        padding: '1rem 1.1rem',
-      }}
-    >
-      <div
-        style={{
-          color: 'var(--accent-secondary)',
-          fontFamily: 'var(--font-ui), sans-serif',
-          fontSize: '0.74rem',
-          fontWeight: 700,
-          letterSpacing: '0.12em',
-          textTransform: 'uppercase',
-        }}
-      >
-        {label}
-      </div>
-      <h3 style={{ margin: '0.35rem 0 0.5rem', fontSize: '1.34rem' }}>{prompt}</h3>
-      <p style={{ color: 'var(--text-muted)', margin: '0 0 0.3rem' }}>
-        Keep both paper sections in the same format so comparisons stay visible.
-      </p>
-
-      <div>
-        {rows.map(([title, text], index) => (
-          <div
-            key={title}
-            style={{
-              ...rowStyle,
-              borderTop: index === 0 ? '1px solid rgba(67, 104, 138, 0.1)' : rowStyle.borderTop,
-            }}
-          >
-            <div
-              style={{
-                color: 'var(--text-heading)',
-                fontFamily: 'var(--font-ui), sans-serif',
-                fontSize: '0.8rem',
-                fontWeight: 700,
-                letterSpacing: '0.04em',
-                textTransform: 'uppercase',
-              }}
-            >
-              {title}
-            </div>
-            <div style={{ color: 'var(--text-body)', fontSize: '0.98rem', lineHeight: 1.68 }}>{text}</div>
-          </div>
-        ))}
-      </div>
-    </div>
   );
 }
 
@@ -323,21 +240,11 @@ export default function MeasurementPage() {
           If Part 4 treated hardware as the physical bottleneck, this chapter treats measurement as the information
           bottleneck.
         </p>
-      </Section>
-
-      <Section id="paper-one" title="Paper 1 Dossier">
         <p>
-          Use this section for the first paper you want to document. The point is not to summarize everything; the
-          point is to isolate what the paper teaches about measurement and readout.
+          Good QRC measurement reporting should make the readout interface reproducible: state which observables were
+          chosen, how feature statistics were estimated, and what latency or sample budget was required to make those
+          estimates reliable.
         </p>
-        <DossierCard label="Paper 1" prompt="Replace this heading with the actual paper title." />
-      </Section>
-
-      <Section id="paper-two" title="Paper 2 Dossier">
-        <p>
-          Mirror the same structure for the second paper so the comparison is structural rather than impressionistic.
-        </p>
-        <DossierCard label="Paper 2" prompt="Replace this heading with the second paper title." />
       </Section>
 
       <Section id="synthesis" title="Synthesis">
@@ -351,8 +258,8 @@ export default function MeasurementPage() {
           doing much of the real work.
         </p>
         <p>
-          That is why documenting your two papers inside this chapter is valuable. It turns measurement from a vague
-          implementation detail into a comparable design object.
+          That is the standard this chapter argues for: measurement should be discussed as part of the model design,
+          budget, and benchmarking story, not as a hidden post-processing detail tacked on at the end.
         </p>
       </Section>
 

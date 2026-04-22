@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { Essay, Section } from '@/components/Essay';
 import { MathBlock } from '@/components/MathBlock';
 import { ReviewCardSet } from '@/components/ReviewCardSet';
@@ -259,6 +260,11 @@ export default function PhysicalReservoirsPage() {
         <p>
           Without standardized reporting, apparent improvements can be driven by evaluation choices rather than model
           quality.
+        </p>
+        <p>
+          The measurement side of that reporting problem is important enough to deserve its own chapter; see{' '}
+          <Link href="/measurement">Measurement and Readout</Link> for observables, shot costs, and readout-layer
+          benchmarking.
         </p>
       </Section>
 

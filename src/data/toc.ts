@@ -99,7 +99,7 @@ export const essays: TocEssay[] = [
     title: 'Measurement and Readout',
     shortTitle: 'Measurement and Readout',
     description:
-      'A measurement-first guide to observables, shot noise, backaction, readout design, and structured notes for two key papers.',
+      'A measurement-first guide to observables, shot noise, backaction, readout design, and fair benchmarking of the measurement layer.',
     sections: [
       { id: 'measurement-introduction', title: 'Introduction' },
       { id: 'observables-and-povms', title: 'Observables and POVMs' },
@@ -107,8 +107,6 @@ export const essays: TocEssay[] = [
       { id: 'backaction-and-sequences', title: 'Backaction and Sequences' },
       { id: 'measurement-for-reservoirs', title: 'Measurement for Reservoirs' },
       { id: 'benchmarking-measurement', title: 'Benchmarking Measurement' },
-      { id: 'paper-one', title: 'Paper 1 Dossier' },
-      { id: 'paper-two', title: 'Paper 2 Dossier' },
       { id: 'synthesis', title: 'Synthesis' },
     ],
   },
