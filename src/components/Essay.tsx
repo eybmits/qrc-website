@@ -54,12 +54,7 @@ interface SectionProps {
 export function Section({ id, title, children }: SectionProps) {
   return (
     <section id={id} className={styles.section}>
-      <h2 className={styles.sectionTitle}>
-        <a href={`#${id}`} className={styles.anchor}>
-          #
-        </a>
-        {title}
-      </h2>
+      <h2 className={styles.sectionTitle}>{title}</h2>
       {children}
     </section>
   );
@@ -74,12 +69,7 @@ interface SubSectionProps {
 export function SubSection({ id, title, children }: SubSectionProps) {
   return (
     <div id={id} className={styles.subsection}>
-      <h3 className={styles.subsectionTitle}>
-        <a href={`#${id}`} className={styles.anchor}>
-          #
-        </a>
-        {title}
-      </h3>
+      <h3 className={styles.subsectionTitle}>{title}</h3>
       {children}
     </div>
   );
