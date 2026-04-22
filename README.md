@@ -6,9 +6,11 @@ Live site:
 - `https://eybmits.github.io/qrc-website/`
 
 ## Features
-- Long-form QRC learning path across multiple essays
+- Five-part QRC learning path across long-form essays
 - In-essay review cards that unlock knowledge progressively
 - Review Hub with Anki-style scheduling logic
+- Page-specific metadata, social previews, sitemap, robots, and structured data
+- Generated app manifest, icons, and custom 404 page
 - Modern animated hero background tuned for readability and stability
 
 ## Project Docs
@@ -38,3 +40,21 @@ Deployment runs automatically via GitHub Actions on push to `main`:
 - Workflow: `.github/workflows/deploy-pages.yml`
 - Output directory: `out/`
 - Hosting: GitHub Pages
+
+## Public Routes
+- `/` Home
+- `/quantum-primer`
+- `/qrc`
+- `/echo-state`
+- `/physical-reservoirs`
+- `/measurement`
+- `/review`
+
+Generated metadata and platform routes:
+- `/robots.txt`
+- `/sitemap.xml`
+- `/manifest.webmanifest`
+- `/opengraph-image`
+- `/twitter-image`
+- `/icon`
+- `/apple-icon`

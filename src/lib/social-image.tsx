@@ -9,6 +9,72 @@ export const socialImageSize = {
   height: 630,
 } as const;
 
+interface BrandIconProps {
+  compact?: boolean;
+}
+
+export function BrandIcon({ compact = false }: BrandIconProps) {
+  return (
+    <div
+      style={{
+        alignItems: 'center',
+        background: 'linear-gradient(145deg, #f8fcff 0%, #eaf4fc 55%, #f7efe3 100%)',
+        color: '#183046',
+        display: 'flex',
+        height: '100%',
+        justifyContent: 'center',
+        position: 'relative',
+        width: '100%',
+      }}
+    >
+      <div
+        style={{
+          border: '8px solid rgba(37, 95, 147, 0.18)',
+          borderRadius: '28%',
+          height: '82%',
+          position: 'absolute',
+          transform: 'rotate(8deg)',
+          width: '82%',
+        }}
+      />
+      <div
+        style={{
+          border: '6px solid rgba(37, 95, 147, 0.3)',
+          borderRadius: '50%',
+          height: '60%',
+          position: 'absolute',
+          width: '60%',
+        }}
+      />
+      <div
+        style={{
+          borderRadius: '50%',
+          boxShadow: '0 0 0 16px rgba(109, 149, 188, 0.12)',
+          height: '18%',
+          position: 'absolute',
+          width: '18%',
+          background: '#255f93',
+        }}
+      />
+      <div
+        style={{
+          background: 'rgba(255, 255, 255, 0.82)',
+          border: '3px solid rgba(67, 104, 138, 0.12)',
+          borderRadius: 999,
+          display: 'flex',
+          fontSize: compact ? 88 : 140,
+          fontWeight: 800,
+          letterSpacing: -8,
+          padding: compact ? '18px 34px 22px' : '22px 48px 28px',
+          position: 'absolute',
+        }}
+      >
+        QRC
+      </div>
+    </div>
+  );
+}
+
 export function SocialImage(): ReactElement {
   return (
     <div

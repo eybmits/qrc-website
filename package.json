@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build && touch out/.nojekyll",
+    "build": "next build && node scripts/postprocess-static-export.mjs && touch out/.nojekyll",
     "start": "next start",
     "lint": "next lint"
   },

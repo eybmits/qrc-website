@@ -66,6 +66,30 @@ body {
   position: relative;
 }
 
+.skip-link {
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(67, 104, 138, 0.16);
+  border-radius: 999px;
+  box-shadow: var(--shadow-soft);
+  color: var(--accent-primary);
+  font-family: var(--font-ui), sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  left: 1rem;
+  padding: 0.72rem 0.95rem;
+  position: fixed;
+  text-decoration: none;
+  top: 1rem;
+  transform: translateY(-180%);
+  transition: transform var(--transition-fast);
+  z-index: 120;
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
 body::before,
 body::after {
   content: '';

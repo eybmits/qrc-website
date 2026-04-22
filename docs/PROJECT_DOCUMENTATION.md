@@ -21,21 +21,37 @@ Main deployment target: GitHub Pages at `https://eybmits.github.io/qrc-website/`
 ## Routing and App Structure
 Main routes:
 - `/` Overview Hero page
+- `/quantum-primer` Quantum mechanics primer
 - `/qrc` Quantum Reservoir Computing essay
 - `/echo-state` Echo State Networks essay
 - `/physical-reservoirs` Physical Reservoir Computing essay
+- `/measurement` Measurement and Readout essay
 - `/review` central spaced-repetition review page
+
+Generated metadata/platform routes:
+- `/robots.txt`
+- `/sitemap.xml`
+- `/manifest.webmanifest`
+- `/opengraph-image`
+- `/twitter-image`
+- `/icon`
+- `/apple-icon`
+- `/404.html`
 
 Key files:
 - `src/app/layout.tsx` global shell + sidebar
+- `src/app/manifest.ts` generated web-app manifest
+- `src/app/not-found.tsx` exported custom 404 page
 - `src/components/Sidebar.tsx` left navigation and section tracking
 - `src/components/Hero.tsx` landing hero and visual background layers
 - `src/components/Hero.module.css` hero visual system
 - `src/components/Essay.tsx` essay layout primitives
 - `src/components/ReviewCardSet.tsx` inline essay flashcards
 - `src/components/ReviewPage.tsx` dedicated review workflow
+- `src/components/StructuredData.tsx` JSON-LD injection helper
 - `src/lib/spaced-repetition.ts` scheduler and queue logic
 - `src/lib/storage.ts` localStorage state, normalization, and migrations
+- `src/lib/site.ts` canonical URL, page metadata, and structured-data helpers
 - `src/data/*-cards.ts` card banks per essay
 - `src/data/toc.ts` sidebar essay metadata and section map
 
@@ -149,6 +165,27 @@ Deployment is automated via GitHub Actions:
 `next.config.mjs` sets:
 - `output: 'export'`
 - dynamic `basePath` and `assetPrefix` for GitHub Pages in Actions
+- a post-export rewrite step fixes manifest links for GitHub Pages project-site paths
+
+## Metadata and Discoverability
+Site-level metadata now includes:
+- canonical URLs for every public route,
+- page-specific `title` and `description`,
+- Open Graph and Twitter cards,
+- generated social preview images,
+- `robots.txt` and `sitemap.xml`,
+- JSON-LD for `WebSite`, `CollectionPage`, `Article`, and `WebPage`,
+- generated manifest and icons for pinned/home-screen use.
+
+Essay routes use route-local `layout.tsx` wrappers to attach metadata and structured data while keeping the essay bodies as client-rendered pages.
+
+## Accessibility Notes
+Current accessibility-oriented behavior includes:
+- skip link to main content,
+- mobile sidebar toggle with `aria-controls` / `aria-expanded`,
+- `Escape` to close the mobile menu,
+- background scroll lock while the mobile menu is open,
+- active-state announcements via `aria-current` in navigation.
 
 ## Common Troubleshooting
 If the site looks unstyled or outdated after deploy:

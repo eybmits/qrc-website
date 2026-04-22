@@ -2,28 +2,36 @@ import type { Metadata } from 'next';
 import 'katex/dist/katex.min.css';
 import './globals.css';
 import { AmbientBackground } from '@/components/AmbientBackground';
+import { StructuredData } from '@/components/StructuredData';
 import { Sidebar } from '@/components/Sidebar';
-import { siteConfig } from '@/lib/site';
+import { socialImageAlt, socialImageSize } from '@/lib/social-image';
+import { absoluteUrl, getWebSiteJsonLd, siteConfig } from '@/lib/site';
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteConfig.url),
+  metadataBase: new URL(`${siteConfig.url}/`),
+  applicationName: siteConfig.name,
   title: siteConfig.name,
   description: siteConfig.description,
-  alternates: {
-    canonical: '/',
+  icons: {
+    icon: [{ url: absoluteUrl('/icon'), type: 'image/png' }],
+    apple: [{ url: absoluteUrl('/apple-icon'), type: 'image/png' }],
+    shortcut: [{ url: absoluteUrl('/icon'), type: 'image/png' }],
   },
   openGraph: {
-    type: 'website',
-    url: '/',
-    title: siteConfig.name,
-    description: siteConfig.description,
     siteName: siteConfig.name,
     locale: 'en_US',
+    images: [
+      {
+        url: '/opengraph-image',
+        width: socialImageSize.width,
+        height: socialImageSize.height,
+        alt: socialImageAlt,
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: siteConfig.name,
-    description: siteConfig.description,
+    images: ['/twitter-image'],
   },
 };
 
@@ -35,9 +43,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <StructuredData data={getWebSiteJsonLd()} />
+        <a href="#main-content" className="skip-link">
+          Skip to content
+        </a>
         <AmbientBackground />
         <Sidebar />
-        <main className="main-content">{children}</main>
+        <main id="main-content" className="main-content" tabIndex={-1}>
+          {children}
+        </main>
       </body>
     </html>
   );

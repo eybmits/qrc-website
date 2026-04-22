@@ -21,12 +21,32 @@ export function Sidebar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('');
+  const sidebarId = 'site-sidebar';
 
   const currentEssay = essays.find((essay) => matchesRoute(pathname, essay.slug));
 
   useEffect(() => {
     setMobileOpen(false);
   }, [pathname]);
+
+  useEffect(() => {
+    if (!mobileOpen) return;
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setMobileOpen(false);
+      }
+    };
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', handleEscape);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', handleEscape);
+    };
+  }, [mobileOpen]);
 
   useEffect(() => {
     if (!currentEssay) {
@@ -56,8 +76,10 @@ export function Sidebar() {
   return (
     <>
       <button
+        type="button"
         className={styles.hamburger}
         onClick={() => setMobileOpen((open) => !open)}
+        aria-controls={sidebarId}
         aria-expanded={mobileOpen}
         aria-label="Toggle contents"
       >
@@ -66,9 +88,9 @@ export function Sidebar() {
         <span className={`${styles.hamburgerLine} ${mobileOpen ? styles.open : ''}`} />
       </button>
 
-      {mobileOpen && <div className={styles.overlay} onClick={() => setMobileOpen(false)} />}
+      {mobileOpen && <div className={styles.overlay} aria-hidden="true" onClick={() => setMobileOpen(false)} />}
 
-      <aside className={`${styles.sidebar} ${mobileOpen ? styles.sidebarOpen : ''}`}>
+      <aside id={sidebarId} className={`${styles.sidebar} ${mobileOpen ? styles.sidebarOpen : ''}`}>
         <div className={styles.brand}>
           <Link href="/" onClick={() => setMobileOpen(false)}>
             <span className={styles.brandMark}>QRC</span>
@@ -79,7 +101,10 @@ export function Sidebar() {
           </Link>
         </div>
 
-        <nav className={styles.contents}>
+        <nav
+          className={styles.contents}
+          aria-label={currentEssay ? `${currentEssay.title} table of contents` : 'Reading path'}
+        >
           <p className={styles.contentsLabel}>{currentEssay ? 'Contents' : 'Reading path'}</p>
 
           {currentEssay ? (
@@ -87,6 +112,7 @@ export function Sidebar() {
               <Link
                 href={currentEssay.slug}
                 className={styles.currentEssay}
+                aria-current="page"
                 onClick={() => setMobileOpen(false)}
               >
                 {currentEssay.title}
@@ -99,6 +125,7 @@ export function Sidebar() {
                     className={`${styles.sectionLink} ${
                       activeSection === section.id ? styles.sectionActive : ''
                     }`}
+                    aria-current={activeSection === section.id ? 'location' : undefined}
                     onClick={() => setMobileOpen(false)}
                   >
                     {section.title}
@@ -115,6 +142,7 @@ export function Sidebar() {
                   className={`${styles.essayLink} ${
                     matchesRoute(pathname, essay.slug) ? styles.sectionActive : ''
                   }`}
+                  aria-current={matchesRoute(pathname, essay.slug) ? 'page' : undefined}
                   onClick={() => setMobileOpen(false)}
                 >
                   <span className={styles.essayIndex}>Part {index + 1}</span>
@@ -125,10 +153,11 @@ export function Sidebar() {
           )}
         </nav>
 
-        <div className={styles.meta}>
+        <nav className={styles.meta} aria-label="Global links">
           <Link
             href="/"
             className={matchesRoute(pathname, '/') ? styles.metaActive : ''}
+            aria-current={matchesRoute(pathname, '/') ? 'page' : undefined}
             onClick={() => setMobileOpen(false)}
           >
             Home
@@ -136,11 +165,12 @@ export function Sidebar() {
           <Link
             href="/review"
             className={matchesRoute(pathname, '/review') ? styles.metaActive : ''}
+            aria-current={matchesRoute(pathname, '/review') ? 'page' : undefined}
             onClick={() => setMobileOpen(false)}
           >
             Review cards
           </Link>
-        </div>
+        </nav>
       </aside>
     </>
   );
