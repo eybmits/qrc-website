@@ -68,7 +68,7 @@ const essayGroups: EssayGroup[] = [
     cards: quantumPrimerCards,
   },
   {
-    title: 'Quantum Reservoir Computing',
+    title: 'What is Quantum Reservoir Computing',
     slug: '/qrc',
     cards: qrcCards,
   },

@@ -197,7 +197,7 @@ export default function QRCPage() {
 
   return (
     <Essay
-      title="Quantum Reservoir Computing"
+      title="What is Quantum Reservoir Computing"
       subtitle="A deep path from classical temporal learning to quantum reservoirs: intuitive first steps, then full mathematical structure and realistic implementation constraints."
       slug="/qrc"
     >

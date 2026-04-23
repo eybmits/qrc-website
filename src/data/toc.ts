@@ -33,8 +33,8 @@ export const essays: TocEssay[] = [
   },
   {
     slug: '/qrc',
-    title: 'Quantum Reservoir Computing',
-    shortTitle: 'Quantum Reservoir Computing',
+    title: 'What is Quantum Reservoir Computing',
+    shortTitle: 'What is Quantum Reservoir Computing',
     description:
       'A full-path introduction to quantum reservoir computing: intuition first, mathematics next, and implementation details last.',
     sections: [

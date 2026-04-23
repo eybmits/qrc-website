@@ -22,7 +22,7 @@ interface PageConfig {
 
 const essayMetadataOverrides: Partial<Record<string, Partial<Pick<PageConfig, 'title' | 'description'>>>> = {
   '/qrc': {
-    title: 'Quantum Reservoir Computing Essay',
+    title: 'What is Quantum Reservoir Computing',
   },
   '/echo-state': {
     title: 'Why Go Quantum?',

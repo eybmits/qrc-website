@@ -22,7 +22,7 @@ Main deployment target: GitHub Pages at `https://eybmits.github.io/qrc-website/`
 Main routes:
 - `/` Overview Hero page
 - `/quantum-primer` Quantum mechanics primer
-- `/qrc` Quantum Reservoir Computing essay
+- `/qrc` What is Quantum Reservoir Computing essay
 - `/echo-state` Echo State Networks essay
 - `/physical-reservoirs` Physical Reservoir Computing essay
 - `/measurement` Measurement and Readout essay
