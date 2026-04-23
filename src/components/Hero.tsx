@@ -51,11 +51,6 @@ export function Hero() {
             Explanations and flashcards are woven together so the key ideas have a
             better chance of staying in long-term memory.
           </p>
-          <p className={styles.measurementCallout}>
-            New in Part 5: <Link href="/measurement">Measurement and Readout</Link>{' '}
-            focuses on observables, shot budgets, and backaction as the real bridge
-            from quantum dynamics to useful classical features.
-          </p>
         </div>
       </section>
 
