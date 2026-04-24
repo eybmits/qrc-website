@@ -1,25 +1,24 @@
-'use client';
-
 import katex from 'katex';
-import { useMemo } from 'react';
 
 interface MathBlockProps {
   math: string;
   display?: boolean;
 }
 
+function renderMath(math: string, display: boolean): string {
+  try {
+    return katex.renderToString(math, {
+      displayMode: display,
+      throwOnError: false,
+      trust: true,
+    });
+  } catch {
+    return `<span style="color: var(--accent-error)">Error rendering: ${math}</span>`;
+  }
+}
+
 export function MathBlock({ math, display = false }: MathBlockProps) {
-  const html = useMemo(() => {
-    try {
-      return katex.renderToString(math, {
-        displayMode: display,
-        throwOnError: false,
-        trust: true,
-      });
-    } catch {
-      return `<span style="color: var(--accent-error)">Error rendering: ${math}</span>`;
-    }
-  }, [math, display]);
+  const html = renderMath(math, display);
 
   if (display) {
     return (

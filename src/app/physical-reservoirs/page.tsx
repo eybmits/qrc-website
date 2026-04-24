@@ -1,5 +1,3 @@
-'use client';
-
 import Link from 'next/link';
 import { Essay, Section } from '@/components/Essay';
 import { MathBlock } from '@/components/MathBlock';

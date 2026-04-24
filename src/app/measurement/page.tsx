@@ -1,5 +1,3 @@
-'use client';
-
 import { Essay, Section } from '@/components/Essay';
 import { MathBlock } from '@/components/MathBlock';
 import { ReviewCardSet } from '@/components/ReviewCardSet';

@@ -1,5 +1,3 @@
-'use client';
-
 import Link from 'next/link';
 import { essays } from '@/data/toc';
 import styles from './Hero.module.css';

@@ -1,5 +1,7 @@
 .sidebar {
-  background: linear-gradient(270deg, rgba(250, 253, 255, 0.92) 0%, rgba(250, 253, 255, 0.8) 52%, rgba(250, 253, 255, 0) 100%);
+  background: #fcfeff;
+  border-left: 1px solid rgba(67, 104, 138, 0.08);
+  box-shadow: -18px 0 48px rgba(44, 82, 116, 0.08);
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -9,8 +11,14 @@
   position: fixed;
   right: 0;
   top: 0;
+  transform: translateX(100%);
+  transition: transform var(--transition-normal);
   width: var(--sidebar-width);
-  z-index: 40;
+  z-index: 50;
+}
+
+.sidebarOpen {
+  transform: translateX(0);
 }
 
 .brand a {
@@ -146,7 +154,7 @@
   border-radius: 14px;
   box-shadow: 0 16px 34px rgba(44, 82, 116, 0.08);
   cursor: pointer;
-  display: none;
+  display: flex;
   flex-direction: column;
   gap: 5px;
   height: 42px;
@@ -182,33 +190,15 @@
 }
 
 .overlay {
-  background: rgba(26, 52, 77, 0.12);
-  backdrop-filter: blur(2px);
-  display: none;
+  background: rgba(26, 52, 77, 0.1);
+  display: block;
   inset: 0;
   position: fixed;
-  z-index: 45;
+  z-index: 35;
 }
 
 @media (max-width: 1080px) {
   .sidebar {
-    backdrop-filter: blur(16px);
-    background: rgba(252, 254, 255, 0.96);
-    border-left: 1px solid rgba(67, 104, 138, 0.08);
-    box-shadow: -18px 0 48px rgba(44, 82, 116, 0.08);
-    transform: translateX(100%);
-    transition: transform var(--transition-normal);
-  }
-
-  .sidebarOpen {
-    transform: translateX(0);
-  }
-
-  .hamburger {
-    display: flex;
-  }
-
-  .overlay {
-    display: block;
+    width: min(var(--sidebar-width), calc(100vw - 72px));
   }
 }

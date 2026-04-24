@@ -1,10 +1,10 @@
-'use client';
-
+import Image from 'next/image';
 import Link from 'next/link';
 import { Essay, Section, SubSection } from '@/components/Essay';
 import { MathBlock } from '@/components/MathBlock';
 import { ReviewCardSet } from '@/components/ReviewCardSet';
 import { quantumPrimerCards } from '@/data/quantum-primer-cards';
+import { BlochSphereExplorer } from './BlochSphereExplorer';
 import styles from './page.module.css';
 
 interface FigureFrameProps {
@@ -28,60 +28,10 @@ function FigureFrame({ title, caption, children }: FigureFrameProps) {
 function BlochSphereVisual() {
   return (
     <FigureFrame
-      title="The Bloch Sphere"
-      caption="Every pure single-qubit state maps to a point on the unit sphere."
+      title="Interactive Bloch Sphere"
+      caption="Move the three controls to explore polar angle, azimuthal phase, and purity. Turn on auto-spin to watch the state sweep around the sphere."
     >
-      <svg viewBox="0 0 400 380" className={styles.figureSvg} role="img" aria-label="Bloch sphere with qubit state">
-        <defs>
-          <radialGradient id="qpSphereGrad" cx="0.4" cy="0.35" r="0.6">
-            <stop offset="0%" stopColor="rgba(164, 187, 176, 0.18)" />
-            <stop offset="100%" stopColor="rgba(187, 172, 143, 0.05)" />
-          </radialGradient>
-          <marker id="qpArrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
-            <path d="M0,0 L8,4 L0,8 Z" fill="#1d5f54" />
-          </marker>
-          <marker id="qpArrowState" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
-            <path d="M0,0 L8,4 L0,8 Z" fill="#c26a58" />
-          </marker>
-        </defs>
-
-        {/* Sphere outline */}
-        <ellipse cx="200" cy="200" rx="140" ry="140" fill="url(#qpSphereGrad)" stroke="#938d7d" strokeWidth="1" opacity="0.7" />
-        {/* Equator ellipse */}
-        <ellipse cx="200" cy="200" rx="140" ry="40" fill="none" stroke="#a39c8e" strokeWidth="0.8" strokeDasharray="4 3" />
-
-        {/* Z axis */}
-        <line x1="200" y1="46" x2="200" y2="354" stroke="#9b9586" strokeWidth="1.2" />
-        {/* X axis */}
-        <line x1="60" y1="200" x2="340" y2="200" stroke="#9b9586" strokeWidth="1.0" strokeDasharray="4 3" />
-        {/* Y axis (projected) */}
-        <line x1="130" y1="260" x2="270" y2="140" stroke="#9b9586" strokeWidth="1.0" strokeDasharray="4 3" />
-
-        {/* |0⟩ label at north pole */}
-        <circle cx="200" cy="56" r="4" fill="#b7a47c" />
-        <text x="218" y="54" className={styles.svgLabel}>|0⟩</text>
-
-        {/* |1⟩ label at south pole */}
-        <circle cx="200" cy="344" r="4" fill="#b7a47c" />
-        <text x="218" y="348" className={styles.svgLabel}>|1⟩</text>
-
-        {/* Axis labels */}
-        <text x="346" y="204" className={styles.svgSub}>x</text>
-        <text x="274" y="136" className={styles.svgSub}>y</text>
-        <text x="206" y="38" className={styles.svgSub}>z</text>
-
-        {/* State vector |ψ⟩ */}
-        <line x1="200" y1="200" x2="290" y2="110" stroke="#c26a58" strokeWidth="2.5" markerEnd="url(#qpArrowState)" />
-        <text x="296" y="106" fill="#c26a58" className={styles.svgLabel}>|ψ⟩</text>
-
-        {/* Theta arc */}
-        <path d="M200,180 Q210,168 214,160" fill="none" stroke="#c28a5b" strokeWidth="1.2" />
-        <text x="218" y="168" fill="#c28a5b" fontSize="13" fontStyle="italic">θ</text>
-
-        {/* Phi arc on equator */}
-        <path d="M230,200 Q226,210 220,215" fill="none" stroke="#1d5f54" strokeWidth="1.2" />
-        <text x="232" y="218" fill="#1d5f54" fontSize="13" fontStyle="italic">φ</text>
-      </svg>
+      <BlochSphereExplorer />
     </FigureFrame>
   );
 }
@@ -90,33 +40,57 @@ function GateCircuitVisual() {
   return (
     <FigureFrame
       title="Quantum Circuit: Bell State Preparation"
-      caption="A Hadamard gate followed by CNOT creates maximal entanglement from |00⟩."
+      caption="Apply a Hadamard to q0, then a controlled-NOT, to prepare the Bell pair."
     >
-      <svg viewBox="0 0 580 180" className={styles.figureSvg} role="img" aria-label="H gate and CNOT circuit creating Bell state">
-        {/* Qubit wires */}
-        <line x1="60" y1="60" x2="520" y2="60" stroke="#9b9586" strokeWidth="1.5" />
-        <line x1="60" y1="120" x2="520" y2="120" stroke="#9b9586" strokeWidth="1.5" />
+      <svg viewBox="0 0 760 220" className={styles.figureSvg} role="img" aria-label="Bell-state circuit with Hadamard on q0 followed by a controlled-not gate">
+        <defs>
+          <linearGradient id="qpCircuitGateClean" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#fffdf7" />
+            <stop offset="100%" stopColor="#f2ead9" />
+          </linearGradient>
+          <linearGradient id="qpCircuitOutputClean" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#ffffff" stopOpacity="0.98" />
+            <stop offset="100%" stopColor="#eef6fd" stopOpacity="0.94" />
+          </linearGradient>
+          <filter id="qpCircuitGateShadowClean" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="8" stdDeviation="10" floodColor="#456e94" floodOpacity="0.08" />
+          </filter>
+          <filter id="qpCircuitOutputShadowClean" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="10" stdDeviation="12" floodColor="#456e94" floodOpacity="0.09" />
+          </filter>
+        </defs>
 
-        {/* Input labels */}
-        <text x="28" y="64" className={styles.svgLabel}>|0⟩</text>
-        <text x="28" y="124" className={styles.svgLabel}>|0⟩</text>
+        <g opacity="0.52">
+          <line x1="330" y1="30" x2="330" y2="194" stroke="#deebf6" strokeWidth="1.2" />
+          <line x1="475" y1="30" x2="475" y2="194" stroke="#deebf6" strokeWidth="1.2" />
+        </g>
 
-        {/* Hadamard gate */}
-        <rect x="140" y="36" width="52" height="48" rx="6" fill="#faf5ea" stroke="#7d8f84" strokeWidth="1.3" />
-        <text x="166" y="66" textAnchor="middle" className={styles.svgLabel}>H</text>
+        <text x="54" y="73" fill="#5f7286" style={{ fontFamily: 'var(--font-ui), sans-serif', fontSize: 12, fontWeight: 800, letterSpacing: '0.12em' }}>Q0</text>
+        <text x="54" y="141" fill="#5f7286" style={{ fontFamily: 'var(--font-ui), sans-serif', fontSize: 12, fontWeight: 800, letterSpacing: '0.12em' }}>Q1</text>
+        <text x="86" y="82" fill="#1f2731" style={{ fontFamily: 'var(--font-ui), sans-serif', fontSize: 17, fontWeight: 700 }}>|0⟩</text>
+        <text x="86" y="150" fill="#1f2731" style={{ fontFamily: 'var(--font-ui), sans-serif', fontSize: 17, fontWeight: 700 }}>|0⟩</text>
 
-        {/* CNOT gate */}
-        {/* Control dot on qubit 0 */}
-        <circle cx="290" cy="60" r="7" fill="#1d5f54" />
-        {/* Vertical line to target */}
-        <line x1="290" y1="67" x2="290" y2="103" stroke="#1d5f54" strokeWidth="2" />
-        {/* Target circle on qubit 1 */}
-        <circle cx="290" cy="120" r="17" fill="none" stroke="#1d5f54" strokeWidth="2" />
-        <line x1="290" y1="103" x2="290" y2="137" stroke="#1d5f54" strokeWidth="2" />
-        <line x1="273" y1="120" x2="307" y2="120" stroke="#1d5f54" strokeWidth="2" />
+        <line x1="138" y1="76" x2="662" y2="76" stroke="#262f38" strokeWidth="2.6" strokeLinecap="round" />
+        <line x1="138" y1="144" x2="662" y2="144" stroke="#262f38" strokeWidth="2.6" strokeLinecap="round" />
 
-        {/* Output label */}
-        <text x="400" y="90" textAnchor="middle" className={styles.svgSub}>(|00⟩ + |11⟩) / √2</text>
+        <g filter="url(#qpCircuitGateShadowClean)">
+          <rect x="238" y="48" width="72" height="56" rx="16" fill="url(#qpCircuitGateClean)" stroke="#262f38" strokeWidth="2.2" />
+          <text x="274" y="84" textAnchor="middle" fill="#1f2731" style={{ fontFamily: 'var(--font-ui), sans-serif', fontSize: 28, fontWeight: 800 }}>H</text>
+        </g>
+
+        <g>
+          <circle cx="440" cy="76" r="8.5" fill="#1f2731" />
+          <line x1="440" y1="76" x2="440" y2="144" stroke="#1f2731" strokeWidth="4.6" strokeLinecap="round" />
+          <circle cx="440" cy="144" r="23" fill="rgba(255,255,255,0.78)" stroke="#1f2731" strokeWidth="4.4" />
+          <line x1="417" y1="144" x2="463" y2="144" stroke="#1f2731" strokeWidth="3.8" strokeLinecap="round" />
+          <line x1="440" y1="121" x2="440" y2="167" stroke="#1f2731" strokeWidth="3.8" strokeLinecap="round" />
+        </g>
+
+        <g filter="url(#qpCircuitOutputShadowClean)">
+          <rect x="510" y="49" width="186" height="70" rx="24" fill="url(#qpCircuitOutputClean)" stroke="#cfd7df" strokeWidth="1.4" />
+          <text x="603" y="71" textAnchor="middle" fill="#6c7e92" style={{ fontFamily: 'var(--font-ui), sans-serif', fontSize: 11, fontWeight: 800, letterSpacing: '0.14em', textTransform: 'uppercase' }}>Bell Pair</text>
+          <text x="603" y="99" textAnchor="middle" fill="#1f2731" style={{ fontFamily: 'var(--font-display), serif', fontSize: 22, fontWeight: 500, letterSpacing: '-0.01em' }}>(|00⟩ + |11⟩) / √2</text>
+        </g>
       </svg>
     </FigureFrame>
   );
@@ -126,41 +100,81 @@ function MeasurementCollapseVisual() {
   return (
     <FigureFrame
       title="Measurement and Collapse"
-      caption="A superposition state collapses to a definite outcome with Born-rule probabilities."
+      caption="Measure in the Z basis: first compute the Born-rule probabilities, then one sampled outcome becomes the post-measurement state."
     >
-      <svg viewBox="0 0 700 200" className={styles.figureSvg} role="img" aria-label="Measurement collapse from superposition to basis state">
+      <svg viewBox="0 0 760 228" className={styles.figureSvg} role="img" aria-label="Measurement in the Z basis shown as a sequence from superposition to Born-rule probabilities to collapsed outcomes">
         <defs>
-          <marker id="qpMeasArrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
-            <path d="M0,0 L8,4 L0,8 Z" fill="#1d5f54" />
+          <linearGradient id="qpMeasPanelFlow" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#ffffff" stopOpacity="0.97" />
+            <stop offset="100%" stopColor="#f5f9fd" stopOpacity="0.94" />
+          </linearGradient>
+          <linearGradient id="qpMeasStateFlow" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#fffdf7" />
+            <stop offset="100%" stopColor="#f2ebdb" />
+          </linearGradient>
+          <linearGradient id="qpMeasRuleFlow" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#ffffff" />
+            <stop offset="100%" stopColor="#eef5fb" />
+          </linearGradient>
+          <linearGradient id="qpMeasOutcomeFlow" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#ffffff" stopOpacity="0.98" />
+            <stop offset="100%" stopColor="#eef6fd" stopOpacity="0.92" />
+          </linearGradient>
+          <marker id="qpMeasArrowFlow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+            <path d="M0,0 L10,5 L0,10 Z" fill="#24303a" />
           </marker>
+          <filter id="qpMeasShadowFlow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="10" stdDeviation="12" floodColor="#456e94" floodOpacity="0.08" />
+          </filter>
+          <filter id="qpMeasSoftShadowFlow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="6" stdDeviation="9" floodColor="#456e94" floodOpacity="0.07" />
+          </filter>
         </defs>
 
-        {/* Superposition state */}
-        <rect x="30" y="50" width="160" height="100" rx="12" fill="#faf5ea" stroke="#7d8f84" strokeWidth="1.2" />
-        <text x="110" y="88" textAnchor="middle" className={styles.svgLabel}>α|0⟩ + β|1⟩</text>
-        <text x="110" y="116" textAnchor="middle" className={styles.svgSub}>superposition</text>
+        <rect x="16" y="18" width="728" height="192" rx="28" fill="url(#qpMeasPanelFlow)" stroke="#dbe7f2" strokeWidth="1.2" />
 
-        {/* Measurement box */}
-        <rect x="260" y="50" width="120" height="100" rx="12" fill="#f0eadc" stroke="#7d8f84" strokeWidth="1.3" />
-        <text x="320" y="92" textAnchor="middle" className={styles.svgLabel}>Measure</text>
-        <text x="320" y="116" textAnchor="middle" className={styles.svgSub}>in Z basis</text>
+        <g opacity="0.45">
+          <line x1="250" y1="40" x2="250" y2="190" stroke="#deebf5" strokeWidth="1.2" />
+          <line x1="470" y1="40" x2="470" y2="190" stroke="#deebf5" strokeWidth="1.2" />
+        </g>
 
-        {/* Arrows in */}
-        <line x1="190" y1="100" x2="260" y2="100" stroke="#1d5f54" strokeWidth="2" markerEnd="url(#qpMeasArrow)" />
+        <text x="146" y="58" className={styles.svgEyebrow}>Before Measurement</text>
+        <text x="360" y="58" className={styles.svgEyebrow}>Readout Rule</text>
+        <text x="586" y="58" className={styles.svgEyebrow}>Possible Outcomes</text>
 
-        {/* Outcome |0⟩ */}
-        <rect x="460" y="24" width="100" height="56" rx="10" fill="#faf5ea" stroke="#7d8f84" strokeWidth="1.1" />
-        <text x="510" y="50" textAnchor="middle" className={styles.svgLabel}>|0⟩</text>
-        <text x="510" y="68" textAnchor="middle" className={styles.svgSub}>prob |α|²</text>
+        <g filter="url(#qpMeasSoftShadowFlow)">
+          <rect x="58" y="76" width="170" height="90" rx="26" fill="url(#qpMeasStateFlow)" stroke="#87988e" strokeWidth="2" />
+          <text x="143" y="110" textAnchor="middle" className={styles.svgEquation}>α|0⟩ + β|1⟩</text>
+          <text x="143" y="136" textAnchor="middle" fill="#6e86a1" style={{ fontFamily: 'var(--font-body), serif', fontSize: 17 }}>superposition state</text>
+          <text x="143" y="156" textAnchor="middle" className={styles.svgHint}>amplitudes set the later probabilities</text>
+        </g>
 
-        {/* Outcome |1⟩ */}
-        <rect x="460" y="120" width="100" height="56" rx="10" fill="#faf5ea" stroke="#7d8f84" strokeWidth="1.1" />
-        <text x="510" y="146" textAnchor="middle" className={styles.svgLabel}>|1⟩</text>
-        <text x="510" y="164" textAnchor="middle" className={styles.svgSub}>prob |β|²</text>
+        <line x1="228" y1="121" x2="284" y2="121" stroke="#24303a" strokeWidth="3" strokeLinecap="round" markerEnd="url(#qpMeasArrowFlow)" />
 
-        {/* Arrows out */}
-        <line x1="380" y1="80" x2="460" y2="52" stroke="#1d5f54" strokeWidth="2" markerEnd="url(#qpMeasArrow)" />
-        <line x1="380" y1="120" x2="460" y2="148" stroke="#1d5f54" strokeWidth="2" markerEnd="url(#qpMeasArrow)" />
+        <g filter="url(#qpMeasShadowFlow)">
+          <rect x="286" y="62" width="162" height="118" rx="28" fill="url(#qpMeasRuleFlow)" stroke="#90a2ac" strokeWidth="1.8" />
+          <rect x="336" y="74" width="62" height="20" rx="999" fill="rgba(115, 140, 164, 0.10)" stroke="rgba(115, 140, 164, 0.14)" />
+          <text x="367" y="88" textAnchor="middle" fill="#5d7793" style={{ fontFamily: 'var(--font-ui), sans-serif', fontSize: 10, fontWeight: 800, letterSpacing: '0.14em', textTransform: 'uppercase' }}>Z Basis</text>
+          <text x="367" y="116" textAnchor="middle" className={styles.svgLabel}>p(0) = |α|²</text>
+          <text x="367" y="139" textAnchor="middle" className={styles.svgLabel}>p(1) = |β|²</text>
+          <line x1="320" y1="150" x2="414" y2="150" stroke="#dce7f1" strokeWidth="1.2" />
+          <text x="367" y="168" textAnchor="middle" className={styles.svgHint}>sample one outcome</text>
+        </g>
+
+        <line x1="448" y1="121" x2="512" y2="121" stroke="#24303a" strokeWidth="3" strokeLinecap="round" markerEnd="url(#qpMeasArrowFlow)" />
+        <text x="480" y="110" textAnchor="middle" className={styles.svgHint}>collapse after sampling</text>
+
+        <g filter="url(#qpMeasSoftShadowFlow)">
+          <rect x="518" y="72" width="184" height="98" rx="24" fill="url(#qpMeasOutcomeFlow)" stroke="#d8e6f2" strokeWidth="1.4" />
+          <line x1="548" y1="121" x2="674" y2="121" stroke="#dce7f1" strokeWidth="1.2" />
+          <circle cx="568" cy="98" r="7" fill="#c28a5b" />
+          <text x="604" y="95" textAnchor="middle" className={styles.svgLabel}>|0⟩</text>
+          <text x="652" y="95" textAnchor="middle" fill="#6e86a1" style={{ fontFamily: 'var(--font-body), serif', fontSize: 15 }}>with p = |α|²</text>
+          <circle cx="568" cy="145" r="7" fill="#607a96" />
+          <text x="604" y="142" textAnchor="middle" className={styles.svgLabel}>|1⟩</text>
+          <text x="652" y="142" textAnchor="middle" fill="#6e86a1" style={{ fontFamily: 'var(--font-body), serif', fontSize: 15 }}>with p = |β|²</text>
+          <text x="610" y="164" textAnchor="middle" className={styles.svgHint}>a single shot selects one row</text>
+        </g>
       </svg>
     </FigureFrame>
   );
@@ -237,20 +251,31 @@ export default function QuantumPrimerPage() {
         </p>
 
         <div className={styles.quickMap}>
-          <div className={styles.quickMapTitle}>Concepts Path</div>
-          <div className={styles.quickMapFlow}>
-            <span className={styles.quickStep}>States &amp; Qubits</span>
-            <span className={styles.quickArrow}>&rarr;</span>
-            <span className={styles.quickStep}>Gates &amp; Circuits</span>
-            <span className={styles.quickArrow}>&rarr;</span>
-            <span className={styles.quickStep}>Measurement</span>
-            <span className={styles.quickArrow}>&rarr;</span>
-            <span className={styles.quickStep}>Open Dynamics</span>
+          <div className={styles.quickMapVisual} aria-hidden="true">
+            <Image
+              src="/assets/quantum-primer-concepts-path.jpg"
+              alt=""
+              fill
+              sizes="(max-width: 900px) 100vw, 760px"
+              className={styles.quickMapImage}
+            />
           </div>
-          <p className={styles.quickMapNote}>
-            Each section builds on the last. Review cards appear after related sections to reinforce
-            definitions and key equations.
-          </p>
+          <div className={styles.quickMapContent}>
+            <div className={styles.quickMapTitle}>Concepts Path</div>
+            <div className={styles.quickMapFlow}>
+              <span className={styles.quickStep}>States &amp; Qubits</span>
+              <span className={styles.quickArrow}>&rarr;</span>
+              <span className={styles.quickStep}>Gates &amp; Circuits</span>
+              <span className={styles.quickArrow}>&rarr;</span>
+              <span className={styles.quickStep}>Measurement</span>
+              <span className={styles.quickArrow}>&rarr;</span>
+              <span className={styles.quickStep}>Open Dynamics</span>
+            </div>
+            <p className={styles.quickMapNote}>
+              Each section builds on the last. Review cards appear after related sections to reinforce
+              definitions and key equations.
+            </p>
+          </div>
         </div>
       </Section>
 
