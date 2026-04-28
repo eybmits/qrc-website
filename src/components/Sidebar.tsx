@@ -103,54 +103,51 @@ export function Sidebar() {
 
         <nav
           className={styles.contents}
-          aria-label={currentEssay ? `${currentEssay.title} table of contents` : 'Reading path'}
+          aria-label={currentEssay ? `Reading path and ${currentEssay.title} table of contents` : 'Reading path'}
         >
-          <p className={styles.contentsLabel}>{currentEssay ? 'Contents' : 'Reading path'}</p>
+          <p className={styles.contentsLabel}>Chapters</p>
 
-          {currentEssay ? (
-            <>
-              <Link
-                href={currentEssay.slug}
-                className={styles.currentEssay}
-                aria-current="page"
-                onClick={() => setMobileOpen(false)}
-              >
-                {currentEssay.title}
-              </Link>
-              <div className={styles.contentsList}>
-                {currentEssay.sections.map((section) => (
-                  <a
-                    key={section.id}
-                    href={`#${section.id}`}
-                    className={`${styles.sectionLink} ${
-                      activeSection === section.id ? styles.sectionActive : ''
-                    }`}
-                    aria-current={activeSection === section.id ? 'location' : undefined}
+          <div className={styles.chapterList}>
+            {essays.map((essay, index) => {
+              const isCurrentEssay = matchesRoute(pathname, essay.slug);
+
+              return (
+                <div
+                  key={essay.slug}
+                  className={`${styles.chapterItem} ${isCurrentEssay ? styles.chapterCurrent : ''}`}
+                >
+                  <Link
+                    href={essay.slug}
+                    className={`${styles.chapterLink} ${isCurrentEssay ? styles.chapterActive : ''}`}
+                    aria-current={isCurrentEssay ? 'page' : undefined}
                     onClick={() => setMobileOpen(false)}
                   >
-                    {section.title}
-                  </a>
-                ))}
-              </div>
-            </>
-          ) : (
-            <div className={styles.contentsList}>
-              {essays.map((essay, index) => (
-                <Link
-                  key={essay.slug}
-                  href={essay.slug}
-                  className={`${styles.essayLink} ${
-                    matchesRoute(pathname, essay.slug) ? styles.sectionActive : ''
-                  }`}
-                  aria-current={matchesRoute(pathname, essay.slug) ? 'page' : undefined}
-                  onClick={() => setMobileOpen(false)}
-                >
-                  <span className={styles.essayIndex}>Part {index + 1}</span>
-                  <span>{essay.title}</span>
-                </Link>
-              ))}
-            </div>
-          )}
+                    <span className={styles.essayIndex}>Part {index + 1}</span>
+                    <span>{essay.shortTitle}</span>
+                  </Link>
+
+                  {isCurrentEssay && essay.sections.length > 0 && (
+                    <div className={styles.contentsList} aria-label={`${essay.title} sections`}>
+                      <p className={styles.sectionListLabel}>In this chapter</p>
+                      {essay.sections.map((section) => (
+                        <a
+                          key={section.id}
+                          href={`#${section.id}`}
+                          className={`${styles.sectionLink} ${
+                            activeSection === section.id ? styles.sectionActive : ''
+                          }`}
+                          aria-current={activeSection === section.id ? 'location' : undefined}
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {section.title}
+                        </a>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
         </nav>
 
         <nav className={styles.meta} aria-label="Global links">
