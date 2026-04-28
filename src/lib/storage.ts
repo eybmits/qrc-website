@@ -81,6 +81,8 @@ function getDefaultState(): StoredState {
   };
 }
 
+const SERVER_STATE_SNAPSHOT = getDefaultState();
+
 function cloneCardState(state: CardState): CardState {
   return { ...state };
 }
@@ -339,7 +341,7 @@ export function getStoredStateSnapshot(): StoredState {
 }
 
 export function getStoredStateServerSnapshot(): StoredState {
-  return getDefaultState();
+  return SERVER_STATE_SNAPSHOT;
 }
 
 export function loadState(): StoredState {

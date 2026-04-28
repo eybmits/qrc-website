@@ -12,8 +12,8 @@ export function Hero() {
 
         <div className={styles.introGrid}>
           <p className={styles.lead}>
-            Put information into a quantum system, watch how it evolves, and
-            extract useful information from the result.
+            Information enters a quantum system, evolves through its natural
+            dynamics, and emerges as features for prediction.
           </p>
           <div className={styles.actions}>
             <div className={styles.primaryActionShell}>

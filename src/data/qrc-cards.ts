@@ -3,122 +3,122 @@ import { ReviewCard } from '@/lib/spaced-repetition';
 export const qrcCards: ReviewCard[] = [
   {
     id: 'qrc2-1',
-    question: 'What makes a recurrent model different from a feedforward model for time-series data?',
+    question: 'What is the simplest way to describe a feature map?',
     answer:
-      'A recurrent model reuses an internal state across time steps, so each output depends on both the current input and past context. A feedforward model has no built-in temporal memory unless you manually add lagged features.',
+      'A feature map transforms an input into a new representation. The new representation is often easier for a simple model, such as a linear readout, to use.',
   },
   {
     id: 'qrc2-2',
-    question: 'Why does backpropagation through time often fail on very long sequences?',
+    question: 'Why can a simple linear readout work after a good feature map?',
     answer:
-      'Gradients are repeatedly multiplied by Jacobian factors across many steps. Those products can shrink to near zero (vanishing) or grow uncontrollably (exploding), which destabilizes learning.',
+      'The feature map can make important structure more visible. Data that is hard to separate in the original input space may become easy to separate in the transformed feature space.',
   },
   {
     id: 'qrc2-3',
-    question: 'What is the key reservoir-computing shortcut compared with standard RNN training?',
+    question: 'What is a Quantum Extreme Learning Machine in one sentence?',
     answer:
-      'Reservoir computing keeps recurrent dynamics fixed and trains only the readout. This avoids full temporal gradient optimization and turns training into a linear regression problem.',
+      'A QELM uses a fixed quantum system as a static feature map and trains only a classical readout on the measured features.',
   },
   {
     id: 'qrc2-4',
-    question: 'What does the state update equation in reservoir models capture conceptually?',
+    question: 'Which part of a QELM is trained?',
     answer:
-      'It mixes new input with previous state through nonlinear dynamics. The result is a compressed memory trace that emphasizes recent information while retaining useful short-term history.',
+      'Only the final classical readout is trained. The quantum feature map itself is fixed during readout training.',
   },
   {
     id: 'qrc2-5',
-    question: 'Why is an ESN reservoir usually sparse and random?',
+    question: 'What does "static" mean in the QELM setting?',
     answer:
-      'Sparse random connectivity creates diverse dynamical responses at low computational cost. Diversity helps separation of input histories, which improves linear readout performance.',
+      'Each input is transformed independently. The quantum system does not carry a state from one input to the next as part of the model.',
   },
   {
     id: 'qrc2-6',
-    question: 'What is the practical meaning of "washout" in ESN/QRC pipelines?',
+    question: 'What are the features in a QELM usually made from?',
     answer:
-      'Washout is an initial run where states are discarded. It removes dependence on arbitrary initial conditions before you start collecting training features.',
+      'They are made from measurement results, such as expectation values of selected observables after the input has been encoded and transformed by the fixed quantum system.',
   },
   {
     id: 'qrc2-7',
-    question: 'What is the echo state property in one sentence?',
+    question: 'What is the core QELM pipeline?',
     answer:
-      'For a fixed input history, reservoir trajectories from different initial states converge to the same state sequence. This ensures reproducible input-to-state mapping.',
+      'Input x goes into a fixed quantum feature map, measurements produce z(x), and a trained linear readout predicts y from z(x).',
   },
   {
     id: 'qrc2-8',
-    question: 'How does spectral radius affect memory in classical reservoirs?',
+    question: 'What extra ingredient turns the static QELM idea toward reservoir computing?',
     answer:
-      'A spectral radius near one generally increases memory depth but risks instability. Smaller values stabilize dynamics but shorten effective memory.',
+      'Time and memory. A reservoir reuses an internal state, so current features can depend on both the current input and recent past inputs.',
   },
   {
     id: 'qrc2-9',
-    question: 'Why is ridge regression preferred for the readout layer?',
+    question: 'What is the key state-update idea in QRC?',
     answer:
-      'Reservoir features are high-dimensional and correlated, so ordinary least squares can overfit. Ridge regularization improves conditioning and generalization by shrinking readout weights.',
+      'The current quantum state is updated from the previous state and the current input, often summarized as rho_t = F(rho_{t-1}, u_t).',
   },
   {
     id: 'qrc2-10',
-    question: 'Write the standard ridge readout solution and interpret it.',
+    question: 'Why can QRC model time-series data more naturally than QELM?',
     answer:
-      'A common form is W_out = Y H^T (H H^T + lambda I)^(-1). It fits outputs from reservoir states while penalizing large coefficients through lambda.',
+      'QRC reuses a quantum state across time steps. That state carries a fading trace of recent inputs, so measured features can contain temporal context.',
   },
   {
     id: 'qrc2-11',
-    question: 'Why is linear readout training important for physical reservoirs?',
+    question: 'What does the measured feature vector z_t represent in QRC?',
     answer:
-      'Most physical substrates cannot be gradient-trained internally in a practical way. Linear readout lets you exploit rich hardware dynamics without differentiating through the hardware.',
+      'It represents measured observables of the reservoir at time t. Because the reservoir state has memory, z_t can reflect recent input history.',
   },
   {
     id: 'qrc2-12',
-    question: 'What tradeoff does a reservoir designer tune most often?',
+    question: 'Which part is usually trained in QRC?',
     answer:
-      'The main tradeoff is memory versus nonlinearity. Stronger nonlinear transformation can reduce memory depth, while long memory can reduce separability for complex nonlinear targets.',
+      'As in QELM, the trained part is usually the classical readout. The quantum dynamics are kept fixed or only lightly tuned.',
   },
   {
     id: 'qrc2-13',
-    question: 'Why are quantum systems attractive as reservoirs?',
+    question: 'How can QRC make a next-step prediction?',
     answer:
-      'An n-qubit system occupies a 2^n-dimensional Hilbert space, giving a very large feature potential from few physical units. Entanglement and interference enrich temporal dynamics further.',
+      'After input u_t updates the reservoir, measurements produce z_t. A readout then predicts the next value, for example u_hat_{t+1} = w^T z_t + b.',
   },
   {
     id: 'qrc2-14',
-    question: 'Where does useful nonlinearity in QRC mostly come from?',
+    question: 'What does fading memory mean in this context?',
     answer:
-      'Unitary dynamics are linear in state evolution, but measurement maps states to nonlinear probability statistics. Input encoding choices can add additional effective nonlinearity.',
+      'Fading memory means recent inputs still influence the current state, while very old inputs gradually lose influence. This helps prediction stay stable.',
   },
   {
     id: 'qrc2-15',
-    question: 'What role can decoherence play in QRC?',
+    question: 'What is the shortest distinction between QELM and QRC?',
     answer:
-      'Moderate decoherence can implement fading memory, which is useful for reservoir behavior. Too much decoherence destroys informative structure before it reaches readout.',
+      'QELM transforms inputs into quantum features. QRC transforms input histories into quantum features.',
   },
   {
     id: 'qrc2-16',
-    question: 'Why is the density matrix formalism often used in QRC analysis?',
+    question: 'What do QELM and QRC have in common?',
     answer:
-      'Real hardware is open and noisy, so states are mixed rather than pure. Density matrices and master equations naturally model dissipation and measurement statistics.',
+      'Both use a fixed quantum system to create measured features and train a relatively simple classical readout on top of those features.',
   },
   {
     id: 'qrc2-17',
-    question: 'What is the core computational object in a QRC loop?',
+    question: 'Why is linear readout training attractive for quantum hardware?',
     answer:
-      'It is a time-indexed feature vector of measured observables, z(t). The readout learns y(t) from z(t) with linear or lightly regularized regression.',
+      'It avoids differentiating through the quantum device. The hardware can act as a feature generator while training remains a stable classical regression problem.',
   },
   {
     id: 'qrc2-18',
-    question: 'What is parameter encoding in QRC?',
+    question: 'When would QELM be the more natural model?',
     answer:
-      'Classical input values directly modulate control parameters such as rotation angles or drive amplitudes. It is simple to implement and works well for sequential injection.',
+      'QELM is natural when each example can be treated independently, such as static classification or regression with no required temporal memory.',
   },
   {
     id: 'qrc2-19',
-    question: 'What is the main benefit and drawback of amplitude encoding?',
+    question: 'When would QRC be the more natural model?',
     answer:
-      'Benefit: compact representation with logarithmic qubit count in input dimension. Drawback: preparing arbitrary amplitude states can require deep, noise-sensitive circuits.',
+      'QRC is natural when the task depends on sequences, history, or dynamics, such as forecasting, streaming classification, or temporal pattern recognition.',
   },
   {
     id: 'qrc2-20',
-    question: 'What baseline is mandatory when claiming QRC improvements?',
+    question: 'Why should QRC be compared against QELM-style baselines?',
     answer:
-      'A tuned classical reservoir baseline with matched feature budget and fair data protocol. Without that, "quantum advantage" claims are not informative.',
+      'Because some apparent gains may come from the quantum feature map alone. Comparing against a static QELM-style baseline helps isolate what the temporal reservoir adds.',
   },
 ];

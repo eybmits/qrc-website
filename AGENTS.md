@@ -5,6 +5,7 @@ Guidance for Codex when working in this repository.
 ## Commands
 
 ```bash
+npm ci
 npm run dev
 npm run build
 npm run lint
